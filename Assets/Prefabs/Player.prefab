@@ -178,7 +178,6 @@ GameObject:
   - component: {fileID: 4350906382270247647}
   - component: {fileID: 5672766341574271052}
   - component: {fileID: 3112003308122273142}
-  - component: {fileID: 5438717019500162227}
   - component: {fileID: 7368671522974159438}
   m_Layer: 6
   m_Name: Player
@@ -301,7 +300,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!114 &5672766341574271052
 MonoBehaviour:
@@ -316,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  jumpForce: 7
+  boostSpeed: 7
 --- !u!75 &3112003308122273142
 ConstantForce:
   m_ObjectHideFlags: 0
@@ -329,20 +328,6 @@ ConstantForce:
   m_RelativeForce: {x: 0, y: 0, z: 0}
   m_Torque: {x: 0, y: 0, z: 0}
   m_RelativeTorque: {x: 0, y: 0, z: 0}
---- !u!114 &5438717019500162227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8966786079516971463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 620ac5b250bd6ba47a8d0c0e38435eea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapInfo:
-  - {fileID: 11400000, guid: 34d85c249d5cf8949a3c78f67533d0f9, type: 2}
 --- !u!114 &7368671522974159438
 MonoBehaviour:
   m_ObjectHideFlags: 0

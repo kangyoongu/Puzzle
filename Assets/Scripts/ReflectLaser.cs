@@ -22,7 +22,6 @@ public class ReflectLaser : MonoBehaviour
     void Start()
     {
         lights = GetComponentsInChildren<Transform>();
-
         for (int i = 0; i < 6; i++)
         {
             lights[i + 1].gameObject.SetActive(false);

@@ -6,6 +6,5 @@ public class GameManager : SingleTon<GameManager>
 {
     public Transform player;
     public Transform camTrm;
-
-    [HideInInspector]public int mapIndex;
+    [HideInInspector] public bool canControl = true;
 }

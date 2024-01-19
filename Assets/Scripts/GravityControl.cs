@@ -24,20 +24,23 @@ public class GravityControl : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (GameManager.Instance.canControl)
         {
-            EventBus.Publish(changeState);
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            EventBus.Publish(State.Normal);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            changeState = (State)((short)changeState * -1);
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 EventBus.Publish(changeState);
+            }
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                EventBus.Publish(State.Normal);
+            }
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                changeState = (State)((short)changeState * -1);
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    EventBus.Publish(changeState);
+                }
             }
         }
     }
