@@ -5,6 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - KillPlayer
+  - KillEnemy
+  - KillAll
+  - 2D Wall
+  - ZeroGravityZone
+  - Crystal
+  - DissolvingWall
   layers:
   - Default
   - TransparentFX
@@ -16,10 +23,10 @@ TagManager:
   - 3Dto2D
   - Reflection
   - Cartoon
-  - 
-  - 
-  - 
-  - 
+  - IgnorePlayer
+  - 2dwall
+  - NotGrabLayer
+  - Scanner
   - 
   - 
   - 

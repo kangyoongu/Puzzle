@@ -29,7 +29,39 @@ public class Laser : MonoBehaviour
         }
         else if (Physics.Raycast(transform.position, transform.forward, out hit, 60))
         {
-            transform.localScale = new Vector3(1, 1, hit.distance * 0.5f);
+            if (hit.collider.CompareTag("Crystal"))
+            {
+                hit.transform.parent.GetComponent<Crystal>().OnShotLaser();
+            }
+            if (hit.collider.CompareTag("DissolvingWall"))
+            {
+                hit.transform.GetComponent<DissolvingWall>().Disable();
+                SkipWall(hit.point, hit.distance);
+            }
+            else
+            {
+                transform.localScale = new Vector3(1, 1, hit.distance * 0.5f);
+            }
+        }
+        else
+        {
+            transform.localScale = new Vector3(1, 1, 60);
+        }
+    }
+    private void SkipWall(Vector3 pos, float distance)
+    {
+        RaycastHit hit; 
+        if (Physics.Raycast(pos, transform.forward, out hit, 60))
+        {
+            if (hit.collider.CompareTag("DissolvingWall"))
+            {
+                hit.transform.GetComponent<DissolvingWall>().Disable();
+                SkipWall(hit.point, distance + hit.distance);
+            }
+            else
+            {
+                transform.localScale = new Vector3(1, 1, distance + hit.distance * 0.5f);
+            }
         }
         else
         {

@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GravityControl : MonoBehaviour
+public class GravityControl : SingleTon<GravityControl>
 {
     State changeState = State.Up;
     private ConstantForce playerForce;
-    private void Start()
+    [HideInInspector] public State currentState = State.Normal;
+    private void Awake()
     {
         playerForce = GetComponent<ConstantForce>();
     }
@@ -24,20 +25,25 @@ public class GravityControl : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (GameManager.Instance.canControl)
         {
-            EventBus.Publish(changeState);
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            EventBus.Publish(State.Normal);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            changeState = (State)((short)changeState * -1);
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 EventBus.Publish(changeState);
+            }
+
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                EventBus.Publish(State.Normal);
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                changeState = (State)((short)changeState * -1);
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    EventBus.Publish(changeState);
+                }
             }
         }
     }
@@ -45,13 +51,16 @@ public class GravityControl : MonoBehaviour
     private void Up()
     {
         playerForce.force = new Vector3(0, 9.8f, 0);
+        currentState = State.Up;
     }
     private void Down()
     {
-        playerForce.force = new Vector3(0, -19.6f, 0);
+        playerForce.force = new Vector3(0, -29.4f, 0);
+        currentState = State.Down;
     }
     private void Normal()
     {
         playerForce.force = new Vector3(0, -9.8f, 0);
+        currentState = State.Normal;
     }
 }

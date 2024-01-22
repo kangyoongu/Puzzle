@@ -65,14 +65,14 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 1000
+  far clip plane: 5
   field of view: 60
   orthographic: 1
   orthographic size: 2.5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 723731c7989fee041a37e62296f75745, type: 2}
   m_TargetDisplay: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
     m_Bits: 0
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 1
+  m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -139,7 +139,6 @@ GameObject:
   - component: {fileID: 6486604077726550861}
   - component: {fileID: 2792248743764299327}
   - component: {fileID: 3642637468304391621}
-  - component: {fileID: 8201762746575454256}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -213,16 +212,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8201762746575454256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7672160241734474046}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51451c9af5836924eaf5a0ee74ceae48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetMaterial: {fileID: 2100000, guid: 633df487317b3224aa3db2659790b669, type: 2}
