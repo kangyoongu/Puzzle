@@ -432,9 +432,9 @@ GameObject:
   - component: {fileID: 4740123871440204269}
   - component: {fileID: 5956950391716610894}
   - component: {fileID: 6362011027024229392}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Reflecter
-  m_TagString: Untagged
+  m_TagString: Reflection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -517,7 +517,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7771998105482848930}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: e7126f2a19c914b45a1af9fa006b23bc, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3860aa0162a5dc43839245c6339825a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: 20
+  direction: 1
   isWork: 0
 --- !u!75 &4740123871440204269
 ConstantForce:

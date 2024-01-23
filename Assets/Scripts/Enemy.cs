@@ -14,6 +14,7 @@ public class Enemy : Interactable
     public float missingDis;
     bool follow = false;
     Vector3 startPos;
+    Tweener tween;
     void Start()
     {
         vfx = GetComponent<VisualEffect>();
@@ -24,24 +25,25 @@ public class Enemy : Interactable
 
     void FixedUpdate()
     {
-        if (follow)
+        if (!GameManager.Instance.clear)
         {
-            // 대상 방향 구하기
-            FollowTarget(GameManager.Instance.player.position);
-
-            if (Vector3.Distance(GameManager.Instance.player.position, transform.position) >= missingDis)
+            if (follow)
             {
-                follow = false;
+                FollowTarget(GameManager.Instance.player.position);
+
+                if (Vector3.Distance(GameManager.Instance.player.position, transform.position) >= missingDis)
+                {
+                    follow = false;
+                }
             }
-        }
-        else
-        {
-
-            FollowTarget(startPos);
-
-            if (Vector3.Distance(GameManager.Instance.player.position, transform.position) <= followDis)
+            else
             {
-                follow = true;
+                FollowTarget(startPos);
+
+                if (Vector3.Distance(GameManager.Instance.player.position, transform.position) <= followDis)
+                {
+                    follow = true;
+                }
             }
         }
     }
@@ -61,14 +63,7 @@ public class Enemy : Interactable
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            transform.parent = collision.transform;
-            rigid.isKinematic = true;
-            sphereCollider.enabled = false;
-            StartCoroutine(Kill());
-        }
-        else if(collision.gameObject.CompareTag("KillEnemy") || collision.gameObject.CompareTag("KillAll"))
+        if(collision.gameObject.CompareTag("KillEnemy") || collision.gameObject.CompareTag("KillAll"))
         {
             rigid.isKinematic = true;
             sphereCollider.enabled = false;
@@ -79,15 +74,23 @@ public class Enemy : Interactable
     {
         if (other.CompareTag("KillEnemy") || other.CompareTag("KillAll"))
         {
-            rigid.isKinematic = true;
-            sphereCollider.enabled = false;
             StartCoroutine(Die());
+        }
+        if (other.CompareTag("Player"))
+        {
+            if (!GameManager.Instance.clear)
+            {
+                transform.parent = other.transform;
+                rigid.isKinematic = true;
+                sphereCollider.enabled = false;
+                StartCoroutine(Kill());
+            }
         }
     }
     IEnumerator Kill()
     {
         transform.DOLocalMove(Vector3.forward * 0.7f, 5);
-        DOTween.To(() => vfx.GetFloat("Lerp"), x => vfx.SetFloat("Lerp", x), 1.0f, 5f).SetEase(Ease.Linear);
+        tween = DOTween.To(() => vfx.GetFloat("Lerp"), x => vfx.SetFloat("Lerp", x), 1.0f, 5f).SetEase(Ease.Linear);
         yield return new WaitForSeconds(5);
         EventBus.Publish(State.PlayerDie);
         vfx.Stop();
@@ -96,10 +99,19 @@ public class Enemy : Interactable
     }
     IEnumerator Die()
     {
+        rigid.isKinematic = true;
+        sphereCollider.enabled = false;
         vfx.SetBool("isDie", true);
         vfx.Stop();
         yield return new WaitForSeconds(3);
         gameObject.SetActive(false);
+    }
+    public void DieEnemy()
+    {
+        StopAllCoroutines();
+        if (tween != null && tween.IsPlaying()) tween.Kill();
+        vfx.SetFloat("Lerp", 0);
+        StartCoroutine(Die());
     }
 
     public override void ObjectReset()
@@ -108,6 +120,8 @@ public class Enemy : Interactable
         vfx.SetFloat("Lerp", 0);
         vfx.Play();
         sphereCollider.enabled = true;
+        transform.parent = null;
+
         follow = false;
     }
 }

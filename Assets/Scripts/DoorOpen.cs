@@ -26,5 +26,7 @@ public class DoorOpen : MonoBehaviour
     private void OpenDoor()
     {
         anim.Play("Open");
+        MapReset map = (MapReset)FindFirstObjectByType(typeof(MapReset));
+        map.GameClear();
     }
 }

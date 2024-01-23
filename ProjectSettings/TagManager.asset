@@ -12,6 +12,7 @@ TagManager:
   - ZeroGravityZone
   - Crystal
   - DissolvingWall
+  - Reflection
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - UI
   - Player
   - 3Dto2D
-  - Reflection
+  - 
   - Cartoon
   - IgnorePlayer
   - 2dwall
