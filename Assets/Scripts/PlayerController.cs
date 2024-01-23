@@ -53,7 +53,7 @@ public class PlayerController : SingleTon<PlayerController>
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (!grabbing)
+                if (!grabbing && !GameManager.Instance.clear)
                 {
                     // 카메라 기준으로 앞으로 레이를 쏩니다.
                     Ray ray = new Ray(GameManager.Instance.camTrm.position, GameManager.Instance.camTrm.forward);
@@ -83,7 +83,7 @@ public class PlayerController : SingleTon<PlayerController>
                 else
                 {
                     grabbing = false;
-                    grabObject.EndGrab();
+                    grabObject?.EndGrab();
                 }
             }
         }
@@ -92,7 +92,10 @@ public class PlayerController : SingleTon<PlayerController>
     {
         if (collision.gameObject.CompareTag("KillPlayer") || collision.gameObject.CompareTag("KillAll"))
         {
-            EventBus.Publish(State.PlayerDie);
+            if (!GameManager.Instance.clear)
+            {
+                EventBus.Publish(State.PlayerDie);
+            }
         }
     }
 

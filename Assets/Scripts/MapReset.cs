@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MapReset : MonoBehaviour
@@ -9,14 +10,27 @@ public class MapReset : MonoBehaviour
     List<Quaternion> angles = new();
     List<Transform> transforms = new();
     List<Rigidbody> rigids = new();
-    Interactable[] objects;
+    List<Interactable> objects = new();
     Quaternion camAngle;
     RotateCam rotateCam;
+    List<Enemy> enemies = new();
     void Start()
     {
-        objects = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
-        rotateCam = FindObjectOfType<RotateCam>();
-        for (int i = 0; i < objects.Length; i++)
+        Interactable[] inters = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
+        for(int i = 0; i < inters.Length; i++)
+        {
+            if(inters[i].gameObject.scene == gameObject.scene)
+            {
+                objects.Add(inters[i]);
+            }
+            Enemy enemy;
+            if (inters[i].gameObject.TryGetComponent<Enemy>(out enemy))
+            {
+                enemies.Add(enemy);
+            }
+        }
+        rotateCam = FindFirstObjectByType<RotateCam>();
+        for (int i = 0; i < objects.Count; i++)
         {
             positions.Add(objects[i].transform.position);
             angles.Add(objects[i].transform.rotation);
@@ -27,6 +41,7 @@ public class MapReset : MonoBehaviour
         angles.Add(PlayerController.Instance.transform.rotation);
         rigids.Add(PlayerController.Instance.gameObject.GetComponent<Rigidbody>());
         transforms.Add(PlayerController.Instance.transform);
+
         camAngle = GameManager.Instance.camTrm.rotation;
     }
     private void OnEnable()
@@ -40,7 +55,6 @@ public class MapReset : MonoBehaviour
 
     void PlayerDie()
     {
-        print(objects.Length);
         StartCoroutine(Delay());
     }
     IEnumerator Delay()
@@ -55,7 +69,7 @@ public class MapReset : MonoBehaviour
         }
         GameManager.Instance.camTrm.DORotateQuaternion(camAngle, 6);
         yield return new WaitForSeconds(6);
-        for (int i = 0; i < objects.Length; i++)
+        for (int i = 0; i < objects.Count; i++)
         {
             objects[i].gameObject.SetActive(true);
             rigids[i].isKinematic = false;
@@ -66,5 +80,17 @@ public class MapReset : MonoBehaviour
         rotateCam.yaw = 0;
         PlayerController.Instance.ObjectReset();
         GameManager.Instance.canControl = true;
+    }
+    public void GameClear()
+    {
+        for(int i = 0; i < objects.Count; i++)
+        {
+            rigids[i].constraints = RigidbodyConstraints.FreezeAll;
+        }
+        for(int i = 0; i < enemies.Count; i++)
+        {
+            enemies[i].DieEnemy();
+        }
+        GameManager.Instance.clear = true;
     }
 }
