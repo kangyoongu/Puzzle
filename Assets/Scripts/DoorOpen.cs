@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class DoorOpen : MonoBehaviour
 {
-    Animator anim;
+    Animator[] anim;
     public int crystalNum = 1;
     [HideInInspector]public int currentCrystal = 0;
     void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentsInChildren<Animator>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,8 +25,9 @@ public class DoorOpen : MonoBehaviour
     }
     private void OpenDoor()
     {
-        anim.Play("Open");
-        MapReset map = (MapReset)FindFirstObjectByType(typeof(MapReset));
-        map.GameClear();
+        for (int i = 0; i < anim.Length; i++)
+        {
+            anim[i].Play("Open");
+        }
     }
 }

@@ -402,7 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabTrm: {fileID: 5869911719755332313}
   speed: 5
-  boostSpeed: 7
+  boostSpeed: 8
   grabDistance: 5
   grabbing: 0
   grabObject: {fileID: 0}

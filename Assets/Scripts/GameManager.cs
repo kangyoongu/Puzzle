@@ -6,10 +6,14 @@ public class GameManager : SingleTon<GameManager>
 {
     public Transform player;
     public Transform camTrm;
-    [HideInInspector] public bool canControl = true;
+    [HideInInspector] public bool canControl = false;
     [HideInInspector] public bool clear = false;
-    private void Update()
+    [HideInInspector] public bool playing = false;
+    private void Start()
     {
-        print(clear);
+        Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        canControl = false;
     }
 }

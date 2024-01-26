@@ -15,32 +15,47 @@ public class Enemy : Interactable
     bool follow = false;
     Vector3 startPos;
     Tweener tween;
+    Transform lover;
     void Start()
     {
         vfx = GetComponent<VisualEffect>();
         sphereCollider = GetComponent<SphereCollider>();
         rigid = GetComponent<Rigidbody>();
         startPos = transform.position;
+        lover = FindFirstObjectByType<Lover>().transform;
     }
 
     void FixedUpdate()
     {
-        if (!GameManager.Instance.clear)
+        if (!GameManager.Instance.clear && GameManager.Instance.camTrm)
         {
             if (follow)
             {
-                FollowTarget(GameManager.Instance.player.position);
+                Vector3 closer;
+                if (lover != null)
+                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - GameManager.Instance.player.position) ?
+                        lover.position : GameManager.Instance.player.position;
+                else
+                    closer = GameManager.Instance.player.position;
 
-                if (Vector3.Distance(GameManager.Instance.player.position, transform.position) >= missingDis)
+                FollowTarget(closer);
+                if (Vector3.Distance(closer, transform.position) >= missingDis)
                 {
                     follow = false;
                 }
             }
             else
             {
+                Vector3 closer;
+                if (lover != null)
+                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - GameManager.Instance.player.position) ?
+                        lover.position : GameManager.Instance.player.position;
+                else
+                    closer = GameManager.Instance.player.position;
+
                 FollowTarget(startPos);
 
-                if (Vector3.Distance(GameManager.Instance.player.position, transform.position) <= followDis)
+                if (Vector3.Distance(closer, transform.position) <= followDis)
                 {
                     follow = true;
                 }
@@ -55,7 +70,7 @@ public class Enemy : Interactable
         // 대상 방향으로 회전 각도 구하기
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
-        float weight = Mathf.Clamp(targetDirection.magnitude - 30, 7, 28) / 7;
+        float weight = Mathf.Clamp(targetDirection.magnitude - 20, 2, 16) / 2;
         // 부드러운 회전 적용
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime * weight);
@@ -65,20 +80,24 @@ public class Enemy : Interactable
     {
         if(collision.gameObject.CompareTag("KillEnemy") || collision.gameObject.CompareTag("KillAll"))
         {
-            rigid.isKinematic = true;
-            sphereCollider.enabled = false;
-            StartCoroutine(Die());
+            if (GameManager.Instance.canControl)
+            {
+                StartCoroutine(Die());
+            }
         }
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("KillEnemy") || other.CompareTag("KillAll"))
         {
-            StartCoroutine(Die());
+            if (GameManager.Instance.canControl)
+            {
+                StartCoroutine(Die());
+            }
         }
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.name == "Lover")
         {
-            if (!GameManager.Instance.clear)
+            if (!GameManager.Instance.clear && GameManager.Instance.canControl)
             {
                 transform.parent = other.transform;
                 rigid.isKinematic = true;
@@ -93,6 +112,11 @@ public class Enemy : Interactable
         tween = DOTween.To(() => vfx.GetFloat("Lerp"), x => vfx.SetFloat("Lerp", x), 1.0f, 5f).SetEase(Ease.Linear);
         yield return new WaitForSeconds(5);
         EventBus.Publish(State.PlayerDie);
+        Lover lover;
+        if(transform.parent.TryGetComponent(out lover))
+        {
+            lover.Kill();
+        }
         vfx.Stop();
         yield return new WaitForSeconds(3);
         gameObject.SetActive(false);

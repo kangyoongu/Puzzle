@@ -29,6 +29,11 @@ public class Crystal : MonoBehaviour
         mat.DOFloat(1, "_Lerp", 2);
         isEnable = false;
         targetDoor.currentCrystal++;
+        if(targetDoor.currentCrystal >= targetDoor.crystalNum)
+        {
+            MapReset map = (MapReset)FindFirstObjectByType(typeof(MapReset));
+            map.GameClear();
+        }
         for (int i = 2; i < spheres.Length; i++)
         {
             int j = i;

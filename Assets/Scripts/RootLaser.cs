@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class RootLaser : Laser
 {
-    void Update()
+    private void Start()
     {
-        EventBus.Publish(State.BeforeLaserWork);
-        ObjectPool.Instance.ReturnAllToPool("Laser");
+        LaserManager.Instance.roots.Add(this);
+    }
+    public void Trigger()
+    {
         ReflectionLaser();
     }
 }

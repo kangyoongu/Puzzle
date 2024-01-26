@@ -112,14 +112,14 @@ public class FollowChangeGravity : Interactable
 
     public override void ObjectReset()
     {
-        return;
+        Normal();
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("ZeroGravityZone"))
         {
             zeroZone = true;
-            rigid.drag = 2;
+            rigid.drag = 3f;
             if (GravityControl.Instance.currentState == State.Normal)
             {
                 Normal();

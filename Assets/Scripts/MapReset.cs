@@ -69,6 +69,7 @@ public class MapReset : MonoBehaviour
         }
         GameManager.Instance.camTrm.DORotateQuaternion(camAngle, 6);
         yield return new WaitForSeconds(6);
+        GravityControl.Instance.changeState = State.Up;
         for (int i = 0; i < objects.Count; i++)
         {
             objects[i].gameObject.SetActive(true);

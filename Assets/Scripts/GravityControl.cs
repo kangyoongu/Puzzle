@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GravityControl : SingleTon<GravityControl>
 {
-    State changeState = State.Up;
+    [HideInInspector] public State changeState = State.Up;
     private ConstantForce playerForce;
     [HideInInspector] public State currentState = State.Normal;
     private void Awake()
