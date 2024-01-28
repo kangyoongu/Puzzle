@@ -119,7 +119,7 @@ public class FollowChangeGravity : Interactable
         if (other.CompareTag("ZeroGravityZone"))
         {
             zeroZone = true;
-            rigid.drag = 2;
+            rigid.drag = 3f;
             if (GravityControl.Instance.currentState == State.Normal)
             {
                 Normal();
