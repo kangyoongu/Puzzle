@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapReset : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class MapReset : MonoBehaviour
     Quaternion camAngle;
     RotateCam rotateCam;
     List<Enemy> enemies = new();
+    public string nextScene;
+    public Transform spawnPoint;
     void Start()
     {
         Interactable[] inters = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
@@ -24,7 +27,7 @@ public class MapReset : MonoBehaviour
                 objects.Add(inters[i]);
             }
             Enemy enemy;
-            if (inters[i].gameObject.TryGetComponent<Enemy>(out enemy))
+            if (inters[i].gameObject.TryGetComponent(out enemy))
             {
                 enemies.Add(enemy);
             }
@@ -37,20 +40,32 @@ public class MapReset : MonoBehaviour
             rigids.Add(objects[i].GetComponent<Rigidbody>());
             transforms.Add(objects[i].transform);
         }
-        positions.Add(PlayerController.Instance.transform.position);
-        angles.Add(PlayerController.Instance.transform.rotation);
         rigids.Add(PlayerController.Instance.gameObject.GetComponent<Rigidbody>());
         transforms.Add(PlayerController.Instance.transform);
-
-        camAngle = GameManager.Instance.camTrm.rotation;
+        positions.Add(spawnPoint.position);
+        angles.Add(spawnPoint.rotation);
+        if (GameManager.Instance.lover)
+        {
+            positions.Add(spawnPoint.position + (spawnPoint.right * 2));
+            angles.Add(spawnPoint.rotation);
+            rigids.Add(GameManager.Instance.lover.gameObject.GetComponent<Rigidbody>());
+            transforms.Add(GameManager.Instance.lover.transform);
+        }
+        camAngle = Quaternion.identity;
     }
     private void OnEnable()
     {
         EventBus.Subscribe(State.PlayerDie, PlayerDie);
+        EventBus.Subscribe(State.Clear, GameClear);
+        transform.root.position = GameManager.Instance.currentJointPos;
+        GameManager.Instance.currentJointPos = transform.root.position;
+        GameManager.Instance.currentSpawnPoint = spawnPoint.position;
+        GameManager.Instance.currentInfo = this;
     }
     private void OnDisable()
     {
         EventBus.Unsubscribe(State.PlayerDie, PlayerDie);
+        EventBus.Unsubscribe(State.Clear, GameClear);
     }
 
     void PlayerDie()
@@ -61,6 +76,11 @@ public class MapReset : MonoBehaviour
     {
         EventBus.Publish(State.Normal);
         yield return new WaitForSeconds(4);
+        for(int i = 0; i < enemies.Count; i++)
+        {
+            enemies[i].gameObject.SetActive(false);
+            enemies[i].transform.parent = null;
+        }
         for(int i = 0; i < positions.Count; i++)
         {
             rigids[i].isKinematic = true;
@@ -73,16 +93,18 @@ public class MapReset : MonoBehaviour
         for (int i = 0; i < objects.Count; i++)
         {
             objects[i].gameObject.SetActive(true);
-            rigids[i].isKinematic = false;
             objects[i].ObjectReset();
         }
-        rigids[rigids.Count-1].isKinematic = false;
+        for(int i = 0; i < rigids.Count; i++)
+        {
+            rigids[i].isKinematic = false;
+        }
         rotateCam.pitch = 0;
         rotateCam.yaw = 0;
         PlayerController.Instance.ObjectReset();
         GameManager.Instance.canControl = true;
     }
-    public void GameClear()
+    void GameClear()
     {
         for(int i = 0; i < objects.Count; i++)
         {
@@ -90,7 +112,8 @@ public class MapReset : MonoBehaviour
         }
         for(int i = 0; i < enemies.Count; i++)
         {
-            enemies[i].DieEnemy();
+            if(enemies[i].gameObject.activeSelf == true)
+                enemies[i].DieEnemy();
         }
         GameManager.Instance.clear = true;
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using DG.Tweening;
+
 public class Lover : Interactable
 {
     private VisualEffect vfx;
@@ -12,13 +13,17 @@ public class Lover : Interactable
     public float speed = 1;
     public float stopDis;
     bool follow = false;
+
+    private void Awake()
+    {
+        GameManager.Instance.lover = this;
+    }
     void Start()
     {
         vfx = GetComponent<VisualEffect>();
         sphereCollider = GetComponent<SphereCollider>();
         rigid = GetComponent<Rigidbody>();
     }
-
     void FixedUpdate()
     {
         if (follow)
@@ -90,5 +95,9 @@ public class Lover : Interactable
         sphereCollider.enabled = true;
         transform.parent = null;
         follow = false;
+    }
+    private void OnDestroy()
+    {
+        GameManager.Instance.lover = null;
     }
 }

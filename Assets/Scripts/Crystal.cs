@@ -32,7 +32,7 @@ public class Crystal : MonoBehaviour
         if(targetDoor.currentCrystal >= targetDoor.crystalNum)
         {
             MapReset map = (MapReset)FindFirstObjectByType(typeof(MapReset));
-            map.GameClear();
+            EventBus.Publish(State.Clear);
         }
         for (int i = 2; i < spheres.Length; i++)
         {

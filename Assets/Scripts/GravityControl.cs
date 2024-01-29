@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class GravityControl : SingleTon<GravityControl>
 {
     [HideInInspector] public State changeState = State.Up;
     private ConstantForce playerForce;
     [HideInInspector] public State currentState = State.Normal;
+    public Material screenMaterial;
     private void Awake()
     {
         playerForce = GetComponent<ConstantForce>();
@@ -52,15 +53,18 @@ public class GravityControl : SingleTon<GravityControl>
     {
         playerForce.force = new Vector3(0, 9.8f, 0);
         currentState = State.Up;
+        screenMaterial.DOFloat(1, "_Lerp", 0.6f);
     }
     private void Down()
     {
         playerForce.force = new Vector3(0, -29.4f, 0);
         currentState = State.Down;
+        screenMaterial.DOFloat(-1, "_Lerp", 0.6f);
     }
     private void Normal()
     {
         playerForce.force = new Vector3(0, -9.8f, 0);
         currentState = State.Normal;
+        screenMaterial.DOFloat(0, "_Lerp", 0.6f);
     }
 }

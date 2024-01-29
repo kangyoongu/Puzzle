@@ -433,4 +433,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad3d427e5f554744af17191ff6742c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  changeState: -1
   currentState: 0
+  screenMaterial: {fileID: 2100000, guid: afd51ac473dbf6d4982b1be3aff9165f, type: 2}

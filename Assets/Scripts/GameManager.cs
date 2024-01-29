@@ -9,6 +9,10 @@ public class GameManager : SingleTon<GameManager>
     [HideInInspector] public bool canControl = false;
     [HideInInspector] public bool clear = false;
     [HideInInspector] public bool playing = false;
+    [HideInInspector] public Lover lover = null;
+    [HideInInspector] public Vector3 currentSpawnPoint;
+    [HideInInspector] public MapReset currentInfo;
+    [HideInInspector] public Vector3 currentJointPos = Vector3.zero;
     private void Start()
     {
         Time.timeScale = 0;

@@ -32,10 +32,12 @@ public class UIManager : SingleTon<UIManager>
     public GameObject[] block;
 
     private Queue<string> dialog = new();
+    public Image image;
     public TextMeshProUGUI dialogText;
     public RectTransform dialogWindow;
     bool playingText = false;
     bool setting = false;
+    bool imageOn = false;
     public GameObject pause;
     private void Update()
     {
@@ -214,6 +216,35 @@ public class UIManager : SingleTon<UIManager>
     public void AppendDialog(string text)
     {
         dialog.Enqueue(text);
+    }
+    public int DialogCount()
+    {
+        return dialog.Count;
+    }
+    public void AppendImage(Sprite sprite)
+    {
+        if (imageOn)
+        {
+            image.rectTransform.DOAnchorPosY(-109f, 1f).OnComplete(() =>
+            {
+                image.sprite = sprite;
+                image.rectTransform.DOAnchorPosY(109f, 1f);
+            });
+        }
+        else
+        {
+            image.sprite = sprite;
+            imageOn = true;
+            image.rectTransform.DOAnchorPosY(109f, 1f);
+        }
+    }
+    public void OutImage()
+    {
+        if (imageOn)
+        {
+            image.rectTransform.DOAnchorPosY(-109f, 1f);
+            imageOn = false;
+        }
     }
     public void OnClickStart()
     {
