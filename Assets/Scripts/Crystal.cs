@@ -38,7 +38,7 @@ public class Crystal : MonoBehaviour
         {
             int j = i;
             spheres[i].gameObject.SetActive(true);
-            spheres[i].DOScale(Vector3.one * 1000, 4f).SetEase(Ease.InQuad).OnComplete(() =>
+            spheres[i].DOScale(Vector3.one * 1000, 5f).SetEase(Ease.InQuad).OnComplete(() =>
             {
                 spheres[j].gameObject.SetActive(false);
                 spheres[j].transform.localScale = Vector3.zero;

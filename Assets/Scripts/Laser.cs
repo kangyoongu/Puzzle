@@ -4,10 +4,11 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     [HideInInspector]public GameObject child;
+    public LayerMask layerMask;
     public void ReflectionLaser()
     {
         RaycastHit hit;
-       if (Physics.Raycast(transform.position, transform.forward, out hit, 60))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 60f, layerMask))
         {
             SkipWall(transform.position, 0);
         }
@@ -19,7 +20,7 @@ public class Laser : MonoBehaviour
     private void SkipWall(Vector3 pos, float distance)//사라지는 벽 쏘면 평범해질때까지 반복
     {
         RaycastHit hit; 
-        if (Physics.Raycast(pos, transform.forward, out hit, 60))
+        if (Physics.Raycast(pos, transform.forward, out hit, 60, layerMask))
         {
             if (hit.collider.CompareTag("Crystal"))
             {

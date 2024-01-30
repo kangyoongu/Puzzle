@@ -8,7 +8,10 @@ public class FogInfo : SingleTon<FogInfo>
     [HideInInspector] public Transform container;
     void Update()
     {
-        material.SetVector("_BoundsMin", container.position - container.localScale / 2);
-        material.SetVector("_BoundsMax", container.position + container.localScale / 2);
+        if (container)
+        {
+            material.SetVector("_BoundsMin", container.position - container.localScale / 2);
+            material.SetVector("_BoundsMax", container.position + container.localScale / 2);
+        }
     }
 }

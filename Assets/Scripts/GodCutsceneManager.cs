@@ -17,7 +17,6 @@ public class GodCutsceneManager : SingleTon<GodCutsceneManager>
             cameras[i].SetActive(true);
         }
         cube.SetActive(false);
-        ShowGod(10);
     }
     public void ShowGod(float time)
     {
