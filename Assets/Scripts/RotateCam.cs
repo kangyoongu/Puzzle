@@ -11,12 +11,6 @@ public class RotateCam : MonoBehaviour
     [HideInInspector] public float yaw = 0.0f; //
     [HideInInspector]public float pitch = 0.0f;
 
-    void Start()
-    {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
     // Update is called once per frame
     void Update()
     {

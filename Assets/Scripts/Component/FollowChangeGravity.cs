@@ -112,7 +112,7 @@ public class FollowChangeGravity : Interactable
 
     public override void ObjectReset()
     {
-        return;
+        Normal();
     }
     private void OnTriggerEnter(Collider other)
     {

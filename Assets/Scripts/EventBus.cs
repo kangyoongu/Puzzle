@@ -8,8 +8,8 @@ public enum State : short
     Up = -1,
     Normal = 0,
     Down = 1,
-    BeforeLaserWork = 2,
-    PlayerDie = 3
+    PlayerDie = 2,
+    Clear = 3
 }
 public static class EventBus
 {

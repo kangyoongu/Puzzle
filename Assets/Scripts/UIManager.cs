@@ -24,27 +24,47 @@ public struct UI
 }
 public class UIManager : SingleTon<UIManager>
 {
-    public Image hpBar;
     public UI[] gameOverUI;
     public UI[] mainUI;
     public UI[] playUI;
+    public UI[] settingUI;
+    public UI[] pauseUI;
     public GameObject[] block;
 
     private Queue<string> dialog = new();
+    public Image image;
     public TextMeshProUGUI dialogText;
     public RectTransform dialogWindow;
     bool playingText = false;
-    private void Start()
-    {
-
-    }
+    bool setting = false;
+    bool imageOn = false;
+    public GameObject pause;
     private void Update()
     {
         if(dialog.Count > 0 && !playingText)
         {
             StartCoroutine(DisplayText());
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (setting)
+            {
+                SettingUIOut();
+            }
+            else
+            {
+                if (GameManager.Instance.playing && Time.timeScale != 0)
+                {
+                    PauseUIIn();
+                }
+                else if (Time.timeScale == 0)
+                {
+                    PauseUIOut();
+                }
+            }
+        }
     }
+
     IEnumerator DisplayText()
     {
         playingText = true;
@@ -90,9 +110,36 @@ public class UIManager : SingleTon<UIManager>
     {
         Out(playUI);
     }
+    public void SettingUIIn()
+    {
+        In(settingUI);
+        setting = true;
+    }
+    public void SettingUIOut()
+    {
+        Out(settingUI);
+        setting = false;
+    }
+    public void PauseUIIn()
+    {
+        Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        GameManager.Instance.canControl = false;
+        In(pauseUI);
+    }
+    public void PauseUIOut()
+    {
+        Time.timeScale = 1;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        GameManager.Instance.canControl = true;
+        Out(pauseUI);
+    }
     private void In(UI[] lst)
     {
         block[0].SetActive(true);
+        block[1].SetActive(true);
         float max = 0;
         for (int i = 0; i < lst.Length; i++)
         {
@@ -100,18 +147,18 @@ public class UIManager : SingleTon<UIManager>
             if (lst[i].changeUI != null)
             {
                 if (lst[i].setActive) lst[i].changeUI.gameObject.SetActive(true);
-                if (lst[i].dir == Dir.y) lst[i].changeUI.DOAnchorPosY(lst[i].inAndOut.x, lst[i].time).SetEase(Ease.Linear);
-                else lst[i].changeUI.DOAnchorPosX(lst[i].inAndOut.x, lst[i].time).SetEase(Ease.Linear);
+                if (lst[i].dir == Dir.y) lst[i].changeUI.DOAnchorPosY(lst[i].inAndOut.x, lst[i].time).SetEase(Ease.Linear).SetUpdate(true);
+                else lst[i].changeUI.DOAnchorPosX(lst[i].inAndOut.x, lst[i].time).SetEase(Ease.Linear).SetUpdate(true);
             }
             else if (lst[i].fadeUI != null)
             {
                 if (lst[i].setActive) lst[i].fadeUI.gameObject.SetActive(true);
-                lst[i].fadeUI.DOFade(lst[i].fadeFloat / 255f, lst[i].time).SetEase(Ease.Linear);
+                lst[i].fadeUI.DOFade(lst[i].fadeFloat / 255f, lst[i].time).SetEase(Ease.Linear).SetUpdate(true);
             }
             else
             {
                 if (lst[i].setActive) lst[i].changeUI.gameObject.SetActive(true);
-                lst[i].fadeText.DOFade(lst[i].fadeFloat / 255f, lst[i].time).SetEase(Ease.Linear);
+                lst[i].fadeText.DOFade(lst[i].fadeFloat / 255f, lst[i].time).SetEase(Ease.Linear).SetUpdate(true);
             }
         }
         StartCoroutine(BlockTime(max));
@@ -120,6 +167,7 @@ public class UIManager : SingleTon<UIManager>
     private void Out(UI[] lst)
     {
         block[0].SetActive(true);
+        block[1].SetActive(true);
         float max = 0;
         for (int i = 0; i < lst.Length; i++)
         {
@@ -129,14 +177,14 @@ public class UIManager : SingleTon<UIManager>
             {
                 if (lst[i].dir == Dir.y)
                 {
-                    lst[i].changeUI.DOAnchorPosY(lst[i].inAndOut.y, lst[i].time).SetEase(Ease.Linear).OnComplete(() =>
+                    lst[i].changeUI.DOAnchorPosY(lst[i].inAndOut.y, lst[i].time).SetUpdate(true).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         if (lst[index].setActive) lst[index].changeUI.gameObject.SetActive(false);
                     });
                 }
                 else
                 {
-                    lst[i].changeUI.DOAnchorPosX(lst[i].inAndOut.y, lst[i].time).SetEase(Ease.Linear).OnComplete(() =>
+                    lst[i].changeUI.DOAnchorPosX(lst[i].inAndOut.y, lst[i].time).SetUpdate(true).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         if (lst[index].setActive) lst[index].changeUI.gameObject.SetActive(false);
                     });
@@ -144,14 +192,14 @@ public class UIManager : SingleTon<UIManager>
             }
             else if (lst[i].fadeUI != null)
             {
-                lst[i].fadeUI.DOFade(0, lst[i].time).SetEase(Ease.Linear).OnComplete(() =>
+                lst[i].fadeUI.DOFade(0, lst[i].time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
                 {
                     if (lst[index].setActive) lst[index].fadeUI.gameObject.SetActive(false);
                 });
             }
             else
             {
-                lst[i].fadeText.DOFade(0, lst[i].time).SetEase(Ease.Linear).OnComplete(() =>
+                lst[i].fadeText.DOFade(0, lst[i].time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
                 {
                     if (lst[index].setActive) lst[index].changeUI.gameObject.SetActive(false);
                 });
@@ -161,11 +209,53 @@ public class UIManager : SingleTon<UIManager>
     }
     IEnumerator BlockTime(float time)
     {
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSecondsRealtime(time);
         block[0].SetActive(false);
+        block[1].SetActive(false);
     }
     public void AppendDialog(string text)
     {
         dialog.Enqueue(text);
+    }
+    public int DialogCount()
+    {
+        return dialog.Count;
+    }
+    public void AppendImage(Sprite sprite)
+    {
+        if (imageOn)
+        {
+            image.rectTransform.DOAnchorPosY(-109f, 1f).OnComplete(() =>
+            {
+                image.sprite = sprite;
+                image.rectTransform.DOAnchorPosY(109f, 1f);
+            });
+        }
+        else
+        {
+            image.sprite = sprite;
+            imageOn = true;
+            image.rectTransform.DOAnchorPosY(109f, 1f);
+        }
+    }
+    public void OutImage()
+    {
+        if (imageOn)
+        {
+            image.rectTransform.DOAnchorPosY(-109f, 1f);
+            imageOn = false;
+        }
+    }
+    public void OnClickStart()
+    {
+        Time.timeScale = 1;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        GameManager.Instance.canControl = true;
+        GameManager.Instance.playing = true;
+    }
+    public void OnClickQuit()
+    {
+        Application.Quit();
     }
 }

@@ -18,7 +18,6 @@ public class ReflectLaser : MonoBehaviour
     public Direction direction;
     private Transform[] lights;
     private Direction[] allLayers = (Direction[])Enum.GetValues(typeof(Direction));
-    [HideInInspector]public bool isWork = false;
     void Start()
     {
         lights = GetComponentsInChildren<Transform>();
@@ -27,18 +26,6 @@ public class ReflectLaser : MonoBehaviour
             lights[i + 1].gameObject.SetActive(false);
             EnableDirection(i)?.SetActive(true);
         }
-    }
-    private void OnEnable()
-    {
-        EventBus.Subscribe(State.BeforeLaserWork, isNotWork);
-    }
-    private void OnDisable()
-    {
-        EventBus.Unsubscribe(State.BeforeLaserWork, isNotWork);
-    }
-    private void isNotWork()
-    {
-        isWork = false;
     }
     public GameObject EnableDirection(int i)
     {

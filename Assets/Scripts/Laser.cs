@@ -9,6 +9,18 @@ public class Laser : MonoBehaviour
         RaycastHit hit;
        if (Physics.Raycast(transform.position, transform.forward, out hit, 60))
         {
+            SkipWall(transform.position, 0);
+        }
+        else
+        {
+            transform.localScale = new Vector3(1, 1, 60);
+        }
+    }
+    private void SkipWall(Vector3 pos, float distance)//사라지는 벽 쏘면 평범해질때까지 반복
+    {
+        RaycastHit hit; 
+        if (Physics.Raycast(pos, transform.forward, out hit, 60))
+        {
             if (hit.collider.CompareTag("Crystal"))
             {
                 hit.transform.parent.GetComponent<Crystal>().OnShotLaser();
@@ -16,9 +28,9 @@ public class Laser : MonoBehaviour
             if (hit.collider.CompareTag("Reflection"))
             {
                 ReflectLaser reflectLaser = hit.collider.GetComponent<ReflectLaser>();
-                if (reflectLaser.isWork == false)
+                if (!LaserManager.Instance.reflectors.Contains(reflectLaser))
                 {
-                    reflectLaser.isWork = true;//걔 다시 작동 안하게
+                    LaserManager.Instance.reflectors.Add(reflectLaser);//걔 다시 작동 안하게
                     for (int i = 0; i < 6; i++)
                     {
                         GameObject? output = reflectLaser.EnableDirection(i);
@@ -33,29 +45,14 @@ public class Laser : MonoBehaviour
                 }
                 transform.localScale = new Vector3(1, 1, hit.distance * 0.5f);
             }
+            if (hit.collider.CompareTag("ZeroGravityZone"))
+            {
+                SkipWall(hit.point, distance + hit.distance);
+                return;
+            }
             if (hit.collider.CompareTag("DissolvingWall"))
             {
-                hit.transform.GetComponent<DissolvingWall>().Disable();
-                SkipWall(hit.point, hit.distance);
-            }
-            else
-            {
-                transform.localScale = new Vector3(1, 1, hit.distance * 0.5f);
-            }
-        }
-        else
-        {
-            transform.localScale = new Vector3(1, 1, 60);
-        }
-    }
-    private void SkipWall(Vector3 pos, float distance)//사라지는 벽 쏘면 평범해질때까지 반복
-    {
-        RaycastHit hit; 
-        if (Physics.Raycast(pos, transform.forward, out hit, 60))
-        {
-            if (hit.collider.CompareTag("DissolvingWall"))
-            {
-                hit.transform.GetComponent<DissolvingWall>().Disable();
+                hit.transform.GetComponent<DissolvingWall>().ColliderOff();
                 SkipWall(hit.point, distance + hit.distance);
             }
             else

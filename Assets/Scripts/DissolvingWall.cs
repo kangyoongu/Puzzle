@@ -11,6 +11,7 @@ public class DissolvingWall : MonoBehaviour
     {
         boxCollider = GetComponent<BoxCollider>();
         mesh = GetComponent<MeshRenderer>();
+        LaserManager.Instance.walls.Add(this);
     }
     private void Start()
     {
@@ -18,31 +19,31 @@ public class DissolvingWall : MonoBehaviour
         mat = Instantiate(mat);
         mesh.material = mat;
     }
-    private void OnEnable()
+    public void ColliderOn()
     {
-        EventBus.Subscribe(State.BeforeLaserWork, Enable);
+        if (boxCollider.enabled == false)
+        {
+            boxCollider.enabled = true;
+        }
     }
-    private void OnDisable()
+    public void ColliderOff()
     {
-        EventBus.Unsubscribe(State.BeforeLaserWork, Enable);
-    }
-    private void Enable()
-    {
-        boxCollider.enabled = true;
-    }
-    public void Disable()
-    {
-        boxCollider.enabled = false;
+        if(boxCollider.enabled == true)
+        {
+            boxCollider.enabled = false; 
+        }
     }
     private void LateUpdate()
     {
         if (boxCollider.enabled)
         {
             mat.SetFloat("_Lerp", Mathf.Clamp01(mat.GetFloat("_Lerp") - 2f * Time.deltaTime));
+            gameObject.layer = LayerMask.NameToLayer("Default");
         }
         else
         {
             mat.SetFloat("_Lerp", Mathf.Clamp01(mat.GetFloat("_Lerp") + 2f * Time.deltaTime));
+            gameObject.layer = LayerMask.NameToLayer("NotGrabLayer");
         }
     }
 }

@@ -18,6 +18,14 @@ public class GrabableObject : Interactable
         layer = gameObject.layer;
         gravity = GetComponent<FollowChangeGravity>();
     }
+    private void OnEnable()
+    {
+        EventBus.Subscribe(State.Clear, EndGrab);
+    }
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe(State.Clear, EndGrab);
+    }
     private void FixedUpdate()
     {
         if (grab)
