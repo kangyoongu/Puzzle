@@ -11,7 +11,14 @@ public class DissolvingWall : MonoBehaviour
     {
         boxCollider = GetComponent<BoxCollider>();
         mesh = GetComponent<MeshRenderer>();
+    }
+    private void OnEnable()
+    {
         LaserManager.Instance.walls.Add(this);
+    }
+    private void OnDisable()
+    {
+        LaserManager.Instance.walls.RemoveAt(0);
     }
     private void Start()
     {

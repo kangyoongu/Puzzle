@@ -49,7 +49,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 0, g: 8.302655, b: 83.46362, a: 0}
+    - _Color: {r: 0, g: 5.9101653, b: 27.532722, a: 1}
     - _Color_1: {r: 0, g: 0, b: 0, a: 0}
     - _ReflectionColor: {r: 5.216476, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -27,16 +27,16 @@ public class Enemy : Interactable
 
     void FixedUpdate()
     {
-        if (!GameManager.Instance.clear && GameManager.Instance.camTrm)
+        if (!GameManager.Instance.clear && PlayerController.Instance.camTransform)
         {
             if (follow)
             {
                 Vector3 closer;
                 if (lover != null)
-                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - GameManager.Instance.player.position) ?
-                        lover.position : GameManager.Instance.player.position;
+                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - PlayerController.Instance.transform.position) ?
+                        lover.position : PlayerController.Instance.transform.position;
                 else
-                    closer = GameManager.Instance.player.position;
+                    closer = PlayerController.Instance.transform.position;
 
                 FollowTarget(closer);
                 if (Vector3.Distance(closer, transform.position) >= missingDis)
@@ -48,10 +48,10 @@ public class Enemy : Interactable
             {
                 Vector3 closer;
                 if (lover != null)
-                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - GameManager.Instance.player.position) ?
-                        lover.position : GameManager.Instance.player.position;
+                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - PlayerController.Instance.transform.position) ?
+                        lover.position : PlayerController.Instance.transform.position;
                 else
-                    closer = GameManager.Instance.player.position;
+                    closer = PlayerController.Instance.transform.position;
 
                 FollowTarget(startPos);
 

@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class RootLaser : Laser
 {
-    private void Start()
+    private void OnEnable()
     {
         LaserManager.Instance.roots.Add(this);
+    }
+    private void OnDisable()
+    {
+        LaserManager.Instance.roots.RemoveAt(0);
     }
     public void Trigger()
     {

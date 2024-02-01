@@ -51,6 +51,11 @@ public class Laser : MonoBehaviour
                 SkipWall(hit.point, distance + hit.distance);
                 return;
             }
+            if (hit.collider.gameObject.layer == LayerMask.GetMask("Scanner"))
+            {
+                SkipWall(hit.point, distance + hit.distance);
+                return;
+            }
             if (hit.collider.CompareTag("DissolvingWall"))
             {
                 hit.transform.GetComponent<DissolvingWall>().ColliderOff();

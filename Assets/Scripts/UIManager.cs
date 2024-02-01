@@ -4,12 +4,23 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 public enum Dir : short
 {
     x,
     y
 }
+
+[Serializable]
+public struct Dialog
+{
+    public UnityEvent action;
+    public string dialog;
+    public Sprite image;
+    public bool refresh;
+}
+
 [Serializable]
 public struct UI
 {
@@ -31,7 +42,7 @@ public class UIManager : SingleTon<UIManager>
     public UI[] pauseUI;
     public GameObject[] block;
 
-    private Queue<string> dialog = new();
+    private Queue<Dialog> dialog = new();
     public Image image;
     public TextMeshProUGUI dialogText;
     public RectTransform dialogWindow;
@@ -74,13 +85,25 @@ public class UIManager : SingleTon<UIManager>
         while (dialog.Count > 0)
         {
             dialogText.text = "";
-            string text = dialog.Dequeue();
-            for (int i = 0; i < text.Length; i++)
+            Dialog d = dialog.Dequeue();
+            d.action?.Invoke();
+            string text = d.dialog;
+            if (d.refresh)
             {
-                dialogText.text += text[i];
-                yield return new WaitForSeconds(0.1f);
+                if (d.image)
+                    AppendImage(d.image);
+                else
+                    OutImage();
             }
-            yield return new WaitForSeconds(Mathf.Min(1f, text.Length * 0.2f));
+            if (text != "")
+            {
+                for (int i = 0; i < text.Length; i++)
+                {
+                    dialogText.text += text[i];
+                    yield return new WaitForSeconds(0.1f);
+                }
+                yield return new WaitForSeconds(Mathf.Min(1f, text.Length * 0.2f));
+            }
         }
         dialogWindow.DOAnchorPosY(-320f, 1.5f).SetEase(Ease.InBack);
         playingText = false;
@@ -213,9 +236,9 @@ public class UIManager : SingleTon<UIManager>
         block[0].SetActive(false);
         block[1].SetActive(false);
     }
-    public void AppendDialog(string text)
+    public void AppendDialog(Dialog dialog)
     {
-        dialog.Enqueue(text);
+        this.dialog.Enqueue(dialog);
     }
     public int DialogCount()
     {
@@ -225,34 +248,30 @@ public class UIManager : SingleTon<UIManager>
     {
         if (imageOn)
         {
-            image.rectTransform.DOAnchorPosY(-109f, 1f).OnComplete(() =>
+            image.rectTransform.DOAnchorPosY(-109f, 0.6f).OnComplete(() =>
             {
                 image.sprite = sprite;
-                image.rectTransform.DOAnchorPosY(109f, 1f);
+                image.rectTransform.DOAnchorPosY(109f, 0.6f);
             });
         }
         else
         {
             image.sprite = sprite;
             imageOn = true;
-            image.rectTransform.DOAnchorPosY(109f, 1f);
+            image.rectTransform.DOAnchorPosY(109f, 0.6f);
         }
     }
     public void OutImage()
     {
         if (imageOn)
         {
-            image.rectTransform.DOAnchorPosY(-109f, 1f);
+            image.rectTransform.DOAnchorPosY(-109f, 0.6f);
             imageOn = false;
         }
     }
     public void OnClickStart()
     {
-        Time.timeScale = 1;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        GameManager.Instance.canControl = true;
-        GameManager.Instance.playing = true;
+        GameManager.Instance.GameStart();
     }
     public void OnClickQuit()
     {

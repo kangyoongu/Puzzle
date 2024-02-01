@@ -17,6 +17,7 @@ public class MapReset : MonoBehaviour
     List<Enemy> enemies = new();
     public string nextScene;
     public Transform spawnPoint;
+    public GameObject closeDoor;
     void Start()
     {
         Interactable[] inters = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
@@ -59,7 +60,7 @@ public class MapReset : MonoBehaviour
         EventBus.Subscribe(State.Clear, GameClear);
         transform.root.position = GameManager.Instance.currentJointPos;
         GameManager.Instance.currentJointPos = transform.root.position;
-        GameManager.Instance.currentSpawnPoint = spawnPoint.position;
+        GameManager.Instance.currentSpawnPoint = spawnPoint;
         GameManager.Instance.currentInfo = this;
     }
     private void OnDisable()
@@ -87,7 +88,7 @@ public class MapReset : MonoBehaviour
             transforms[i].DOMove(positions[i], 6).SetEase(Ease.OutCubic);
             transforms[i].DORotateQuaternion(angles[i], 6);
         }
-        GameManager.Instance.camTrm.DORotateQuaternion(camAngle, 6);
+        PlayerController.Instance.camTransform.DORotateQuaternion(camAngle, 6);
         yield return new WaitForSeconds(6);
         GravityControl.Instance.changeState = State.Up;
         for (int i = 0; i < objects.Count; i++)
@@ -115,6 +116,14 @@ public class MapReset : MonoBehaviour
             if(enemies[i].gameObject.activeSelf == true)
                 enemies[i].DieEnemy();
         }
+        PlayerController.Instance.grabbing = false;
         GameManager.Instance.clear = true;
+    }
+    public void KinematicFalse()
+    {
+        for (int i = 0; i < objects.Count; i++)
+        {
+            rigids[i].isKinematic = false;
+        }
     }
 }

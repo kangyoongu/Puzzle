@@ -28,14 +28,14 @@ public class Lover : Interactable
     {
         if (follow)
         {
-            FollowTarget(GameManager.Instance.player.position);
+            FollowTarget(PlayerController.Instance.transform.position);
 
-            if (Vector3.Distance(GameManager.Instance.player.position, transform.position) <= stopDis)
+            if (Vector3.Distance(PlayerController.Instance.transform.position, transform.position) <= stopDis)
             {
                 follow = false;
             }
         }
-        else if (Vector3.Distance(GameManager.Instance.player.position, transform.position) > stopDis)
+        else if (Vector3.Distance(PlayerController.Instance.transform.position, transform.position) > stopDis)
         {
             follow = true;
         }
