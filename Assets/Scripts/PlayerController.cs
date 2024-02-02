@@ -113,7 +113,7 @@ public class PlayerController : SingleTon<PlayerController>
         rb.isKinematic = true;
         transform.DOMove(GameManager.Instance.currentSpawnPoint.position, 4).SetEase(Ease.InSine);
         transform.DORotateQuaternion(GameManager.Instance.currentSpawnPoint.rotation, 4).SetEase(Ease.InSine);
-        camTransform.DORotateQuaternion(Quaternion.identity, 4);
+        camTransform.DOLocalRotateQuaternion(Quaternion.identity, 4);
         yield return new WaitForSeconds(4);
         GravityControl.Instance.changeState = State.Up;
         ObjectReset();

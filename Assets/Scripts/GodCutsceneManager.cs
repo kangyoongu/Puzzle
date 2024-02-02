@@ -30,7 +30,7 @@ public class GodCutsceneManager : SingleTon<GodCutsceneManager>
         yield return new WaitForSeconds(time);
         cam.Priority = 0;
         yield return new WaitForSeconds(0.1f);
-        mainCam.m_DefaultBlend.m_Time = 2;
+        mainCam.m_DefaultBlend.m_Time = 1;
         cube.SetActive(true);
     }
 }

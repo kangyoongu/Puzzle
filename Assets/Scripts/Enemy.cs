@@ -16,18 +16,26 @@ public class Enemy : Interactable
     Vector3 startPos;
     Tweener tween;
     Transform lover;
+    [HideInInspector] public bool move = true;
     void Start()
     {
         vfx = GetComponent<VisualEffect>();
         sphereCollider = GetComponent<SphereCollider>();
         rigid = GetComponent<Rigidbody>();
         startPos = transform.position;
-        lover = FindFirstObjectByType<Lover>().transform;
+        try
+        {
+            lover = FindFirstObjectByType<Lover>().transform;
+        }
+        catch
+        {
+            print("No Lover");
+        }
     }
 
     void FixedUpdate()
     {
-        if (!GameManager.Instance.clear && PlayerController.Instance.camTransform)
+        if (!GameManager.Instance.clear && PlayerController.Instance.camTransform && move)
         {
             if (follow)
             {
@@ -144,7 +152,7 @@ public class Enemy : Interactable
         vfx.SetFloat("Lerp", 0);
         vfx.Play();
         sphereCollider.enabled = true;
-        transform.parent = null;
+        transform.parent = GameManager.Instance.currentInfo.transform.root;
 
         follow = false;
     }

@@ -3250,6 +3250,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &669901373 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6578708848044709586, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
+  m_PrefabInstance: {fileID: 6269947481121021956}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &683281076
 GameObject:
   m_ObjectHideFlags: 0
@@ -4918,7 +4923,7 @@ MonoBehaviour:
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 0
+    m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -10979,6 +10984,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 804785917473804645, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3163834094053848545, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -11022,7 +11031,7 @@ PrefabInstance:
     - target: {fileID: 5672766341574271052, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
       propertyPath: camTransform
       value: 
-      objectReference: {fileID: 963194228}
+      objectReference: {fileID: 669901373}
     - target: {fileID: 8966786079516971463, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
       propertyPath: m_Name
       value: Player

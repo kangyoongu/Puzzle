@@ -30,9 +30,9 @@ public class GameManager : SingleTon<GameManager>
     {
         if(PlayerPrefs.GetInt("Stage") == 1)
         {
-            PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0;
+            //PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0;
         }
-        SceneManager.LoadScene(PlayerPrefs.GetInt("Stage"), LoadSceneMode.Additive);
+        SceneManager.LoadScene(5/*PlayerPrefs.GetInt("Stage")*/, LoadSceneMode.Additive);
         Time.timeScale = 1;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -47,6 +47,9 @@ public class GameManager : SingleTon<GameManager>
         PlayerController.Instance.transform.position = currentSpawnPoint.position;
         PlayerController.Instance.transform.rotation = currentSpawnPoint.rotation;
         currentInfo.KinematicFalse();
+        ResetPosition();
+        if (currentInfo.closeDoor)
+            currentInfo.closeDoor.SetActive(true);
     }
     public void ResetPosition()
     {

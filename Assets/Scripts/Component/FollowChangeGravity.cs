@@ -40,17 +40,37 @@ public class FollowChangeGravity : Interactable
     }
     private void Up()
     {
-        if (type == ObjectType.Normal)
+        if (!zeroZone)
         {
-            constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
-        }
-        else if (type == ObjectType.Reverce)
-        {
-            constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+            if (type == ObjectType.Normal)
+            {
+                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+            }
+            else if (type == ObjectType.Reverce)
+            {
+                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+            }
+            else
+            {
+                //constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                constantForce.force = new Vector3(0, 0, 0);
+            }
         }
         else
         {
-            constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+            if (type == ObjectType.Normal)
+            {
+                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+            }
+            else if (type == ObjectType.Reverce)
+            {
+                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+            }
+            else
+            {
+                //constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                constantForce.force = new Vector3(0, 0, 0);
+            }
         }
     }
     private void Down()
@@ -67,7 +87,8 @@ public class FollowChangeGravity : Interactable
             }
             else
             {
-                constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                //constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                constantForce.force = new Vector3(0, 0, 0);
             }
         }
         else
@@ -79,11 +100,12 @@ public class FollowChangeGravity : Interactable
             }
             else if (type == ObjectType.Reverce)
             {
-                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
             }
             else
             {
-                constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                //constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                constantForce.force = new Vector3(0, 0, 0);
             }
         }
     }
