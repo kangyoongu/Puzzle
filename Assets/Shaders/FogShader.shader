@@ -113,6 +113,7 @@ Shader "Hidden/FogShader"
                     dstToBox = rayBoxInfo.x;
                     dstInsideBox = rayBoxInfo.y;
                     transmittance = (dstInsideBox >0 && dstToBox < depth) ? (1 - (dstInsideBox * _Weight)) : 1;
+                    transmittance = max(transmittance, 1 - clamp(abs(depth-dstToBox) * _Weight, 0, 1));
                 }
                 else if(_Count <= 2){
                     rayBoxInfo = rayBoxDst(_BoundsMin0, _BoundsMax0, rayOrigin, rayDir);
