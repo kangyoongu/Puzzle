@@ -14,8 +14,8 @@ public class FogInfo : SingleTon<FogInfo>
             count = value;
             for (int i = 0; i < container.Count; i++)
             {
-                material.SetVector("_BoundsMin" + i.ToString("0"), container[i].localPosition - container[i].localScale / 2);
-                material.SetVector("_BoundsMax" + i.ToString("0"), container[i].localPosition + container[i].localScale / 2);
+                material.SetVector("_BoundsMin" + i.ToString("0"), container[i].position - container[i].localScale / 2);
+                material.SetVector("_BoundsMax" + i.ToString("0"), container[i].position + container[i].localScale / 2);
                 material.SetInt("_Count", count);
             }
         }

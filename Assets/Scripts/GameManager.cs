@@ -14,6 +14,7 @@ public class GameManager : SingleTon<GameManager>
     [HideInInspector] public Transform currentSpawnPoint;
     [HideInInspector] public MapReset currentInfo;
     [HideInInspector] public Vector3 currentJointPos = Vector3.zero;
+    public int startStage = 7;
     private void Start()
     {
         Time.timeScale = 0;
@@ -32,7 +33,7 @@ public class GameManager : SingleTon<GameManager>
         {
             //PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0;
         }
-        SceneManager.LoadScene(5/*PlayerPrefs.GetInt("Stage")*/, LoadSceneMode.Additive);
+        SceneManager.LoadScene(startStage/*PlayerPrefs.GetInt("Stage")*/, LoadSceneMode.Additive);
         Time.timeScale = 1;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

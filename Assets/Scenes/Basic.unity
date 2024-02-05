@@ -2510,6 +2510,7 @@ MonoBehaviour:
   currentSpawnPoint: {fileID: 0}
   currentInfo: {fileID: 0}
   currentJointPos: {x: 0, y: 0, z: 0}
+  startStage: 7
 --- !u!1 &523365007
 GameObject:
   m_ObjectHideFlags: 0
