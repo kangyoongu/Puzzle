@@ -43,6 +43,7 @@ public class GameManager : SingleTon<GameManager>
     IEnumerator NextFrame()
     {
         yield return null;
+        yield return null;
         currentInfo.transform.root.position = PlayerController.Instance.transform.position;
         PlayerController.Instance.transform.position = currentSpawnPoint.position;
         PlayerController.Instance.transform.rotation = currentSpawnPoint.rotation;

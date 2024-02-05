@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8349871340123005367}
   m_Layer: 8
   m_Name: Visual
-  m_TagString: KillEnemy
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -155,4 +155,4 @@ MonoBehaviour:
   child: {fileID: 0}
   layerMask:
     serializedVersion: 2
-    m_Bits: 32503
+    m_Bits: 24311

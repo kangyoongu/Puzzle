@@ -17,6 +17,7 @@ public class Enemy : Interactable
     Tweener tween;
     Transform lover;
     [HideInInspector] public bool move = true;
+    public bool dieWithLaser = true;
     void Start()
     {
         vfx = GetComponent<VisualEffect>();
@@ -97,6 +98,13 @@ public class Enemy : Interactable
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("KillEnemy") || other.CompareTag("KillAll"))
+        {
+            if (GameManager.Instance.canControl)
+            {
+                StartCoroutine(Die());
+            }
+        }
+        if(other.CompareTag("Laser") && dieWithLaser)
         {
             if (GameManager.Instance.canControl)
             {

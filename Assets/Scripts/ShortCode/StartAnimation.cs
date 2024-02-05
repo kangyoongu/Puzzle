@@ -13,7 +13,7 @@ public class StartAnimation : MonoBehaviour
     public GameObject resetter;
     public void SetStart()
     {
-        //PlayerPrefs.DeleteKey("Animation1");
+        PlayerPrefs.DeleteKey("Animation1");
         if (!PlayerPrefs.HasKey("Animation1"))
         {
             PlayerPrefs.SetInt("Animation1", -1);
@@ -33,7 +33,7 @@ public class StartAnimation : MonoBehaviour
     }
     IEnumerator StartAnim()
     {
-        yield return new WaitForSeconds(1);
+        GameManager.Instance.canControl = false;
         view.Priority = 15;
         enemy.move = false;
         floor.SetActive(false);
@@ -41,12 +41,14 @@ public class StartAnimation : MonoBehaviour
         rigidFloor[1].SetActive(true);
         rigidFloor[2].SetActive(true);
         rigidFloor[3].SetActive(true);
-        yield return new WaitForSeconds(0.6f);
-        enemy.transform.DOLocalMove(new Vector3(84.50336f, 5.511235f, 0f), 2).SetEase(Ease.InBack);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1f);
+        enemy.transform.DOLocalMove(new Vector3(84.50336f, 5.511235f, 0f), 3).SetEase(Ease.OutBack);
+        yield return new WaitForSeconds(4);
         view.Priority = 5;
         enemy.move = true;
         resetter.SetActive(true);
+        resetter.GetComponent<MapReset>().KinematicFalse();
+        GameManager.Instance.canControl = true;
     }
 
     private void OnTriggerEnter(Collider other)

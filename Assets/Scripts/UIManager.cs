@@ -102,7 +102,7 @@ public class UIManager : SingleTon<UIManager>
                     dialogText.text += text[i];
                     yield return new WaitForSeconds(0.1f);
                 }
-                yield return new WaitForSeconds(Mathf.Min(1f, text.Length * 0.2f));
+                yield return new WaitForSeconds(text.Length == 0 ? 0 : Mathf.Min(1f, text.Length * 0.2f));
             }
         }
         dialogWindow.DOAnchorPosY(-320f, 1.5f).SetEase(Ease.InBack);

@@ -39,7 +39,13 @@ public class PlayerController : SingleTon<PlayerController>
             grabObject.EndGrab();
         }
     }
-
+    public void Down()
+    {
+        rb.velocity = Vector3.zero;
+        rb.freezeRotation = false;
+        rb.AddTorque(Vector3.right * 4);
+        GameManager.Instance.canControl = false;
+    }
     void Update()
     {
         if (GameManager.Instance.canControl)

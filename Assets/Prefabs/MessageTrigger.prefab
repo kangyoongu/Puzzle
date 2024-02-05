@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4990832877223120126}
   - component: {fileID: 4862846572280279960}
   - component: {fileID: 3811107210392363470}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: MessageTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,6 +74,7 @@ MonoBehaviour:
     dialog: 
     image: {fileID: 0}
     refresh: 0
+  delay: 0
 --- !u!54 &3811107210392363470
 Rigidbody:
   m_ObjectHideFlags: 0

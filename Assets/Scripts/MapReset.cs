@@ -12,6 +12,7 @@ public class MapReset : MonoBehaviour
     List<Transform> transforms = new();
     List<Rigidbody> rigids = new();
     List<Interactable> objects = new();
+    DissolvingWall[] walls;
     Quaternion camAngle;
     RotateCam rotateCam;
     List<Enemy> enemies = new();
@@ -29,7 +30,8 @@ public class MapReset : MonoBehaviour
     void Start()
     {
         Interactable[] inters = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
-        for(int i = 0; i < inters.Length; i++)
+        walls = FindObjectsByType<DissolvingWall>(FindObjectsSortMode.None);
+        for (int i = 0; i < inters.Length; i++)
         {
             if(inters[i].gameObject.scene == gameObject.scene)
             {
@@ -73,7 +75,7 @@ public class MapReset : MonoBehaviour
         EventBus.Unsubscribe(State.Clear, GameClear);
     }
 
-    void PlayerDie()
+    public void PlayerDie()
     {
         StartCoroutine(Delay());
     }
@@ -119,6 +121,10 @@ public class MapReset : MonoBehaviour
         {
             if(enemies[i].gameObject.activeSelf == true)
                 enemies[i].DieEnemy();
+        }
+        for(int i = 0; i < walls.Length; i++)
+        {
+            walls[i].Off();
         }
         PlayerController.Instance.grabbing = false;
         GameManager.Instance.clear = true;

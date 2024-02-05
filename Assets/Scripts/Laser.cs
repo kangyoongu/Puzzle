@@ -46,16 +46,6 @@ public class Laser : MonoBehaviour
                 }
                 transform.localScale = new Vector3(1, 1, hit.distance * 0.5f);
             }
-            if (hit.collider.CompareTag("ZeroGravityZone"))
-            {
-                SkipWall(hit.point, distance + hit.distance);
-                return;
-            }
-            if (hit.collider.gameObject.layer == LayerMask.GetMask("Scanner"))
-            {
-                SkipWall(hit.point, distance + hit.distance);
-                return;
-            }
             if (hit.collider.CompareTag("DissolvingWall"))
             {
                 hit.transform.GetComponent<DissolvingWall>().ColliderOff();

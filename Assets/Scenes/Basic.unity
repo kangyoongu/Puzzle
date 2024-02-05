@@ -4876,7 +4876,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 16375
+    m_Bits: 49143
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -11032,6 +11032,14 @@ PrefabInstance:
       propertyPath: camTransform
       value: 
       objectReference: {fileID: 669901373}
+    - target: {fileID: 5672766341574271052, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
+      propertyPath: grabLayer.m_Bits
+      value: 9975
+      objectReference: {fileID: 0}
+    - target: {fileID: 6547103853356334027, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
+      propertyPath: camSpeed
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8966786079516971463, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
       propertyPath: m_Name
       value: Player
