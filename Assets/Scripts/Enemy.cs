@@ -16,27 +16,36 @@ public class Enemy : Interactable
     Vector3 startPos;
     Tweener tween;
     Transform lover;
+    [HideInInspector] public bool move = true;
+    public bool dieWithLaser = true;
     void Start()
     {
         vfx = GetComponent<VisualEffect>();
         sphereCollider = GetComponent<SphereCollider>();
         rigid = GetComponent<Rigidbody>();
         startPos = transform.position;
-        lover = FindFirstObjectByType<Lover>().transform;
+        try
+        {
+            lover = FindFirstObjectByType<Lover>().transform;
+        }
+        catch
+        {
+            print("No Lover");
+        }
     }
 
     void FixedUpdate()
     {
-        if (!GameManager.Instance.clear && GameManager.Instance.camTrm)
+        if (!GameManager.Instance.clear && PlayerController.Instance.camTransform && move)
         {
             if (follow)
             {
                 Vector3 closer;
                 if (lover != null)
-                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - GameManager.Instance.player.position) ?
-                        lover.position : GameManager.Instance.player.position;
+                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - PlayerController.Instance.transform.position) ?
+                        lover.position : PlayerController.Instance.transform.position;
                 else
-                    closer = GameManager.Instance.player.position;
+                    closer = PlayerController.Instance.transform.position;
 
                 FollowTarget(closer);
                 if (Vector3.Distance(closer, transform.position) >= missingDis)
@@ -48,10 +57,10 @@ public class Enemy : Interactable
             {
                 Vector3 closer;
                 if (lover != null)
-                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - GameManager.Instance.player.position) ?
-                        lover.position : GameManager.Instance.player.position;
+                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - PlayerController.Instance.transform.position) ?
+                        lover.position : PlayerController.Instance.transform.position;
                 else
-                    closer = GameManager.Instance.player.position;
+                    closer = PlayerController.Instance.transform.position;
 
                 FollowTarget(startPos);
 
@@ -89,6 +98,13 @@ public class Enemy : Interactable
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("KillEnemy") || other.CompareTag("KillAll"))
+        {
+            if (GameManager.Instance.canControl)
+            {
+                StartCoroutine(Die());
+            }
+        }
+        if(other.CompareTag("Laser") && dieWithLaser)
         {
             if (GameManager.Instance.canControl)
             {
@@ -144,7 +160,7 @@ public class Enemy : Interactable
         vfx.SetFloat("Lerp", 0);
         vfx.Play();
         sphereCollider.enabled = true;
-        transform.parent = null;
+        transform.parent = GameManager.Instance.currentInfo.transform.root;
 
         follow = false;
     }

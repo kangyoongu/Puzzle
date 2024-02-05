@@ -33,7 +33,7 @@ public class StartCutscene : MonoBehaviour
         yield return new WaitForSeconds(6);
         cam.GetComponent<CinemachineVirtualCamera>().m_Priority = 0;
         yield return new WaitForSeconds(0.1f);
-        PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 2;
+        PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 1;
         RenderSettings.fog = true;
         gameObject.SetActive(false);
         g.SetActive(true);

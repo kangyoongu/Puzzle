@@ -38,7 +38,7 @@ public class GrabableObject : Interactable
                 }
                 constant.force = new Vector3(0, 0, 0);
             }
-            rigid.velocity = (transform.position - PlayerController.Instance.grabTrm.position) * -25;
+            rigid.velocity = (transform.position - PlayerController.Instance.grabTrm.position) * -15;
         }
     }
     public void StartGrab()
@@ -47,6 +47,9 @@ public class GrabableObject : Interactable
             currentGravity = constant.force.y;
         else
             rigid.useGravity = false;
+        rigid.constraints = RigidbodyConstraints.None;
+        rigid.freezeRotation = true;
+
         gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
         grab = true;
     }
@@ -64,8 +67,13 @@ public class GrabableObject : Interactable
             }
         }
         else
+        {
             rigid.useGravity = true;
+        }
         gameObject.layer = layer;
+        rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+        rigid.freezeRotation = true;
+        rigid.velocity = Vector3.zero;
         grab = false;
     }
 

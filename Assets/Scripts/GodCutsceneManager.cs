@@ -17,7 +17,6 @@ public class GodCutsceneManager : SingleTon<GodCutsceneManager>
             cameras[i].SetActive(true);
         }
         cube.SetActive(false);
-        ShowGod(10);
     }
     public void ShowGod(float time)
     {
@@ -31,7 +30,7 @@ public class GodCutsceneManager : SingleTon<GodCutsceneManager>
         yield return new WaitForSeconds(time);
         cam.Priority = 0;
         yield return new WaitForSeconds(0.1f);
-        mainCam.m_DefaultBlend.m_Time = 2;
+        mainCam.m_DefaultBlend.m_Time = 1;
         cube.SetActive(true);
     }
 }

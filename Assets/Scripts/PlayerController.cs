@@ -1,4 +1,6 @@
+using DG.Tweening;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : SingleTon<PlayerController>
@@ -8,7 +10,7 @@ public class PlayerController : SingleTon<PlayerController>
 
     public float speed = 5f;
     public float boostSpeed = 7f;
-
+    public Transform camTransform;
     public float grabDistance = 5f;
     [HideInInspector] public bool grabbing = false;
     [HideInInspector] public GrabableObject grabObject;
@@ -37,7 +39,13 @@ public class PlayerController : SingleTon<PlayerController>
             grabObject.EndGrab();
         }
     }
-
+    public void Down()
+    {
+        rb.velocity = Vector3.zero;
+        rb.freezeRotation = false;
+        rb.AddTorque(Vector3.right * 4);
+        GameManager.Instance.canControl = false;
+    }
     void Update()
     {
         if (GameManager.Instance.canControl)
@@ -48,15 +56,16 @@ public class PlayerController : SingleTon<PlayerController>
             Vector3 inputDirection = new Vector3(horizontalInput, 0f, verticalInput);
 
             // 로컬 좌표로 변환
-            Vector3 localVelocity = transform.TransformDirection(inputDirection) * (Input.GetKey(KeyCode.LeftShift) ? boostSpeed : speed);
+            Vector3 localVelocity = transform.TransformDirection(inputDirection);
+            if (localVelocity.sqrMagnitude > 1) localVelocity.Normalize();
+            localVelocity *= (Input.GetKey(KeyCode.LeftShift) ? boostSpeed : speed);
             rb.velocity = new Vector3(localVelocity.x, rb.velocity.y, localVelocity.z);
-
             if (Input.GetMouseButtonDown(0))
             {
                 if (!grabbing && !GameManager.Instance.clear)
                 {
                     // 카메라 기준으로 앞으로 레이를 쏩니다.
-                    Ray ray = new Ray(GameManager.Instance.camTrm.position, GameManager.Instance.camTrm.forward);
+                    Ray ray = new Ray(camTransform.position, camTransform.forward);
                     RaycastHit hit;
 
                     if (Physics.Raycast(ray, out hit, grabDistance, grabLayer))
@@ -97,6 +106,25 @@ public class PlayerController : SingleTon<PlayerController>
                 EventBus.Publish(State.PlayerDie);
             }
         }
+        if (collision.gameObject.CompareTag("KillBridge"))
+        {
+            StartCoroutine(DieOnBridge());
+        }
+    }
+    IEnumerator DieOnBridge()
+    {
+        EventBus.Publish(State.Normal);
+        Die();
+        yield return new WaitForSeconds(4);
+        rb.isKinematic = true;
+        transform.DOMove(GameManager.Instance.currentSpawnPoint.position, 4).SetEase(Ease.InSine);
+        transform.DORotateQuaternion(GameManager.Instance.currentSpawnPoint.rotation, 4).SetEase(Ease.InSine);
+        camTransform.DOLocalRotateQuaternion(Quaternion.identity, 4);
+        yield return new WaitForSeconds(4);
+        GravityControl.Instance.changeState = State.Up;
+        ObjectReset();
+        rb.isKinematic = false;
+        GameManager.Instance.canControl = true;
     }
 
     public void ObjectReset()

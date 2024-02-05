@@ -29,7 +29,7 @@ public class DoorOpen : MonoBehaviour, IDoor
     {
         if (other.CompareTag("Crystal"))
         {
-            centerMaterial.SetFloat("_Lerp", 1 - (currentCrystal / crystalNum));
+            centerMaterial.SetFloat("_Lerp", 1f - ((float)currentCrystal / (float)crystalNum));
             if (currentCrystal >= crystalNum && !open)
             {
                 open = true;
@@ -39,6 +39,7 @@ public class DoorOpen : MonoBehaviour, IDoor
     }
     public void OpenDoor()
     {
+        centerMaterial.SetFloat("_Lerp", 0);
         for (int i = 0; i < anim.Length; i++)
         {
             anim[i].Play("Open");

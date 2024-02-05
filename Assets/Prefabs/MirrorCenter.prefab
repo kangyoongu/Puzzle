@@ -296,7 +296,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8702760801986958307}
   - component: {fileID: 6867523621927518209}
-  - component: {fileID: 8665845387718377431}
   - component: {fileID: 4668032363117393571}
   m_Layer: 0
   m_Name: Camera
@@ -371,14 +370,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &8665845387718377431
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 403538230427789656}
-  m_Enabled: 1
 --- !u!114 &4668032363117393571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,7 +456,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3044484239565739336}
   - component: {fileID: 2925403189836337497}
-  - component: {fileID: 676684714571216984}
   - component: {fileID: 4969940938144559276}
   m_Layer: 0
   m_Name: Camera
@@ -540,14 +530,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &676684714571216984
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880014958803836109}
-  m_Enabled: 1
 --- !u!114 &4969940938144559276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1548,7 +1530,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7685102668181677761}
   - component: {fileID: 7641454096582981566}
-  - component: {fileID: 2266137889201101670}
   - component: {fileID: 7812713631192873555}
   m_Layer: 0
   m_Name: Camera
@@ -1623,14 +1604,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2266137889201101670
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3869470248848686939}
-  m_Enabled: 1
 --- !u!114 &7812713631192873555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2047,7 +2020,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9021794367219493058}
   - component: {fileID: 7161285371684069585}
-  - component: {fileID: 1832823224495009300}
   - component: {fileID: 9000965171845928390}
   m_Layer: 0
   m_Name: Camera
@@ -2122,14 +2094,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1832823224495009300
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4235321839481378146}
-  m_Enabled: 1
 --- !u!114 &9000965171845928390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2652,7 +2616,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8859101076915681363}
   - component: {fileID: 4597114521094775704}
-  - component: {fileID: 1291112939715531374}
   - component: {fileID: 1616728966261202715}
   m_Layer: 0
   m_Name: Camera
@@ -2727,14 +2690,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1291112939715531374
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6476481175595285968}
-  m_Enabled: 1
 --- !u!114 &1616728966261202715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3573,7 +3528,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8424104297545234352}
   - component: {fileID: 91300049934878282}
-  - component: {fileID: 6014053031017997175}
   - component: {fileID: 986518445585525990}
   m_Layer: 0
   m_Name: Camera
@@ -3648,14 +3602,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &6014053031017997175
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7778999850928202664}
-  m_Enabled: 1
 --- !u!114 &986518445585525990
 MonoBehaviour:
   m_ObjectHideFlags: 0

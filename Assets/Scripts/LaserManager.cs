@@ -9,15 +9,15 @@ public class LaserManager : SingleTon<LaserManager>
     [HideInInspector] public List<DissolvingWall> walls = new();
     void Update()
     {
-        for(int i = 0; i < walls.Count; i++)
+        for (int i = 0; i < walls.Count; i++)
         {
             walls[i].ColliderOn();
         }
         ObjectPool.Instance.ReturnAllToPool("Laser");
         reflectors = new();
-        for(int i = 0; i < roots.Count; i++)
+        for (int i = 0; i < roots.Count; i++)
         {
             roots[i].Trigger();
-        }   
+        }
     }
 }

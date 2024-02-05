@@ -12,15 +12,26 @@ public class MapReset : MonoBehaviour
     List<Transform> transforms = new();
     List<Rigidbody> rigids = new();
     List<Interactable> objects = new();
+    DissolvingWall[] walls;
     Quaternion camAngle;
     RotateCam rotateCam;
     List<Enemy> enemies = new();
     public string nextScene;
     public Transform spawnPoint;
+    public GameObject closeDoor;
+    private void Awake()
+    {
+        transform.root.position = GameManager.Instance.currentJointPos;
+        GameManager.Instance.currentJointPos = transform.root.position;
+        GameManager.Instance.currentSpawnPoint = spawnPoint;
+        GameManager.Instance.currentInfo = this;
+        FindFirstObjectByType<StartAnimation>()?.SetStart();
+    }
     void Start()
     {
         Interactable[] inters = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
-        for(int i = 0; i < inters.Length; i++)
+        walls = FindObjectsByType<DissolvingWall>(FindObjectsSortMode.None);
+        for (int i = 0; i < inters.Length; i++)
         {
             if(inters[i].gameObject.scene == gameObject.scene)
             {
@@ -35,18 +46,18 @@ public class MapReset : MonoBehaviour
         rotateCam = FindFirstObjectByType<RotateCam>();
         for (int i = 0; i < objects.Count; i++)
         {
-            positions.Add(objects[i].transform.position);
+            positions.Add(objects[i].transform.localPosition);
             angles.Add(objects[i].transform.rotation);
             rigids.Add(objects[i].GetComponent<Rigidbody>());
             transforms.Add(objects[i].transform);
         }
         rigids.Add(PlayerController.Instance.gameObject.GetComponent<Rigidbody>());
         transforms.Add(PlayerController.Instance.transform);
-        positions.Add(spawnPoint.position);
+        positions.Add(Vector3.zero);
         angles.Add(spawnPoint.rotation);
         if (GameManager.Instance.lover)
         {
-            positions.Add(spawnPoint.position + (spawnPoint.right * 2));
+            positions.Add(spawnPoint.right * 2);
             angles.Add(spawnPoint.rotation);
             rigids.Add(GameManager.Instance.lover.gameObject.GetComponent<Rigidbody>());
             transforms.Add(GameManager.Instance.lover.transform);
@@ -57,10 +68,6 @@ public class MapReset : MonoBehaviour
     {
         EventBus.Subscribe(State.PlayerDie, PlayerDie);
         EventBus.Subscribe(State.Clear, GameClear);
-        transform.root.position = GameManager.Instance.currentJointPos;
-        GameManager.Instance.currentJointPos = transform.root.position;
-        GameManager.Instance.currentSpawnPoint = spawnPoint.position;
-        GameManager.Instance.currentInfo = this;
     }
     private void OnDisable()
     {
@@ -68,7 +75,7 @@ public class MapReset : MonoBehaviour
         EventBus.Unsubscribe(State.Clear, GameClear);
     }
 
-    void PlayerDie()
+    public void PlayerDie()
     {
         StartCoroutine(Delay());
     }
@@ -79,15 +86,15 @@ public class MapReset : MonoBehaviour
         for(int i = 0; i < enemies.Count; i++)
         {
             enemies[i].gameObject.SetActive(false);
-            enemies[i].transform.parent = null;
+            enemies[i].transform.parent = GameManager.Instance.currentInfo.transform.root;
         }
         for(int i = 0; i < positions.Count; i++)
         {
             rigids[i].isKinematic = true;
-            transforms[i].DOMove(positions[i], 6).SetEase(Ease.OutCubic);
+            transforms[i].DOLocalMove(positions[i], 6).SetEase(Ease.OutCubic);
             transforms[i].DORotateQuaternion(angles[i], 6);
         }
-        GameManager.Instance.camTrm.DORotateQuaternion(camAngle, 6);
+        PlayerController.Instance.camTransform.DOLocalRotateQuaternion(camAngle, 6);
         yield return new WaitForSeconds(6);
         GravityControl.Instance.changeState = State.Up;
         for (int i = 0; i < objects.Count; i++)
@@ -108,13 +115,25 @@ public class MapReset : MonoBehaviour
     {
         for(int i = 0; i < objects.Count; i++)
         {
-            rigids[i].constraints = RigidbodyConstraints.FreezeAll;
+            rigids[i].isKinematic = true;
         }
         for(int i = 0; i < enemies.Count; i++)
         {
             if(enemies[i].gameObject.activeSelf == true)
                 enemies[i].DieEnemy();
         }
+        for(int i = 0; i < walls.Length; i++)
+        {
+            walls[i].Off();
+        }
+        PlayerController.Instance.grabbing = false;
         GameManager.Instance.clear = true;
+    }
+    public void KinematicFalse()
+    {
+        for (int i = 0; i < objects.Count; i++)
+        {
+            rigids[i].isKinematic = false;
+        }
     }
 }

@@ -9,7 +9,7 @@ public enum State : short
     Normal = 0,
     Down = 1,
     PlayerDie = 2,
-    Clear = 3
+    Clear = 3,
 }
 public static class EventBus
 {

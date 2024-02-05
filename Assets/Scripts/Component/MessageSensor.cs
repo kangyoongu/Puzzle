@@ -4,25 +4,29 @@ using UnityEngine;
 
 public class MessageSensor : MonoBehaviour
 {
-    public List<string> messages;
-    public Sprite image;
-    public bool upImage;
+    public Dialog[] messages;
+    public int delay;
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            for(int i = 0; i < messages.Count; i++)
-            {
-                UIManager.Instance.AppendDialog(messages[i]);
-            }
-            if (upImage)
-            {
-                UIManager.Instance.AppendImage(image);
-            }
-            else
-            {
-                UIManager.Instance.OutImage();
-            }
+            StartCoroutine(Delay());
         }
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(delay);
+
+        for (int i = 0; i < messages.Length; i++)
+        {
+            UIManager.Instance.AppendDialog(messages[i]);
+        }
+        gameObject.SetActive(false);
+    }
+
+    public void CanControl()
+    {
+        GameManager.Instance.canControl = true;
     }
 }
