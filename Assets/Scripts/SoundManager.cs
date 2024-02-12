@@ -11,18 +11,28 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private Slider BGMSlider;
     [SerializeField] private Slider SFXSlider;
 
+    private void Start()
+    {
+        readingSlider.value = JsonManager.Instance.Reading;
+        BGMSlider.value = JsonManager.Instance.BGM;
+        SFXSlider.value = JsonManager.Instance.SFX;
+    }
+
     public void SetReadVolume(float volume)
     {
         audioMixer.SetFloat("Reading", Mathf.Log10(volume) * 20);
+        JsonManager.Instance.Reading = volume;
     }
 
     public void SetBGMVolume(float volume)
     {
         audioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
+        JsonManager.Instance.BGM = volume;
     }
 
     public void SetSFXVolume(float volume)
     {
         audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+        JsonManager.Instance.SFX = volume;
     }
 }

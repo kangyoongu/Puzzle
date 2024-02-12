@@ -8,6 +8,10 @@ public class DissolvingWall : MonoBehaviour
     private MeshRenderer mesh;
     Material mat;
     bool work = true;
+    public AudioClip onClip;
+    public AudioClip offClip;
+    AudioSource audioSource;
+    bool beforeCollider = true;
     private void Awake()
     {
         boxCollider = GetComponent<Collider>();
@@ -26,6 +30,7 @@ public class DissolvingWall : MonoBehaviour
         mat = mesh.material;
         mat = Instantiate(mat);
         mesh.material = mat;
+        audioSource = GetComponent<AudioSource>();
     }
     public void ColliderOn()
     {
@@ -38,7 +43,7 @@ public class DissolvingWall : MonoBehaviour
     {
         if(boxCollider.enabled == true && work)
         {
-            boxCollider.enabled = false; 
+            boxCollider.enabled = false;
         }
     }
     private void LateUpdate()
@@ -47,11 +52,23 @@ public class DissolvingWall : MonoBehaviour
         {
             if (boxCollider.enabled)
             {
+                if(!beforeCollider && mat.GetFloat("_Lerp") < 0.8f)
+                {
+                    beforeCollider = true;
+                    audioSource.clip = onClip;
+                    audioSource.Play();
+                }
                 mat.SetFloat("_Lerp", Mathf.Clamp01(mat.GetFloat("_Lerp") - 2f * Time.deltaTime));
                 gameObject.layer = LayerMask.NameToLayer("Default");
             }
             else
             {
+                if (beforeCollider && mat.GetFloat("_Lerp") > 0.2f)
+                {
+                    beforeCollider = false;
+                    audioSource.clip = offClip;
+                    audioSource.Play();
+                }
                 mat.SetFloat("_Lerp", Mathf.Clamp01(mat.GetFloat("_Lerp") + 2f * Time.deltaTime));
                 gameObject.layer = LayerMask.NameToLayer("NotGrabLayer");
             }

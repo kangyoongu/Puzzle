@@ -22,11 +22,6 @@ public class MessageSensor : MonoBehaviour
         {
             UIManager.Instance.AppendDialog(messages[i]);
         }
-        gameObject.SetActive(false);
-    }
-
-    public void CanControl()
-    {
-        GameManager.Instance.canControl = true;
+        Destroy(this);
     }
 }

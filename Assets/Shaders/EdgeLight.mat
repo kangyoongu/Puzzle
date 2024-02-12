@@ -71,6 +71,6 @@ Material:
     - _ZWriteControl: 0
     m_Colors:
     - _Down: {r: 19.468573, g: 5.788049, b: 0, a: 0}
-    - _Power: {r: -0.02, g: 0.06, b: 0, a: 0}
-    - _Up: {r: 0, g: 9.082411, b: 8.884587, a: 0}
+    - _Power: {r: -0.25, g: 0.06, b: 0, a: 0}
+    - _Up: {r: 0, g: 14.754421, b: 14.433057, a: 0}
   m_BuildTextureStacks: []

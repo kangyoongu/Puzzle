@@ -40,7 +40,8 @@ public class MapReset : MonoBehaviour
             Enemy enemy;
             if (inters[i].gameObject.TryGetComponent(out enemy))
             {
-                enemies.Add(enemy);
+                if(enemy.gameObject.scene == gameObject.scene)
+                    enemies.Add(enemy);
             }
         }
         rotateCam = FindFirstObjectByType<RotateCam>();
@@ -74,10 +75,34 @@ public class MapReset : MonoBehaviour
         EventBus.Unsubscribe(State.PlayerDie, PlayerDie);
         EventBus.Unsubscribe(State.Clear, GameClear);
     }
-
+    public void SetSpawnPoint(int index, Vector3 pos)
+    {
+        positions[index] = pos;
+    }
     public void PlayerDie()
     {
         StartCoroutine(Delay());
+    }
+    public void OnlyPlayerDie()
+    {
+        StartCoroutine(OnlyPlayerDelay());
+    }
+    IEnumerator OnlyPlayerDelay()
+    {
+        EventBus.Publish(State.Normal);
+        yield return new WaitForSeconds(4);
+        rigids[objects.Count].isKinematic = true;
+        transforms[objects.Count].DOLocalMove(positions[objects.Count], 6).SetEase(Ease.OutCubic);
+        transforms[objects.Count].DORotateQuaternion(angles[objects.Count], 6);
+        PlayerController.Instance.camTransform.DOLocalRotateQuaternion(camAngle, 6);
+        yield return new WaitForSeconds(6);
+        GravityControl.Instance.changeState = State.Up;
+
+        rigids[objects.Count].isKinematic = false;
+        rotateCam.pitch = 0;
+        rotateCam.yaw = 0;
+        PlayerController.Instance.ObjectReset();
+        GameManager.Instance.canControl = true;
     }
     IEnumerator Delay()
     {
@@ -85,12 +110,16 @@ public class MapReset : MonoBehaviour
         yield return new WaitForSeconds(4);
         for(int i = 0; i < enemies.Count; i++)
         {
-            enemies[i].gameObject.SetActive(false);
-            enemies[i].transform.parent = GameManager.Instance.currentInfo.transform.root;
-        }
-        for(int i = 0; i < positions.Count; i++)
+            if (enemies[i])
+            {
+                enemies[i].gameObject.SetActive(false);
+                enemies[i].transform.parent = GameManager.Instance.currentInfo.transform.root;
+            }
+            }
+            for (int i = 0; i < positions.Count; i++)
         {
-            rigids[i].isKinematic = true;
+            if(rigids[i] != null)
+                rigids[i].isKinematic = true;
             transforms[i].DOLocalMove(positions[i], 6).SetEase(Ease.OutCubic);
             transforms[i].DORotateQuaternion(angles[i], 6);
         }
@@ -104,18 +133,20 @@ public class MapReset : MonoBehaviour
         }
         for(int i = 0; i < rigids.Count; i++)
         {
-            rigids[i].isKinematic = false;
+            if (rigids[i] != null)
+                rigids[i].isKinematic = false;
         }
         rotateCam.pitch = 0;
         rotateCam.yaw = 0;
         PlayerController.Instance.ObjectReset();
         GameManager.Instance.canControl = true;
     }
-    void GameClear()
+    public void GameClear()
     {
         for(int i = 0; i < objects.Count; i++)
         {
-            rigids[i].isKinematic = true;
+            if (rigids[i] != null)
+                rigids[i].isKinematic = true;
         }
         for(int i = 0; i < enemies.Count; i++)
         {
@@ -128,12 +159,5 @@ public class MapReset : MonoBehaviour
         }
         PlayerController.Instance.grabbing = false;
         GameManager.Instance.clear = true;
-    }
-    public void KinematicFalse()
-    {
-        for (int i = 0; i < objects.Count; i++)
-        {
-            rigids[i].isKinematic = false;
-        }
     }
 }

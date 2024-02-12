@@ -49,12 +49,15 @@ public class Laser : MonoBehaviour
             if (hit.collider.CompareTag("DissolvingWall"))
             {
                 hit.transform.GetComponent<DissolvingWall>().ColliderOff();
-                SkipWall(hit.point, distance + hit.distance);
+                SkipWall(hit.point + transform.forward * 0.01f, distance+0.01f + hit.distance);
+                return;
             }
-            else
+            if (hit.collider.isTrigger && hit.collider.gameObject.layer != LayerMask.NameToLayer("BlockLaser"))
             {
-                transform.localScale = new Vector3(1, 1, (distance + hit.distance) * 0.5f);
+                SkipWall(hit.point + transform.forward * 0.01f, distance + 0.01f + hit.distance);
+                return;
             }
+            transform.localScale = new Vector3(1, 1, (distance + hit.distance) * 0.5f);
         }
         else
         {

@@ -6,19 +6,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public enum Dir : short
 {
     x,
     y
-}
-
-[Serializable]
-public struct Dialog
-{
-    public UnityEvent action;
-    public string dialog;
-    public Sprite image;
-    public bool refresh;
 }
 
 [Serializable]
@@ -33,6 +25,12 @@ public struct UI
     public bool setActive;
     public float fadeFloat;
 }
+[Serializable]
+public struct Dialog
+{
+    public string speaker;
+    public string line;
+}
 public class UIManager : SingleTon<UIManager>
 {
     public UI[] gameOverUI;
@@ -45,18 +43,20 @@ public class UIManager : SingleTon<UIManager>
     private Queue<Dialog> dialog = new();
     public Image image;
     public TextMeshProUGUI dialogText;
+    public TextMeshProUGUI speakerText;
     public RectTransform dialogWindow;
     bool playingText = false;
     bool setting = false;
     bool imageOn = false;
     public GameObject pause;
+    Coroutine co;
     private void Update()
     {
         if(dialog.Count > 0 && !playingText)
         {
             StartCoroutine(DisplayText());
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && block[0].activeSelf == false)
         {
             if (setting)
             {
@@ -79,30 +79,24 @@ public class UIManager : SingleTon<UIManager>
     IEnumerator DisplayText()
     {
         playingText = true;
-        dialogText.text = "";
-        dialogWindow.DOAnchorPosY(228f, 1.5f).SetEase(Ease.OutBack);
-        yield return new WaitForSeconds(1.5f);
         while (dialog.Count > 0)
         {
+            Dialog text = dialog.Dequeue();
             dialogText.text = "";
-            Dialog d = dialog.Dequeue();
-            d.action?.Invoke();
-            string text = d.dialog;
-            if (d.refresh)
+            speakerText.text = text.speaker;
+            if (dialogWindow.anchoredPosition.y != 228f)
             {
-                if (d.image)
-                    AppendImage(d.image);
-                else
-                    OutImage();
+                dialogWindow.DOAnchorPosY(228f, 1.5f).SetEase(Ease.OutBack);
+                yield return new WaitForSeconds(1.5f);
             }
-            if (text != "")
+            if (text.line != "")
             {
-                for (int i = 0; i < text.Length; i++)
+                for (int i = 0; i < text.line.Length; i++)
                 {
-                    dialogText.text += text[i];
+                    dialogText.text += text.line[i];
                     yield return new WaitForSeconds(0.1f);
                 }
-                yield return new WaitForSeconds(text.Length == 0 ? 0 : Mathf.Min(1f, text.Length * 0.2f));
+                yield return new WaitForSeconds(Mathf.Min(1f, text.line.Length * 0.2f));
             }
         }
         dialogWindow.DOAnchorPosY(-320f, 1.5f).SetEase(Ease.InBack);
@@ -244,37 +238,70 @@ public class UIManager : SingleTon<UIManager>
     {
         return dialog.Count;
     }
-    public void AppendImage(Sprite sprite)
+    public void ShowImage(Sprite sprite, float time)
     {
         if (imageOn)
         {
-            image.rectTransform.DOAnchorPosY(-109f, 0.6f).OnComplete(() =>
-            {
-                image.sprite = sprite;
-                image.rectTransform.DOAnchorPosY(109f, 0.6f);
-            });
+            StopCoroutine(co);
+            co = StartCoroutine(Swap(time, sprite));
         }
         else
         {
             image.sprite = sprite;
-            imageOn = true;
-            image.rectTransform.DOAnchorPosY(109f, 0.6f);
+            co = StartCoroutine(Show(time));
         }
     }
-    public void OutImage()
+    IEnumerator Swap(float time, Sprite sprite)
     {
-        if (imageOn)
-        {
-            image.rectTransform.DOAnchorPosY(-109f, 0.6f);
-            imageOn = false;
-        }
+
+        image.DOFade(0, 1);
+        yield return new WaitForSeconds(1);
+        image.sprite = sprite;
+        image.DOFade(1, 1);
+        yield return new WaitForSeconds(1);
+        imageOn = true;
+        yield return new WaitForSeconds(time);
+        image.DOFade(0, 1);
+        yield return new WaitForSeconds(1);
+        imageOn = false;
+    }
+    IEnumerator Show(float time)
+    {
+        image.DOFade(1, 1);
+        yield return new WaitForSeconds(1);
+        imageOn = true;
+        yield return new WaitForSeconds(time);
+        image.DOFade(0, 1);
+        yield return new WaitForSeconds(1);
+        imageOn = false;
     }
     public void OnClickStart()
     {
         GameManager.Instance.GameStart();
     }
+    public void OnClickRestart()
+    {
+        CheckManager.Instance.Check("정말 처음부터\n다시하시겠습니까?", Restart);
+    }
+    private void Restart()
+    {
+        GameManager.Instance.GameStart();
+        PlayerPrefs.SetInt("Stage", 1);
+        PlayUIIn();
+        MainUIOut();
+    }
     public void OnClickQuit()
     {
         Application.Quit();
+    }
+    public void OnClickGoMain()
+    {
+        CheckManager.Instance.Check("정말 하던 게임을\n그만두시겠습니까?", GoMain);
+    }
+
+    private void GoMain()
+    {
+        SceneManager.UnloadSceneAsync(GameManager.Instance.currentInfo.gameObject.scene);
+        SceneManager.LoadScene(gameObject.scene.name);
     }
 }

@@ -7,19 +7,20 @@ public class Enemy : Interactable
 {
     private VisualEffect vfx;
     private SphereCollider sphereCollider;
-    private Rigidbody rigid;
+    [HideInInspector]public Rigidbody rigid;
     public float rotationSpeed = 2;
     public float speed = 1;
     public float followDis;
     public float missingDis;
     bool follow = false;
-    Vector3 startPos;
+    [HideInInspector] public Vector3 startPos;
     Tweener tween;
     Transform lover;
     [HideInInspector] public bool move = true;
     public bool dieWithLaser = true;
     void Start()
     {
+        rotationSpeed += Random.Range(-0.2f, 0.2f);
         vfx = GetComponent<VisualEffect>();
         sphereCollider = GetComponent<SphereCollider>();
         rigid = GetComponent<Rigidbody>();
@@ -38,16 +39,16 @@ public class Enemy : Interactable
     {
         if (!GameManager.Instance.clear && PlayerController.Instance.camTransform && move)
         {
+            Vector3 closer;
+            if (lover != null)
+                closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - PlayerController.Instance.transform.position) ?
+                    lover.position : PlayerController.Instance.transform.position;
+            else
+                closer = PlayerController.Instance.transform.position;
             if (follow)
             {
-                Vector3 closer;
-                if (lover != null)
-                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - PlayerController.Instance.transform.position) ?
-                        lover.position : PlayerController.Instance.transform.position;
-                else
-                    closer = PlayerController.Instance.transform.position;
-
                 FollowTarget(closer);
+
                 if (Vector3.Distance(closer, transform.position) >= missingDis)
                 {
                     follow = false;
@@ -55,14 +56,8 @@ public class Enemy : Interactable
             }
             else
             {
-                Vector3 closer;
-                if (lover != null)
-                    closer = Vector3.SqrMagnitude(transform.position - lover.position) < Vector3.SqrMagnitude(transform.position - PlayerController.Instance.transform.position) ?
-                        lover.position : PlayerController.Instance.transform.position;
-                else
-                    closer = PlayerController.Instance.transform.position;
-
-                FollowTarget(startPos);
+                if(Vector3.Distance(startPos, transform.position) > 0.5f)
+                    FollowTarget(startPos);
 
                 if (Vector3.Distance(closer, transform.position) <= followDis)
                 {
@@ -79,7 +74,7 @@ public class Enemy : Interactable
         // 대상 방향으로 회전 각도 구하기
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
-        float weight = Mathf.Clamp(targetDirection.magnitude - 20, 2, 16) / 2;
+        float weight = Mathf.Clamp(targetDirection.magnitude - 10, 1, 100);
         // 부드러운 회전 적용
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime * weight);
@@ -97,7 +92,7 @@ public class Enemy : Interactable
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("KillEnemy") || other.CompareTag("KillAll"))
+        if ((other.CompareTag("KillEnemy") || other.CompareTag("KillAll")) && dieWithLaser)
         {
             if (GameManager.Instance.canControl)
             {
@@ -113,7 +108,7 @@ public class Enemy : Interactable
         }
         if (other.CompareTag("Player") || other.name == "Lover")
         {
-            if (!GameManager.Instance.clear && GameManager.Instance.canControl)
+            if (!GameManager.Instance.clear && GameManager.Instance.canControl && move)
             {
                 transform.parent = other.transform;
                 rigid.isKinematic = true;

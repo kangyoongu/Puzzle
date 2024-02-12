@@ -40,95 +40,104 @@ public class FollowChangeGravity : Interactable
     }
     private void Up()
     {
-        if (!zeroZone)
+        if (!GameManager.Instance.clear)
         {
-            if (type == ObjectType.Normal)
+            if (!zeroZone)
             {
-                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
-            }
-            else if (type == ObjectType.Reverce)
-            {
-                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                if (type == ObjectType.Normal)
+                {
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                }
+                else if (type == ObjectType.Reverce)
+                {
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                }
+                else
+                {
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    //constantForce.force = new Vector3(0, 0, 0);
+                }
             }
             else
             {
-                //constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
-                constantForce.force = new Vector3(0, 0, 0);
-            }
-        }
-        else
-        {
-            if (type == ObjectType.Normal)
-            {
-                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
-            }
-            else if (type == ObjectType.Reverce)
-            {
-                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
-            }
-            else
-            {
-                //constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
-                constantForce.force = new Vector3(0, 0, 0);
+                if (type == ObjectType.Normal)
+                {
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                }
+                else if (type == ObjectType.Reverce)
+                {
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                }
+                else
+                {
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    //constantForce.force = new Vector3(0, 0, 0);
+                }
             }
         }
     }
     private void Down()
     {
-        if (!zeroZone)
+        if (!GameManager.Instance.clear)
         {
-            if (type == ObjectType.Normal)
+            if (!zeroZone)
             {
-                constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
-            }
-            else if (type == ObjectType.Reverce)
-            {
-                constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                if (type == ObjectType.Normal)
+                {
+                    constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                }
+                else if (type == ObjectType.Reverce)
+                {
+                    constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                }
+                else
+                {
+                    constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                    //constantForce.force = new Vector3(0, 0, 0);
+                }
             }
             else
             {
-                //constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
-                constantForce.force = new Vector3(0, 0, 0);
-            }
-        }
-        else
-        {
 
-            if (type == ObjectType.Normal)
-            {
-                constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
-            }
-            else if (type == ObjectType.Reverce)
-            {
-                constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
-            }
-            else
-            {
-                //constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
-                constantForce.force = new Vector3(0, 0, 0);
+                if (type == ObjectType.Normal)
+                {
+                    constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
+                }
+                else if (type == ObjectType.Reverce)
+                {
+                    constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
+                }
+                else
+                {
+                    constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                    //constantForce.force = new Vector3(0, 0, 0);
+                }
             }
         }
     }
     private void Normal()
     {
-        if (!zeroZone)
+        if (!GameManager.Instance.clear)
         {
-            if (type == ObjectType.Normal)
+            if (!zeroZone)
             {
-                constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
-            }
-            else if (type == ObjectType.Reverce)
-            {
-                constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                if (type == ObjectType.Normal)
+                {
+                    constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
+                }
+                else if (type == ObjectType.Reverce)
+                {
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                }
+                else
+                {
+                    constantForce.force = new Vector3(0, 0, 0);
+                }
             }
             else
             {
                 constantForce.force = new Vector3(0, 0, 0);
             }
-        }
-        else
-        {
-            constantForce.force = new Vector3(0, 0, 0);
         }
     }
 
@@ -142,6 +151,7 @@ public class FollowChangeGravity : Interactable
         {
             zeroZone = true;
             rigid.drag = 3f;
+            other.GetComponent<ZeroGravityAudio>()?.Enter();
             if (GravityControl.Instance.currentState == State.Normal)
             {
                 Normal();
@@ -158,6 +168,7 @@ public class FollowChangeGravity : Interactable
         {
             zeroZone = false;
             rigid.drag = 0.3f;
+            other.GetComponent<ZeroGravityAudio>()?.Exit();
             if (GravityControl.Instance.currentState == State.Normal)
             {
                 Normal();

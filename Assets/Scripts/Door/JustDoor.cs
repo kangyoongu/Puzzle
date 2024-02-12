@@ -10,15 +10,21 @@ public class JustDoor : MonoBehaviour, IDoor
     Animator[] anim;
     Transform center;
     GameObject block;
+    public AudioClip openClip;
+    public AudioClip closeClip;
+    private AudioSource audioSource;
     void Start()
     {
         anim = GetComponentsInChildren<Animator>();
         center = transform.GetChild(5).GetComponent<Transform>();
+        audioSource = GetComponent<AudioSource>();
         block = transform.GetChild(6).gameObject;
     }
 
     public void OpenDoor()
     {
+        audioSource.clip = openClip;
+        audioSource.Play();
         for (int i = 0; i < anim.Length; i++)
         {
             anim[i].Play("Open");
@@ -27,7 +33,9 @@ public class JustDoor : MonoBehaviour, IDoor
     }
     public void CloseDoor()
     {
-        for(int i = 0; i < anim.Length; i++)
+        audioSource.clip = closeClip;
+        audioSource.Play();
+        for (int i = 0; i < anim.Length; i++)
         {
             anim[i].Play("Close");
         }

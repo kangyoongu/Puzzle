@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Crystal : MonoBehaviour
+public class Crystal : Interactable
 {
     Transform[] spheres;
     Material mat;
     bool isEnable = true;
     public DoorOpen targetDoor;
+    public AudioClip clip;
+    private AudioSource audioSource;
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = clip;
         spheres = GetComponentsInChildren<Transform>();
         mat = spheres[1].GetComponent<MeshRenderer>().material;
         mat = Instantiate(mat);
@@ -26,10 +30,11 @@ public class Crystal : MonoBehaviour
 
     IEnumerator PlayParticle()
     {
+        audioSource.Play();
         mat.DOFloat(1, "_Lerp", 2);
         isEnable = false;
-        targetDoor.currentCrystal++;
-        if(targetDoor.currentCrystal >= targetDoor.crystalNum)
+        targetDoor.CurrentCrystal++;
+        if(targetDoor.CurrentCrystal >= targetDoor.crystalNum)
         {
             MapReset map = (MapReset)FindFirstObjectByType(typeof(MapReset));
             EventBus.Publish(State.Clear);
@@ -45,5 +50,17 @@ public class Crystal : MonoBehaviour
             });
             yield return new WaitForSeconds(0.2f);
         }
+    }
+
+    public override void ObjectReset()
+    {
+        isEnable = true;
+        mat.DOFloat(0, "_Lerp", 1f);
+        for (int i = 2; i < spheres.Length; i++)
+        {
+            spheres[i].gameObject.SetActive(false);
+            spheres[i].transform.localScale = Vector3.zero;
+        }
+        targetDoor.CurrentCrystal = 0;
     }
 }

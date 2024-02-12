@@ -9,6 +9,7 @@ public class DoorCloser : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GetComponentInParent<IDoor>().CloseDoor();
+            gameObject.SetActive(false);
         }
     }
 }

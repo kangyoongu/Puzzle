@@ -43,7 +43,7 @@ public class PlayerController : SingleTon<PlayerController>
     {
         rb.velocity = Vector3.zero;
         rb.freezeRotation = false;
-        rb.AddTorque(Vector3.right * 4);
+        rb.AddTorque(Vector3.right * 3);
         GameManager.Instance.canControl = false;
     }
     void Update()
@@ -117,10 +117,13 @@ public class PlayerController : SingleTon<PlayerController>
         Die();
         yield return new WaitForSeconds(4);
         rb.isKinematic = true;
-        transform.DOMove(GameManager.Instance.currentSpawnPoint.position, 4).SetEase(Ease.InSine);
+        transform.DOMove(GameManager.Instance.currentSpawnPoint.position - (GameManager.Instance.currentSpawnPoint.forward * 50), 4).SetEase(Ease.InSine);
         transform.DORotateQuaternion(GameManager.Instance.currentSpawnPoint.rotation, 4).SetEase(Ease.InSine);
         camTransform.DOLocalRotateQuaternion(Quaternion.identity, 4);
         yield return new WaitForSeconds(4);
+        RotateCam cam = transform.GetChild(0).GetComponent<RotateCam>();
+        cam.pitch = 0;
+        cam.yaw = 0;
         GravityControl.Instance.changeState = State.Up;
         ObjectReset();
         rb.isKinematic = false;

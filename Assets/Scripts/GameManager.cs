@@ -21,6 +21,7 @@ public class GameManager : SingleTon<GameManager>
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         canControl = false;
+        Application.targetFrameRate = 120;
         if (!PlayerPrefs.HasKey("Stage"))
         {
             PlayerPrefs.SetInt("Stage", 1);
@@ -48,7 +49,6 @@ public class GameManager : SingleTon<GameManager>
         currentInfo.transform.root.position = PlayerController.Instance.transform.position;
         PlayerController.Instance.transform.position = currentSpawnPoint.position;
         PlayerController.Instance.transform.rotation = currentSpawnPoint.rotation;
-        currentInfo.KinematicFalse();
         ResetPosition();
         if (currentInfo.closeDoor)
             currentInfo.closeDoor.SetActive(true);

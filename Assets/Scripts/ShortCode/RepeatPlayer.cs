@@ -5,13 +5,23 @@ using UnityEngine;
 public class RepeatPlayer : MonoBehaviour
 {
     int count = 0;
+    public Dialog[] repeatDialog;
+    public SixEvent sixEvent;
     public int Count { 
         get => count;
         set {
             count = value;
-            if(count == 2)
+            if(count == 5)
             {
-                UIManager.Instance.AppendDialog(new Dialog() { dialog = "ㅋㅋㅋ뭔가 이상하지 않니" });
+                for (int i = 0; i < repeatDialog.Length; i++)
+                {
+                    UIManager.Instance.AppendDialog(repeatDialog[i]);
+                }
+                if (sixEvent.isFind == false)
+                {
+                    UIManager.Instance.AppendDialog(new Dialog { speaker = "찐신", line = "내가 진짜 큐브의 위치를 알려줄게"});
+                    sixEvent.GuideParticle();
+                }
             }
         }
     }

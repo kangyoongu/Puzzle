@@ -9,7 +9,19 @@ public class DoorOpen : MonoBehaviour, IDoor
 {
     Animator[] anim;
     public int crystalNum = 1;
-    [HideInInspector] public int currentCrystal = 0;
+    private int currentCrystal = 0;
+    public AudioClip openClip;
+    public AudioClip closeClip;
+    private AudioSource audioSource;
+    public int CurrentCrystal
+    {
+        get => currentCrystal;
+        set
+        {
+            currentCrystal = value;
+            centerMaterial.SetFloat("_Lerp", 1f - ((float)currentCrystal / crystalNum));
+        }
+    }
     MeshRenderer center;
     Material centerMaterial;
     GameObject block;
@@ -18,6 +30,7 @@ public class DoorOpen : MonoBehaviour, IDoor
     {
         anim = GetComponentsInChildren<Animator>();
         center = transform.GetChild(5).GetComponent<MeshRenderer>();
+        audioSource = GetComponent<AudioSource>();
         block = transform.GetChild(6).gameObject;
         centerMaterial = center.material;
         centerMaterial = Instantiate(centerMaterial);
@@ -29,17 +42,22 @@ public class DoorOpen : MonoBehaviour, IDoor
     {
         if (other.CompareTag("Crystal"))
         {
-            centerMaterial.SetFloat("_Lerp", 1f - ((float)currentCrystal / (float)crystalNum));
-            if (currentCrystal >= crystalNum && !open)
+            if (CurrentCrystal >= crystalNum && !open)
             {
                 open = true;
                 OpenDoor();
             }
         }
     }
-    public void OpenDoor()
+    public void ColorFull()
     {
         centerMaterial.SetFloat("_Lerp", 0);
+    }
+    public void OpenDoor()
+    {
+        ColorFull();
+        audioSource.clip = openClip;
+        audioSource.Play();
         for (int i = 0; i < anim.Length; i++)
         {
             anim[i].Play("Open");
@@ -49,7 +67,9 @@ public class DoorOpen : MonoBehaviour, IDoor
     }
     public void CloseDoor()
     {
-        for(int i = 0; i < anim.Length; i++)
+        audioSource.clip = closeClip;
+        audioSource.Play();
+        for (int i = 0; i < anim.Length; i++)
         {
             anim[i].Play("Close");
         }

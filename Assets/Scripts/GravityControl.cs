@@ -8,9 +8,19 @@ public class GravityControl : SingleTon<GravityControl>
     private ConstantForce playerForce;
     [HideInInspector] public State currentState = State.Normal;
     public Material screenMaterial;
+    [HideInInspector] public bool canGravityControl = true;
+
+    public AudioClip upClip;
+    public AudioClip downClip;
+    private AudioSource audioSource;
+    public AudioClip continueUpClip;
+    public AudioClip continueDownClip;
+    private AudioSource continueAudioSource;
     private void Awake()
     {
         playerForce = GetComponent<ConstantForce>();
+        audioSource = transform.GetChild(1).GetComponent<AudioSource>();
+        continueAudioSource = GetComponent<AudioSource>();
     }
     private void OnEnable()
     {
@@ -26,9 +36,23 @@ public class GravityControl : SingleTon<GravityControl>
     }
     void Update()
     {
-        if (GameManager.Instance.canControl)
+        if (GameManager.Instance.canControl && canGravityControl)
         {
             if (Input.GetKeyDown(KeyCode.Space))
+            {
+                EventBus.Publish(changeState);
+                if (changeState == State.Up)
+                {
+                    continueAudioSource.clip = continueUpClip;
+                    continueAudioSource.Play();
+                }
+                else if (changeState == State.Down)
+                {
+                    continueAudioSource.clip = continueDownClip;
+                    continueAudioSource.Play();
+                }
+            }
+            if (Input.GetKey(KeyCode.Space))
             {
                 EventBus.Publish(changeState);
             }
@@ -36,15 +60,33 @@ public class GravityControl : SingleTon<GravityControl>
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 EventBus.Publish(State.Normal);
+                if (changeState == State.Up)
+                {
+                    continueAudioSource.Stop();
+                }
+                else if (changeState == State.Down)
+                {
+                    continueAudioSource.Stop();
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
                 changeState = (State)((short)changeState * -1);
-                if (Input.GetKey(KeyCode.Space))
+                if(changeState == State.Up)
+                {
+                    audioSource.clip = upClip;
+                    audioSource.Play();
+                }
+                else if (changeState == State.Down)
+                {
+                    audioSource.clip = downClip;
+                    audioSource.Play();
+                }
+                /*if (Input.GetKey(KeyCode.Space))
                 {
                     EventBus.Publish(changeState);
-                }
+                }*/
             }
         }
     }

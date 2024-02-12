@@ -3,34 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class GodCutsceneManager : SingleTon<GodCutsceneManager>
+public class GodCutsceneManager : MonoBehaviour
 {
     public GameObject[] cameras;
-    public CinemachineVirtualCamera cam;
-    CinemachineBrain mainCam;
-    public GameObject cube;
     private void Start()
     {
-        mainCam = Camera.main.GetComponent<CinemachineBrain>();
-        for(int i = 0; i < cameras.Length; i++)
+        for(int i = 0; i < cameras.Length-1; i++)
         {
             cameras[i].SetActive(true);
         }
-        cube.SetActive(false);
+        StartCoroutine(Next());
     }
-    public void ShowGod(float time)
+    IEnumerator Next()
     {
-        StartCoroutine(StartScene(time));
-    }
-    IEnumerator StartScene(float time)
-    {
-        cube.SetActive(true);
-        mainCam.m_DefaultBlend.m_Time = 0;
-        cam.Priority = 20;
-        yield return new WaitForSeconds(time);
-        cam.Priority = 0;
-        yield return new WaitForSeconds(0.1f);
-        mainCam.m_DefaultBlend.m_Time = 1;
-        cube.SetActive(true);
+        yield return new WaitForSeconds(1);
+        cameras[cameras.Length - 1].SetActive(true);
     }
 }

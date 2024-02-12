@@ -22,10 +22,10 @@ public class StartCutscene : MonoBehaviour
         RenderSettings.fog = false;
         fade.color = new Color(0, 0, 0, 1);
         yield return new WaitForSeconds(3);
-        fade.DOFade(0, 7).SetEase(Ease.InCubic);
+        fade.DOFade(0, 0.2f).SetEase(Ease.InCubic);
+        yield return new WaitForSeconds(3);
+        cam.DOLocalMoveX(-73f, 7f).SetEase(Ease.Linear);
         yield return new WaitForSeconds(8);
-        cam.DOLocalMoveX(-73f, 8f).SetEase(Ease.Linear);
-        yield return new WaitForSeconds(10);
         for(int i = 0; i < effects.Length; i++)
         {
             effects[i].SetInt("instansity", 25);
