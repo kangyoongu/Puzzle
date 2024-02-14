@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class GameManager : SingleTon<GameManager>
 {
@@ -14,6 +15,7 @@ public class GameManager : SingleTon<GameManager>
     [HideInInspector] public Transform currentSpawnPoint;
     [HideInInspector] public MapReset currentInfo;
     [HideInInspector] public Vector3 currentJointPos = Vector3.zero;
+    public Material cartoon;
     public int startStage = 7;
     private void Start()
     {
@@ -58,5 +60,9 @@ public class GameManager : SingleTon<GameManager>
         Vector3 pos = currentSpawnPoint.position;
         currentInfo.transform.parent.position -= pos;
         PlayerController.Instance.transform.position -= pos;
+    }
+    public void GoCartoon()
+    {
+        cartoon.DOFloat(1, "_Lerp", 5);
     }
 }

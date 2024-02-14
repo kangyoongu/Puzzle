@@ -15,9 +15,24 @@ public class PlayerController : SingleTon<PlayerController>
     [HideInInspector] public bool grabbing = false;
     [HideInInspector] public GrabableObject grabObject;
     public LayerMask grabLayer;
+    float walktime = 0;
+    float runWeight;
+    public AudioClip walkClip;
+    public AudioClip dieClip;
+    public AudioClip windClip;
+    private AudioSource audioSource;
+    private AudioSource dieAud;
+    private AudioSource windAud;
     void Start()
     {
+        audioSource = transform.GetChild(2).GetComponent<AudioSource>();
+        dieAud = transform.GetChild(3).GetComponent<AudioSource>();
+        windAud = transform.GetChild(4).GetComponent<AudioSource>();
+        audioSource.clip = walkClip;
+        dieAud.clip = dieClip;
+        windAud.clip = windClip;
         rb = GetComponent<Rigidbody>();
+        runWeight = boostSpeed / speed;
     }
     private void OnEnable()
     {
@@ -50,16 +65,6 @@ public class PlayerController : SingleTon<PlayerController>
     {
         if (GameManager.Instance.canControl)
         {
-            // 플레이어 움직임
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
-            Vector3 inputDirection = new Vector3(horizontalInput, 0f, verticalInput);
-
-            // 로컬 좌표로 변환
-            Vector3 localVelocity = transform.TransformDirection(inputDirection);
-            if (localVelocity.sqrMagnitude > 1) localVelocity.Normalize();
-            localVelocity *= (Input.GetKey(KeyCode.LeftShift) ? boostSpeed : speed);
-            rb.velocity = new Vector3(localVelocity.x, rb.velocity.y, localVelocity.z);
             if (Input.GetMouseButtonDown(0))
             {
                 if (!grabbing && !GameManager.Instance.clear)
@@ -97,6 +102,53 @@ public class PlayerController : SingleTon<PlayerController>
             }
         }
     }
+    private void FixedUpdate()
+    {
+        if(GameManager.Instance.canControl)
+            Move();
+        else
+        {
+            if (windAud.isPlaying) windAud.Stop();
+        }
+    }
+    private void Move()
+    {
+        // 플레이어 움직임
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        Vector3 inputDirection = new Vector3(horizontalInput, 0f, verticalInput);
+
+        // 로컬 좌표로 변환
+        Vector3 localVelocity = transform.TransformDirection(inputDirection);
+        if (localVelocity.sqrMagnitude > 1) localVelocity.Normalize();
+        bool boost = Input.GetKey(KeyCode.LeftShift);
+
+        localVelocity *= (boost ? boostSpeed : speed);
+        RaycastHit hit;
+        if (inputDirection.sqrMagnitude >= 1 && new Vector2(rb.velocity.x, rb.velocity.z).sqrMagnitude > 1f && Physics.Raycast(transform.position, Vector3.down, out hit))//발소리 낼지 말지
+        {
+            if (hit.distance <= 1.1f)
+            {
+                walktime += Time.fixedDeltaTime * (boost ? runWeight : 1f);
+                if (walktime >= 1f)
+                {
+                    audioSource.Play();
+                    walktime = 0;
+                }
+            }
+        }
+
+        rb.velocity = new Vector3(localVelocity.x, rb.velocity.y, localVelocity.z);//판단 후 속도 바꿈
+        if (Mathf.Abs(rb.velocity.y) >= 11)
+        {
+            windAud.Play();
+        }
+        else
+        {
+            if (windAud.isPlaying) windAud.Stop();
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("KillPlayer") || collision.gameObject.CompareTag("KillAll"))
@@ -104,10 +156,12 @@ public class PlayerController : SingleTon<PlayerController>
             if (!GameManager.Instance.clear)
             {
                 EventBus.Publish(State.PlayerDie);
+                dieAud.Play();
             }
         }
         if (collision.gameObject.CompareTag("KillBridge"))
         {
+            dieAud.Play();
             StartCoroutine(DieOnBridge());
         }
     }

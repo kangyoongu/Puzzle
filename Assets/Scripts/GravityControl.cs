@@ -56,7 +56,6 @@ public class GravityControl : SingleTon<GravityControl>
             {
                 EventBus.Publish(changeState);
             }
-
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 EventBus.Publish(State.Normal);

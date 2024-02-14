@@ -13,6 +13,10 @@ public class LaserManager : SingleTon<LaserManager>
         {
             walls[i].ColliderOn();
         }
+        for(int i = 0; i < reflectors.Count; i++)
+        {
+            reflectors[i].Off();
+        }
         ObjectPool.Instance.ReturnAllToPool("Laser");
         reflectors = new();
         for (int i = 0; i < roots.Count; i++)

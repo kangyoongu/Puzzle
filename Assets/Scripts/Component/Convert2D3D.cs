@@ -15,11 +15,16 @@ public class Convert2D3D : Interactable
     Vector3 dir;
     Tweener tween;
     bool[] startState = new bool[3];
+    float through = 1.735f;
+
+    public AudioClip inClip;
+    public AudioClip outClip;
+    public AudioSource audioSource;
     private void Start()
     {
         rigid = GetComponent<Rigidbody>();
         if(inWall)
-            dir = inWall.rotation * Vector3.forward * Mathf.Sqrt(3f);
+            dir = inWall.rotation * Vector3.forward * through;
         startState[0] = is2d;
         startState[1] = canIn;
         startState[2] = canOut;
@@ -36,9 +41,10 @@ public class Convert2D3D : Interactable
                     grabable.EndGrab();
                 }
                 rigid.isKinematic = true;
-                dir = collision.transform.rotation * Vector3.forward * Mathf.Sqrt(3f);
                 tween = transform.DOMove(transform.position + dir, 1.2f);
                 is2d = true;
+                audioSource.clip = inClip;
+                audioSource.Play();
                 if (PlayerController.Instance.grabObject.gameObject != null && PlayerController.Instance.grabObject.gameObject == gameObject) PlayerController.Instance.grabbing = false;
             }
         }
@@ -47,6 +53,8 @@ public class Convert2D3D : Interactable
     public void GoOut()
     {
         is2d = false;
+        audioSource.clip = outClip;
+        audioSource.Play();
         tween = transform.DOMove(transform.position - (dir*1.1f), 1.2f).OnComplete(() =>
         {
             rigid.isKinematic = false;

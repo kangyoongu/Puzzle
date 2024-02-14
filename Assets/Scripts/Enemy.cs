@@ -18,8 +18,20 @@ public class Enemy : Interactable
     Transform lover;
     [HideInInspector] public bool move = true;
     public bool dieWithLaser = true;
+    public AudioClip followingClip;
+    private AudioSource aud;
+    public AudioClip dieClip;
+    private AudioSource dieAud;
+    public AudioClip killClip;
+    private AudioSource killAud;
     void Start()
     {
+        aud = GetComponent<AudioSource>();
+        aud.clip = followingClip;
+        dieAud = transform.GetChild(0).GetComponent<AudioSource>();
+        dieAud.clip = dieClip;
+        killAud = transform.GetChild(1).GetComponent<AudioSource>();
+        killAud.clip = killClip;
         rotationSpeed += Random.Range(-0.2f, 0.2f);
         vfx = GetComponent<VisualEffect>();
         sphereCollider = GetComponent<SphereCollider>();
@@ -45,10 +57,12 @@ public class Enemy : Interactable
                     lover.position : PlayerController.Instance.transform.position;
             else
                 closer = PlayerController.Instance.transform.position;
+
             if (follow)
             {
                 FollowTarget(closer);
 
+                if (!aud.isPlaying) aud.Play();
                 if (Vector3.Distance(closer, transform.position) >= missingDis)
                 {
                     follow = false;
@@ -59,6 +73,7 @@ public class Enemy : Interactable
                 if(Vector3.Distance(startPos, transform.position) > 0.5f)
                     FollowTarget(startPos);
 
+                if (aud.isPlaying) aud.Stop();
                 if (Vector3.Distance(closer, transform.position) <= followDis)
                 {
                     follow = true;
@@ -119,6 +134,7 @@ public class Enemy : Interactable
     }
     IEnumerator Kill()
     {
+        killAud.Play();
         transform.DOLocalMove(Vector3.forward * 0.7f, 5);
         tween = DOTween.To(() => vfx.GetFloat("Lerp"), x => vfx.SetFloat("Lerp", x), 1.0f, 5f).SetEase(Ease.Linear);
         yield return new WaitForSeconds(5);
@@ -134,6 +150,7 @@ public class Enemy : Interactable
     }
     IEnumerator Die()
     {
+        dieAud.Play();
         rigid.isKinematic = true;
         sphereCollider.enabled = false;
         vfx.SetBool("isDie", true);
