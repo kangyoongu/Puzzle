@@ -52,8 +52,8 @@ Material:
     - _Speed: 1
     - _power: 4.65
     m_Colors:
-    - _BackgroundColor: {r: 0, g: 0, b: 0, a: 0.9411765}
-    - _Color: {r: 4.232384, g: 4.232384, b: 4.232384, a: 1}
+    - _BackgroundColor: {r: 0, g: 0, b: 0, a: 0.7372549}
+    - _Color: {r: 4.232384, g: 4.232384, b: 4.232384, a: 0.8980392}
   m_BuildTextureStacks: []
 --- !u!114 &9023675354882660718
 MonoBehaviour:

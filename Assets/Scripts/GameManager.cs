@@ -11,11 +11,12 @@ public class GameManager : SingleTon<GameManager>
     [HideInInspector] public bool canControl = false;
     [HideInInspector] public bool clear = false;
     [HideInInspector] public bool playing = false;
-    [HideInInspector] public Lover lover = null;
+    public Lover lover;
     [HideInInspector] public Transform currentSpawnPoint;
     [HideInInspector] public MapReset currentInfo;
     [HideInInspector] public Vector3 currentJointPos = Vector3.zero;
     public Material cartoon;
+    public Material fog;
     public int startStage = 7;
     private void Start()
     {
@@ -29,12 +30,54 @@ public class GameManager : SingleTon<GameManager>
             PlayerPrefs.SetInt("Stage", 1);
         }
     }
-
+    public void Ch3()
+    {
+        fog.SetColor("_Color", new Color32(96, 96, 96, 255));
+        RenderSettings.fogColor = new Color32(33, 13, 13, 255);
+        cartoon.SetFloat("_Lerp", 1);
+        cartoon.SetFloat("_BaseColorLerp", 0);
+        cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
+    }
+    public void ToCh3()
+    {
+        cartoon.DOFloat(1f, "_Lerp", 3f);
+        cartoon.DOFloat(0f, "_BaseColorLerp", 3f);
+        cartoon.DOColor(new Color(0, 0, 0), "_OutlineColor", 3f);
+    }
+    public void Ch2()
+    {
+        fog.SetColor("_Color", new Color32(96, 96, 96, 255));
+        RenderSettings.fogColor = new Color32(33, 13, 13, 255);
+        cartoon.SetFloat("_Lerp", 0);
+        cartoon.SetFloat("_BaseColorLerp", 0);
+        cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
+    }
+    public void Ch1()
+    {
+        fog.SetColor("_Color", new Color32(255, 255, 255, 255));
+        RenderSettings.fogColor = new Color32(255, 255, 255, 255);
+        cartoon.SetFloat("_Lerp", 0);
+        cartoon.SetFloat("_BaseColorLerp", 0);
+        cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
+    }
     internal void GameStart()
     {
-        if(PlayerPrefs.GetInt("Stage") == 1)
+        Ch2();
+        if (PlayerPrefs.GetInt("Stage") == 1)
         {
             //PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0;
+        }
+        if(startStage >= 1 && startStage <= 8)
+        {
+            Ch1();
+        }
+        else if (startStage >= 9 && startStage <= 11)
+        {
+            Ch2();
+        }
+        else if (startStage >= 12 && startStage <= 12)
+        {
+            Ch3();
         }
         SceneManager.LoadScene(startStage/*PlayerPrefs.GetInt("Stage")*/, LoadSceneMode.Additive);
         Time.timeScale = 1;
@@ -60,6 +103,11 @@ public class GameManager : SingleTon<GameManager>
         Vector3 pos = currentSpawnPoint.position;
         currentInfo.transform.parent.position -= pos;
         PlayerController.Instance.transform.position -= pos;
+        currentInfo.EnemyStartPos();
+        if (lover.gameObject.activeSelf == true)
+        {
+            lover.transform.position = PlayerController.Instance.transform.position + PlayerController.Instance.transform.forward * 2;
+        }
     }
     public void GoCartoon()
     {

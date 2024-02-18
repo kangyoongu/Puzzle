@@ -9,7 +9,6 @@ public class GravityControl : SingleTon<GravityControl>
     [HideInInspector] public State currentState = State.Normal;
     public Material screenMaterial;
     [HideInInspector] public bool canGravityControl = true;
-
     public AudioClip upClip;
     public AudioClip downClip;
     private AudioSource audioSource;

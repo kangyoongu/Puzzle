@@ -35,5 +35,5 @@ Material:
     - BoundsMin: {r: 7.9950004, g: -48.805, b: 16.394999, a: 0}
     - _BoundsMax: {r: 14.3, g: 8.17, b: -5.96, a: 0}
     - _BoundsMin: {r: 4.3, g: -1.8299999, b: -15.96, a: 0}
-    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

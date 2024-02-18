@@ -53,7 +53,7 @@ public class FiveCutscene : MonoBehaviour
                 StartCoroutine(GoGod());
             }
         }
-        if(endCheck.isKinematic == true)
+        if(endCheck.isKinematic == true && GameManager.Instance.clear)
         {
             firstTrigger.SetActive(false);
         }

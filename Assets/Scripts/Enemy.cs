@@ -24,6 +24,10 @@ public class Enemy : Interactable
     private AudioSource dieAud;
     public AudioClip killClip;
     private AudioSource killAud;
+    Transform parent;
+    float timer = 0;
+
+    private FollowChangeGravity changeGravity;
     void Start()
     {
         aud = GetComponent<AudioSource>();
@@ -36,6 +40,8 @@ public class Enemy : Interactable
         vfx = GetComponent<VisualEffect>();
         sphereCollider = GetComponent<SphereCollider>();
         rigid = GetComponent<Rigidbody>();
+        changeGravity = GetComponent<FollowChangeGravity>();
+        parent = transform.parent;
         startPos = transform.position;
         try
         {
@@ -60,7 +66,8 @@ public class Enemy : Interactable
 
             if (follow)
             {
-                FollowTarget(closer);
+                Vector3 targetDirection = closer - transform.position;
+                FollowTarget(targetDirection);
 
                 if (!aud.isPlaying) aud.Play();
                 if (Vector3.Distance(closer, transform.position) >= missingDis)
@@ -70,8 +77,11 @@ public class Enemy : Interactable
             }
             else
             {
-                if(Vector3.Distance(startPos, transform.position) > 0.5f)
-                    FollowTarget(startPos);
+                if(Vector3.Distance(startPos, transform.position) > 1.5f)
+                {
+                    Vector3 targetDirection = startPos - transform.position;
+                    FollowTarget(targetDirection);
+                }
 
                 if (aud.isPlaying) aud.Stop();
                 if (Vector3.Distance(closer, transform.position) <= followDis)
@@ -79,17 +89,34 @@ public class Enemy : Interactable
                     follow = true;
                 }
             }
+            if (changeGravity)
+            {
+                if (GravityControl.Instance.currentState == State.Up|| GravityControl.Instance.currentState == State.Down)
+                {
+                    changeGravity.weight = Mathf.Max(0, changeGravity.weight - Time.fixedDeltaTime / 5);
+                    timer = 0;
+                }
+                else
+                {
+                    timer += Time.fixedDeltaTime;
+                    if (timer >= 3)
+                    {
+                        timer = 0;
+                        changeGravity.weight = 1;
+                    }
+                }
+            }
         }
     }
 
     private void FollowTarget(Vector3 target)
     {
-        Vector3 targetDirection = target - transform.position;
+        Vector3 targetDirection = target;
 
         // 대상 방향으로 회전 각도 구하기
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
-        float weight = Mathf.Clamp(targetDirection.magnitude - 10, 1, 100);
+        float weight = Mathf.Clamp(targetDirection.magnitude - 10, 2, 100) / 2;
         // 부드러운 회전 적용
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime * weight);
@@ -168,12 +195,13 @@ public class Enemy : Interactable
 
     public override void ObjectReset()
     {
+        if (tween != null && tween.IsPlaying()) tween.Kill();
         vfx.SetBool("isDie", false);
         vfx.SetFloat("Lerp", 0);
         vfx.Play();
         sphereCollider.enabled = true;
-        transform.parent = GameManager.Instance.currentInfo.transform.root;
-
+        transform.parent = parent;
+        timer = 0;
         follow = false;
     }
 }

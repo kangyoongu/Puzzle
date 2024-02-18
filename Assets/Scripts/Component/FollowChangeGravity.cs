@@ -17,20 +17,19 @@ public class FollowChangeGravity : Interactable
     private Rigidbody rigid;
     public ObjectType type = ObjectType.Normal;
     [HideInInspector]public bool zeroZone = false;
+    [HideInInspector] public float weight = 1;
+
     private void Awake()
     {
         constantForce = GetComponent<ConstantForce>();
         rigid = GetComponent<Rigidbody>();
-    }
-    private void Start()
-    {
-        EventBus.Publish(GravityControl.Instance.currentState);
     }
     private void OnEnable()
     {
         EventBus.Subscribe(State.Up, Up);
         EventBus.Subscribe(State.Down, Down);
         EventBus.Subscribe(State.Normal, Normal);
+        EventBus.Publish(GravityControl.Instance.currentState);
     }
     private void OnDisable()
     {
@@ -46,15 +45,15 @@ public class FollowChangeGravity : Interactable
             {
                 if (type == ObjectType.Normal)
                 {
-                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass * weight, 0);
                 }
                 else if (type == ObjectType.Reverce)
                 {
-                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass * weight, 0);
                 }
                 else
                 {
-                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass * weight, 0);
                     //constantForce.force = new Vector3(0, 0, 0);
                 }
             }
@@ -62,15 +61,15 @@ public class FollowChangeGravity : Interactable
             {
                 if (type == ObjectType.Normal)
                 {
-                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass * weight, 0);
                 }
                 else if (type == ObjectType.Reverce)
                 {
-                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass* weight, 0);
                 }
                 else
                 {
-                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass* weight, 0);
                     //constantForce.force = new Vector3(0, 0, 0);
                 }
             }
@@ -84,15 +83,15 @@ public class FollowChangeGravity : Interactable
             {
                 if (type == ObjectType.Normal)
                 {
-                    constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, -29.4f * rigid.mass* weight, 0);
                 }
                 else if (type == ObjectType.Reverce)
                 {
-                    constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, -29.4f * rigid.mass* weight, 0);
                 }
                 else
                 {
-                    constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, -29.4f * rigid.mass* weight, 0);
                     //constantForce.force = new Vector3(0, 0, 0);
                 }
             }
@@ -101,15 +100,15 @@ public class FollowChangeGravity : Interactable
 
                 if (type == ObjectType.Normal)
                 {
-                    constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, -9.8f * rigid.mass* weight, 0);
                 }
                 else if (type == ObjectType.Reverce)
                 {
-                    constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, -9.8f * rigid.mass* weight, 0);
                 }
                 else
                 {
-                    constantForce.force = new Vector3(0, -29.4f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, -29.4f * rigid.mass* weight, 0);
                     //constantForce.force = new Vector3(0, 0, 0);
                 }
             }
@@ -123,11 +122,11 @@ public class FollowChangeGravity : Interactable
             {
                 if (type == ObjectType.Normal)
                 {
-                    constantForce.force = new Vector3(0, -9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, -9.8f * rigid.mass* weight, 0);
                 }
                 else if (type == ObjectType.Reverce)
                 {
-                    constantForce.force = new Vector3(0, 9.8f * rigid.mass, 0);
+                    constantForce.force = new Vector3(0, 9.8f * rigid.mass* weight, 0);
                 }
                 else
                 {
@@ -143,6 +142,7 @@ public class FollowChangeGravity : Interactable
 
     public override void ObjectReset()
     {
+        weight = 1;
         Normal();
     }
     private void OnTriggerEnter(Collider other)

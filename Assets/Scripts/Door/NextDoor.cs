@@ -46,6 +46,7 @@ public class NextDoor : MonoBehaviour, IDoor
     IEnumerator UnloadScene()
     {
         GameManager.Instance.clear = false;
+        EventBus.Publish(GravityControl.Instance.currentState);
         yield return new WaitForSeconds(2);
         GameManager.Instance.ResetPosition();
         if(GameManager.Instance.currentInfo.closeDoor)

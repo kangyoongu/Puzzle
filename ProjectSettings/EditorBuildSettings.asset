@@ -35,4 +35,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/2_EnemyStage/Stage 9.unity
     guid: ea908ab7a53f74a4090540e4afce2a9f
+  - enabled: 1
+    path: Assets/Scenes/2_EnemyStage/Stage 10.unity
+    guid: 6ba96b7a251d2674084bc4ce8f57ae7b
+  - enabled: 1
+    path: Assets/Scenes/2_EnemyStage/Stage 11.unity
+    guid: f72d67f75d2fdb344b6b59df93a74b50
+  - enabled: 1
+    path: Assets/Scenes/3_Painting/Stage 12.unity
+    guid: df6728b7f0f43634798265b69c569dec
   m_configObjects: {}

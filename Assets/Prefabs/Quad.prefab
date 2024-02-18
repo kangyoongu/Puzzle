@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8441702666373125453}
   - component: {fileID: 4796865063195997880}
   - component: {fileID: 7907741168832006517}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 1, b: 0, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -72,7 +72,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 112567
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 723731c7989fee041a37e62296f75745, type: 2}
   m_TargetDisplay: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 6486604077726550861}
   - component: {fileID: 2792248743764299327}
   - component: {fileID: 3642637468304391621}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 633df487317b3224aa3db2659790b669, type: 2}
+  - {fileID: 2100000, guid: 5594bf9bb8f276c45962dea3ac4b6a02, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

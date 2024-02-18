@@ -1924,12 +1924,13 @@ MonoBehaviour:
   canControl: 0
   clear: 0
   playing: 0
-  lover: {fileID: 0}
+  lover: {fileID: 795938323}
   currentSpawnPoint: {fileID: 0}
   currentInfo: {fileID: 0}
   currentJointPos: {x: 0, y: 0, z: 0}
-  cartoon: {fileID: 2100000, guid: 93799140004337d49811c45beda4d565, type: 2}
-  startStage: 3
+  cartoon: {fileID: 2100000, guid: d6ade1491e2229243a733408eb837d8f, type: 2}
+  fog: {fileID: 2100000, guid: 326c4c495447c95459176e1b9af6cf95, type: 2}
+  startStage: 5
 --- !u!1 &566214667
 GameObject:
   m_ObjectHideFlags: 0
@@ -3443,6 +3444,86 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &795938322
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024006808333616789, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2400295710010097833, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3399365868013070302, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_Name
+      value: Lover
+      objectReference: {fileID: 0}
+    - target: {fileID: 3399365868013070302, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4098345485755173484, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+      propertyPath: speed
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+--- !u!114 &795938323 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4098345485755173484, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
+  m_PrefabInstance: {fileID: 795938322}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44474b6dbcc6edd4aa99b92bdccdbd64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &838707779 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1025069552818817159, guid: f5e96c6da43b5c546b3235f1b516cd80, type: 3}
@@ -11047,3 +11128,4 @@ SceneRoots:
   - {fileID: 661249019}
   - {fileID: 1847619095}
   - {fileID: 493456678}
+  - {fileID: 795938322}

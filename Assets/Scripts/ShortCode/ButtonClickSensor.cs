@@ -66,7 +66,7 @@ public class ButtonClickSensor : OnOffImage
             if (i == 8) yield return new WaitForSeconds(2);
             int z = i;
             effects[z].gameObject.SetActive(true);
-            DOTween.To(() => effects[z].GetFloat("AlphaLerp"), x => effects[z].SetFloat("AlphaLerp", x), 3, 2)//슬슬 보이게
+            DOTween.To(() => effects[z].GetFloat("AlphaLerp"), x => effects[z].SetFloat("AlphaLerp", x), 2, 2)//슬슬 보이게
                .SetEase(Ease.Linear).OnComplete(() =>
                {
                    beforeObj[z].SetActive(false);//이동시작

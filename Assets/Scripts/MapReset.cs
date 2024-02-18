@@ -56,13 +56,6 @@ public class MapReset : MonoBehaviour
         transforms.Add(PlayerController.Instance.transform);
         positions.Add(Vector3.zero);
         angles.Add(spawnPoint.rotation);
-        if (GameManager.Instance.lover)
-        {
-            positions.Add(spawnPoint.right * 2);
-            angles.Add(spawnPoint.rotation);
-            rigids.Add(GameManager.Instance.lover.gameObject.GetComponent<Rigidbody>());
-            transforms.Add(GameManager.Instance.lover.transform);
-        }
         camAngle = Quaternion.identity;
     }
     private void OnEnable()
@@ -115,8 +108,8 @@ public class MapReset : MonoBehaviour
                 enemies[i].gameObject.SetActive(false);
                 enemies[i].transform.parent = GameManager.Instance.currentInfo.transform.root;
             }
-            }
-            for (int i = 0; i < positions.Count; i++)
+        }
+        for (int i = 0; i < positions.Count; i++)
         {
             if(rigids[i] != null)
                 rigids[i].isKinematic = true;
@@ -126,15 +119,17 @@ public class MapReset : MonoBehaviour
         PlayerController.Instance.camTransform.DOLocalRotateQuaternion(camAngle, 6);
         yield return new WaitForSeconds(6);
         GravityControl.Instance.changeState = State.Up;
-        for (int i = 0; i < objects.Count; i++)
-        {
-            objects[i].gameObject.SetActive(true);
-            objects[i].ObjectReset();
-        }
+        if(GameManager.Instance.lover.gameObject.activeSelf == true)
+            GameManager.Instance.lover.ObjectReset();
         for(int i = 0; i < rigids.Count; i++)
         {
             if (rigids[i] != null)
                 rigids[i].isKinematic = false;
+        }
+        for (int i = 0; i < objects.Count; i++)
+        {
+            objects[i].gameObject.SetActive(true);
+            objects[i].ObjectReset();
         }
         rotateCam.pitch = 0;
         rotateCam.yaw = 0;
@@ -159,5 +154,12 @@ public class MapReset : MonoBehaviour
         }
         PlayerController.Instance.grabbing = false;
         GameManager.Instance.clear = true;
+    }
+    public void EnemyStartPos()
+    {
+        for(int i = 0; i < enemies.Count; i++)
+        {
+            enemies[i].startPos = enemies[i].transform.position;
+        }
     }
 }

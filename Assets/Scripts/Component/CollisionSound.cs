@@ -7,7 +7,7 @@ public class CollisionSound : MonoBehaviour
 {
     AudioSource audioSource;
     public AudioClip clip;
-    void Start()
+    void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = clip;

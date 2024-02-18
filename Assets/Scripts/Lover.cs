@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.VFX;
 using DG.Tweening;
 
-public class Lover : Interactable
+public class Lover : MonoBehaviour
 {
     private VisualEffect vfx;
     private SphereCollider sphereCollider;
@@ -14,10 +14,6 @@ public class Lover : Interactable
     public float stopDis;
     bool follow = false;
 
-    private void Awake()
-    {
-        GameManager.Instance.lover = this;
-    }
     void Start()
     {
         vfx = GetComponent<VisualEffect>();
@@ -56,9 +52,9 @@ public class Lover : Interactable
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("KillPlayer") || collision.gameObject.CompareTag("KillAll"))
+        if (collision.gameObject.CompareTag("KillPlayer") || collision.gameObject.CompareTag("KillAll"))
         {
-            if (GameManager.Instance.canControl)
+            if (GameManager.Instance.canControl && !GameManager.Instance.clear)
             {
                 Kill();
             }
@@ -68,7 +64,7 @@ public class Lover : Interactable
     {
         if (other.CompareTag("KillPlayer") || other.CompareTag("KillAll"))
         {
-            if (GameManager.Instance.canControl)
+            if (GameManager.Instance.canControl && !GameManager.Instance.clear)
             {
                 Kill();
             }
@@ -86,18 +82,18 @@ public class Lover : Interactable
         vfx.Stop();
         EventBus.Publish(State.PlayerDie);
         yield return new WaitForSeconds(3);
-        gameObject.SetActive(false);
     }
-    public override void ObjectReset()
-    {
+    public void ObjectReset()
+    { 
+        if(vfx == null)
+            vfx = GetComponent<VisualEffect>();
         vfx.SetBool("isDie", false);
         vfx.Play();
+        if(sphereCollider == null)
+            sphereCollider = GetComponent<SphereCollider>();
         sphereCollider.enabled = true;
         transform.parent = null;
+        transform.position = PlayerController.Instance.transform.position + PlayerController.Instance.transform.forward * 2;
         follow = false;
-    }
-    private void OnDestroy()
-    {
-        GameManager.Instance.lover = null;
     }
 }

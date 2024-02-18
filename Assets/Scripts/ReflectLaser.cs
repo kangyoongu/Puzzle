@@ -27,7 +27,7 @@ public class ReflectLaser : MonoBehaviour
     bool before = false;
     void Start()
     {
-        aud = transform.GetChild(6).GetComponent<AudioSource>();
+        aud = transform.GetChild(7).GetComponent<AudioSource>();
         aud.clip = reflectClip;
         for (int i = 0; i < 6; i++)
         {

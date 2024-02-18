@@ -14,6 +14,7 @@ public class PlayerController : SingleTon<PlayerController>
     public float grabDistance = 5f;
     [HideInInspector] public bool grabbing = false;
     [HideInInspector] public GrabableObject grabObject;
+    [HideInInspector] public bool grabable = true;
     public LayerMask grabLayer;
     float walktime = 0;
     float runWeight;
@@ -47,6 +48,7 @@ public class PlayerController : SingleTon<PlayerController>
     {
         rb.freezeRotation = false;
         rb.AddTorque(Vector3.forward * 3);
+        dieAud.Play();
         GameManager.Instance.canControl = false;
         if (grabbing)
         {
@@ -63,7 +65,7 @@ public class PlayerController : SingleTon<PlayerController>
     }
     void Update()
     {
-        if (GameManager.Instance.canControl)
+        if (GameManager.Instance.canControl && grabable)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -156,12 +158,10 @@ public class PlayerController : SingleTon<PlayerController>
             if (!GameManager.Instance.clear)
             {
                 EventBus.Publish(State.PlayerDie);
-                dieAud.Play();
             }
         }
         if (collision.gameObject.CompareTag("KillBridge"))
         {
-            dieAud.Play();
             StartCoroutine(DieOnBridge());
         }
     }

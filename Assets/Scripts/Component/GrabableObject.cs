@@ -38,7 +38,8 @@ public class GrabableObject : Interactable
                 }
                 constant.force = new Vector3(0, 0, 0);
             }
-            rigid.velocity = (transform.position - PlayerController.Instance.grabTrm.position) * -15;
+            if(rigid.isKinematic == false)
+                rigid.velocity = (transform.position - PlayerController.Instance.grabTrm.position) * -15;
         }
     }
     public void StartGrab()

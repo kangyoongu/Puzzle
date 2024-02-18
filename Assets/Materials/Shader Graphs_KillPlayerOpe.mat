@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1345365957671651843
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,14 +20,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_KillPlayer
-  m_Shader: {fileID: -6465566751694194690, guid: 01ceb93ead9781d4892cecbb4b4090d5, type: 3}
+  m_Name: Shader Graphs_KillPlayerOpe
+  m_Shader: {fileID: -6465566751694194690, guid: cf508de1242e91f4d9ca1a7723fb71f4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
+  m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -23,10 +36,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _SampleTexture2D_3cc44474ce5c4a5db3186175385de527_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: b62de734fc6fe1840a00df9cbe014ccf, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _Texture2D:
         m_Texture: {fileID: 2800000, guid: b62de734fc6fe1840a00df9cbe014ccf, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -48,23 +57,9 @@ Material:
     - _Fog: 50
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Size: 5
     - _Speed: 1
-    - _power: 4.65
     m_Colors:
-    - _BackgroundColor: {r: 0.7490197, g: 0, b: 0, a: 0.5529412}
-    - _Color: {r: 12.844469, g: 0.6427035, b: 0, a: 0.84313726}
+    - _BackgroundColor: {r: 0.5943396, g: 0.0072925105, b: 0, a: 0}
+    - _Color: {r: 3.2638505, g: 0.9082053, b: 0.15269476, a: 1}
+    - _Size_1: {r: 3, g: 3, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &9023675354882660718
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
