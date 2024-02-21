@@ -13,10 +13,12 @@ public class ZeroGravityAudio : MonoBehaviour
     }
     public void Enter()
     {
-        audioSource.PlayOneShot(enterClip);
+        audioSource.clip = enterClip;
+        if(!GameManager.Instance.currentInfo.firstFrame && !GameManager.Instance.currentInfo.isDie) audioSource.Play();
     }
     public void Exit()
     {
-        audioSource.PlayOneShot(exitClip);
+        audioSource.clip = exitClip;
+        if (!GameManager.Instance.currentInfo.firstFrame && !GameManager.Instance.currentInfo.isDie) audioSource.Play();
     }
 }

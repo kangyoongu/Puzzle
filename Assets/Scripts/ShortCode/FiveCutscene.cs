@@ -17,7 +17,8 @@ public class FiveCutscene : MonoBehaviour
     public Transform pass;
     public CinemachineVirtualCamera target;
     public Material arrowMat;
-    public BoxCollider arrowColliders;
+    public GameObject fake;
+    public GameObject real;
     public GameObject firstTrigger;
     public VisualEffect[] arrows;
     public GameObject god;
@@ -36,7 +37,8 @@ public class FiveCutscene : MonoBehaviour
         if (!PlayerPrefs.HasKey("Animation2"))
         {
             arrowMat.color = new Color(1, 0, 0, 1);
-            arrowColliders.enabled = true;
+            fake.SetActive(true);
+            real.SetActive(false);
         }
         else
         {
@@ -122,7 +124,7 @@ public class FiveCutscene : MonoBehaviour
     public void ResetScene()
     {
         door.localPosition = new Vector3(door.localPosition.x, 16, door.localPosition.z);
-        enemy.move = true;
+
         bloom.weight = 0;
         firstTrigger.SetActive(true);
         for (int i = 0; i < arrows.Length; i++)
@@ -130,11 +132,18 @@ public class FiveCutscene : MonoBehaviour
             arrows[i].SetFloat("Lerp", 0);
         }
         OffArrow();
+        StartCoroutine(Delay());
+    }
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(3);
+        enemy.move = true;
     }
 
     private void OffArrow()
     {
         arrowMat.color = new Color(1, 0, 0, 0);
-        arrowColliders.enabled = false;
+        fake.SetActive(false);
+        real.SetActive(true);
     }
 }

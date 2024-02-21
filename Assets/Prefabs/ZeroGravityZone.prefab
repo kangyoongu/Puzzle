@@ -190,7 +190,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -242,5 +242,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3169b92ec2cfa7640b498d0c70a84fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enterClip: {fileID: 8300000, guid: 4cc2cd5af1bd61144ab5dc68f01302ae, type: 3}
-  exitClip: {fileID: 8300000, guid: 4cc2cd5af1bd61144ab5dc68f01302ae, type: 3}
+  enterClip: {fileID: 8300000, guid: 91f9732811ed88247825f17aaa03da8b, type: 3}
+  exitClip: {fileID: 8300000, guid: 91f9732811ed88247825f17aaa03da8b, type: 3}

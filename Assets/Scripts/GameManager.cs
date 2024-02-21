@@ -11,6 +11,7 @@ public class GameManager : SingleTon<GameManager>
     [HideInInspector] public bool canControl = false;
     [HideInInspector] public bool clear = false;
     [HideInInspector] public bool playing = false;
+    [SerializeField] GameObject player;
     public Lover lover;
     [HideInInspector] public Transform currentSpawnPoint;
     [HideInInspector] public MapReset currentInfo;
@@ -18,12 +19,15 @@ public class GameManager : SingleTon<GameManager>
     public Material cartoon;
     public Material fog;
     public int startStage = 7;
+    [HideInInspector] public AudioSource audioSource;
     private void Start()
     {
-        Time.timeScale = 0;
+        SceneManager.LoadScene("StartScene", LoadSceneMode.Additive);
+        Time.timeScale = 1;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         canControl = false;
+        audioSource = GetComponent<AudioSource>();
         Application.targetFrameRate = 120;
         if (!PlayerPrefs.HasKey("Stage"))
         {
@@ -36,13 +40,21 @@ public class GameManager : SingleTon<GameManager>
         RenderSettings.fogColor = new Color32(33, 13, 13, 255);
         cartoon.SetFloat("_Lerp", 1);
         cartoon.SetFloat("_BaseColorLerp", 0);
+        cartoon.SetFloat("_ColorThreshold", 0.1f);
         cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
     }
     public void ToCh3()
     {
-        cartoon.DOFloat(1f, "_Lerp", 3f);
-        cartoon.DOFloat(0f, "_BaseColorLerp", 3f);
-        cartoon.DOColor(new Color(0, 0, 0), "_OutlineColor", 3f);
+        cartoon.SetFloat("_Lerp", 1f);
+        cartoon.SetFloat("_BaseColorLerp", 1f);
+        cartoon.SetColor("_OutlineColor", new Color(1, 1, 1));
+        cartoon.DOFloat(0.005f, "_ColorThreshold", 1f).SetEase(Ease.Linear);
+        cartoon.DOFloat(1f, "_Lerp", 6f).SetEase(Ease.Linear);
+        cartoon.DOFloat(0f, "_BaseColorLerp", 6f).SetEase(Ease.Linear);
+        cartoon.DOColor(new Color(0, 0, 0), "_OutlineColor", 6f).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            cartoon.DOFloat(0.1f, "_ColorThreshold", 1f).SetEase(Ease.Linear);
+        });
     }
     public void Ch2()
     {
@@ -62,12 +74,12 @@ public class GameManager : SingleTon<GameManager>
     }
     internal void GameStart()
     {
-        Ch2();
+        player.SetActive(true);
         if (PlayerPrefs.GetInt("Stage") == 1)
         {
             //PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0;
         }
-        if(startStage >= 1 && startStage <= 8)
+        if (startStage >= 1 && startStage <= 8)
         {
             Ch1();
         }
@@ -79,17 +91,23 @@ public class GameManager : SingleTon<GameManager>
         {
             Ch3();
         }
-        SceneManager.LoadScene(startStage/*PlayerPrefs.GetInt("Stage")*/, LoadSceneMode.Additive);
-        Time.timeScale = 1;
+        Scene detectedScene = SceneManager.GetSceneByBuildIndex(startStage);
+
+        // 씬이 로드되어 있는지 여부를 확인
+        if (!detectedScene.IsValid())
+        {
+            SceneManager.LoadScene(startStage/*PlayerPrefs.GetInt("Stage")*/, LoadSceneMode.Additive);
+        }
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         canControl = true;
         playing = true;
-        StartCoroutine(NextFrame());
+        StartCoroutine(NextFrameStart());
     }
-    IEnumerator NextFrame()
+    IEnumerator NextFrameStart()
     {
         yield return null;
+        SceneManager.UnloadSceneAsync("StartScene");
         yield return null;
         currentInfo.transform.root.position = PlayerController.Instance.transform.position;
         PlayerController.Instance.transform.position = currentSpawnPoint.position;
@@ -108,6 +126,17 @@ public class GameManager : SingleTon<GameManager>
         {
             lover.transform.position = PlayerController.Instance.transform.position + PlayerController.Instance.transform.forward * 2;
         }
+    }
+    public void GoMain()
+    {
+        for (int i = 0; i < SceneManager.loadedSceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).name != "Basic")
+            {
+                SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
+            }
+        }
+        SceneManager.LoadScene(gameObject.scene.name);
     }
     public void GoCartoon()
     {

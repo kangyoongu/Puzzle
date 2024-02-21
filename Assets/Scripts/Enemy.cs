@@ -161,6 +161,8 @@ public class Enemy : Interactable
     }
     IEnumerator Kill()
     {
+        move = false;
+        aud.Stop();
         killAud.Play();
         transform.DOLocalMove(Vector3.forward * 0.7f, 5);
         tween = DOTween.To(() => vfx.GetFloat("Lerp"), x => vfx.SetFloat("Lerp", x), 1.0f, 5f).SetEase(Ease.Linear);
@@ -177,6 +179,8 @@ public class Enemy : Interactable
     }
     IEnumerator Die()
     {
+        move = false;
+        aud.Stop();
         dieAud.Play();
         rigid.isKinematic = true;
         sphereCollider.enabled = false;
@@ -196,6 +200,7 @@ public class Enemy : Interactable
     public override void ObjectReset()
     {
         if (tween != null && tween.IsPlaying()) tween.Kill();
+        aud.Stop();
         vfx.SetBool("isDie", false);
         vfx.SetFloat("Lerp", 0);
         vfx.Play();

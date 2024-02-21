@@ -50,6 +50,29 @@ public class UIManager : SingleTon<UIManager>
     bool imageOn = false;
     public GameObject pause;
     Coroutine co;
+    [Header("중심점")]
+    public Image bigCircle;
+    public Image donut;
+    public Image point;
+    int pointerState = 0;
+    [SerializeField] Color upColor;
+    [SerializeField] Color downColor;
+    private void Start()
+    {
+        UpPoint();
+    }
+    public void UpPoint()
+    {
+        point.DOColor(new Color(upColor.r, upColor.g, upColor.b, point.color.a), 0.5f);
+        donut.DOColor(new Color(upColor.r, upColor.g, upColor.b, donut.color.a), 0.5f);
+        bigCircle.DOColor(new Color(upColor.r, upColor.g, upColor.b, bigCircle.color.a), 0.5f);
+    }
+    public void DownPoint()
+    {
+        point.DOColor(new Color(downColor.r, downColor.g, downColor.b, point.color.a), 0.5f);
+        donut.DOColor(new Color(downColor.r, downColor.g, downColor.b, donut.color.a), 0.5f);
+        bigCircle.DOColor(new Color(downColor.r, downColor.g, downColor.b, bigCircle.color.a), 0.5f);
+    }
     private void Update()
     {
         if(dialog.Count > 0 && !playingText)
@@ -156,7 +179,6 @@ public class UIManager : SingleTon<UIManager>
     private void In(UI[] lst)
     {
         block[0].SetActive(true);
-        block[1].SetActive(true);
         float max = 0;
         for (int i = 0; i < lst.Length; i++)
         {
@@ -184,7 +206,6 @@ public class UIManager : SingleTon<UIManager>
     private void Out(UI[] lst)
     {
         block[0].SetActive(true);
-        block[1].SetActive(true);
         float max = 0;
         for (int i = 0; i < lst.Length; i++)
         {
@@ -228,7 +249,6 @@ public class UIManager : SingleTon<UIManager>
     {
         yield return new WaitForSecondsRealtime(time);
         block[0].SetActive(false);
-        block[1].SetActive(false);
     }
     public void AppendDialog(Dialog dialog)
     {
@@ -265,6 +285,33 @@ public class UIManager : SingleTon<UIManager>
         yield return new WaitForSeconds(1);
         imageOn = false;
     }
+    public void Normal()
+    {
+        if (pointerState != 0)
+        {
+            bigCircle.DOFade(0f, 0.5f);
+            donut.DOFade(0f, 0.5f);
+            pointerState = 0;
+        }
+    }
+    public void OnGrabable()
+    {
+        if (pointerState != 1)
+        {
+            bigCircle.DOFade(0.4f, 0.5f);
+            donut.DOFade(0f, 0.5f);
+            pointerState = 1;
+        }
+    }
+    public void Grab()
+    {
+        if (pointerState != 2)
+        {
+            bigCircle.DOFade(0f, 0.5f);
+            donut.DOFade(1f, 0.5f);
+            pointerState = 2;
+        }
+    }
     IEnumerator Show(float time)
     {
         image.DOFade(1, 1);
@@ -296,12 +343,6 @@ public class UIManager : SingleTon<UIManager>
     }
     public void OnClickGoMain()
     {
-        CheckManager.Instance.Check("정말 하던 게임을\n그만두시겠습니까?", GoMain);
-    }
-
-    private void GoMain()
-    {
-        SceneManager.UnloadSceneAsync(GameManager.Instance.currentInfo.gameObject.scene);
-        SceneManager.LoadScene(gameObject.scene.name);
+        CheckManager.Instance.Check("정말 하던 게임을\n그만두시겠습니까?", GameManager.Instance.GoMain);
     }
 }

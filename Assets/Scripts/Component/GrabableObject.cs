@@ -72,9 +72,12 @@ public class GrabableObject : Interactable
             rigid.useGravity = true;
         }
         gameObject.layer = layer;
-        rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
-        rigid.freezeRotation = true;
-        rigid.velocity = Vector3.zero;
+        if (rigid)
+        {
+            rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+            rigid.freezeRotation = true;
+            rigid.velocity = Vector3.zero;
+        }
         grab = false;
     }
 

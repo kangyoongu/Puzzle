@@ -60,6 +60,7 @@ public class ButtonClickSensor : OnOffImage
         button.DOLocalMoveY(1.62f, 0.5f);
         yield return new WaitForSeconds(1.2f);
         RenderSettings.fogColor = new Color32(51, 19, 19, 255);
+        GameManager.Instance.fog.SetColor("_Color", new Color32(96, 96, 96, 255));
         pillar.DOLocalMoveY(-28f, 2f);
         for(int i = 0; i < effects.Length; i++)
         {

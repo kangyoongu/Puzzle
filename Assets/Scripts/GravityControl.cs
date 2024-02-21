@@ -73,11 +73,13 @@ public class GravityControl : SingleTon<GravityControl>
                 changeState = (State)((short)changeState * -1);
                 if(changeState == State.Up)
                 {
+                    UIManager.Instance.UpPoint();
                     audioSource.clip = upClip;
                     audioSource.Play();
                 }
                 else if (changeState == State.Down)
                 {
+                    UIManager.Instance.DownPoint();
                     audioSource.clip = downClip;
                     audioSource.Play();
                 }

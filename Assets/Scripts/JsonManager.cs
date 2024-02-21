@@ -23,7 +23,7 @@ public class GameData
 }
 public class JsonManager : SingleTon<JsonManager>
 {
-    public GameData gameData;
+    private GameData gameData;
     string fileName;
 
     public float Reading { get { return gameData._reading; } set { gameData._reading = value; SaveData(); } }
@@ -44,7 +44,7 @@ public class JsonManager : SingleTon<JsonManager>
         }
         else
         {
-            gameData = new GameData { };
+            gameData = new GameData { _BGM = 1.401642f, _SFX = 1.401642f, _reading = 1.401642f, _stage = 1, _resolution = Screen.resolutions.Length-1, _fullScreen = true, _language = 0, _sensitivity = 1.912209f };//여기 초기값 작성
             SaveData();
         }
     }

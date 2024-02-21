@@ -7,13 +7,18 @@ public class CollisionSound : MonoBehaviour
 {
     AudioSource audioSource;
     public AudioClip clip;
+    Rigidbody rigid;
     void Awake()
     {
+        rigid = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = clip;
     }
     private void OnCollisionEnter(Collision collision)
     {
-        audioSource.PlayOneShot(clip);
+        if (rigid.isKinematic == false)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

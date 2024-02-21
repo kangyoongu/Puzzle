@@ -19,6 +19,8 @@ public class MapReset : MonoBehaviour
     public string nextScene;
     public Transform spawnPoint;
     public GameObject closeDoor;
+    [HideInInspector] public bool isDie = false;
+    [HideInInspector] public bool firstFrame = true;
     private void Awake()
     {
         transform.root.position = GameManager.Instance.currentJointPos;
@@ -57,6 +59,12 @@ public class MapReset : MonoBehaviour
         positions.Add(Vector3.zero);
         angles.Add(spawnPoint.rotation);
         camAngle = Quaternion.identity;
+        StartCoroutine(NextFrame());
+    }
+    IEnumerator NextFrame()
+    {
+        yield return null;
+        firstFrame = false;
     }
     private void OnEnable()
     {
@@ -82,13 +90,17 @@ public class MapReset : MonoBehaviour
     }
     IEnumerator OnlyPlayerDelay()
     {
+        isDie = true;
+
         EventBus.Publish(State.Normal);
         yield return new WaitForSeconds(4);
+
+        GameManager.Instance.audioSource.Play();
         rigids[objects.Count].isKinematic = true;
-        transforms[objects.Count].DOLocalMove(positions[objects.Count], 6).SetEase(Ease.OutCubic);
-        transforms[objects.Count].DORotateQuaternion(angles[objects.Count], 6);
-        PlayerController.Instance.camTransform.DOLocalRotateQuaternion(camAngle, 6);
-        yield return new WaitForSeconds(6);
+        transforms[objects.Count].DOLocalMove(positions[objects.Count], 4).SetEase(Ease.OutCubic);
+        transforms[objects.Count].DORotateQuaternion(angles[objects.Count], 4);
+        PlayerController.Instance.camTransform.DOLocalRotateQuaternion(camAngle, 4);
+        yield return new WaitForSeconds(4);
         GravityControl.Instance.changeState = State.Up;
 
         rigids[objects.Count].isKinematic = false;
@@ -96,11 +108,15 @@ public class MapReset : MonoBehaviour
         rotateCam.yaw = 0;
         PlayerController.Instance.ObjectReset();
         GameManager.Instance.canControl = true;
+        yield return null;
+        isDie = false;
     }
     IEnumerator Delay()
     {
+        isDie = true;
         EventBus.Publish(State.Normal);
         yield return new WaitForSeconds(4);
+        GameManager.Instance.audioSource.Play();
         for(int i = 0; i < enemies.Count; i++)
         {
             if (enemies[i])
@@ -113,11 +129,11 @@ public class MapReset : MonoBehaviour
         {
             if(rigids[i] != null)
                 rigids[i].isKinematic = true;
-            transforms[i].DOLocalMove(positions[i], 6).SetEase(Ease.OutCubic);
-            transforms[i].DORotateQuaternion(angles[i], 6);
+            transforms[i].DOLocalMove(positions[i], 4).SetEase(Ease.OutCubic);
+            transforms[i].DORotateQuaternion(angles[i], 4);
         }
-        PlayerController.Instance.camTransform.DOLocalRotateQuaternion(camAngle, 6);
-        yield return new WaitForSeconds(6);
+        PlayerController.Instance.camTransform.DOLocalRotateQuaternion(camAngle, 4);
+        yield return new WaitForSeconds(4);
         GravityControl.Instance.changeState = State.Up;
         if(GameManager.Instance.lover.gameObject.activeSelf == true)
             GameManager.Instance.lover.ObjectReset();
@@ -135,6 +151,8 @@ public class MapReset : MonoBehaviour
         rotateCam.yaw = 0;
         PlayerController.Instance.ObjectReset();
         GameManager.Instance.canControl = true;
+        yield return null;
+        isDie = false;
     }
     public void GameClear()
     {

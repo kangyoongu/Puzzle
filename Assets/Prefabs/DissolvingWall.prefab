@@ -119,8 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 193c376f058569f458df06adb85c9845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClip: {fileID: 8300000, guid: 4cc2cd5af1bd61144ab5dc68f01302ae, type: 3}
-  offClip: {fileID: 8300000, guid: 4cc2cd5af1bd61144ab5dc68f01302ae, type: 3}
+  onClip: {fileID: 8300000, guid: 03e0e6cbfcdd13f4e8a9f916a15cc306, type: 3}
+  offClip: {fileID: 8300000, guid: 03e0e6cbfcdd13f4e8a9f916a15cc306, type: 3}
 --- !u!82 &1967990336482669260
 AudioSource:
   m_ObjectHideFlags: 0

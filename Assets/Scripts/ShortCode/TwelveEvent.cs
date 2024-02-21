@@ -13,9 +13,16 @@ public class TwelveEvent : MonoBehaviour
     public Dialog[] dialog;
     private void Start()
     {
+        PlayerPrefs.DeleteAll();
+        StartCoroutine(Last());
+        
+    }
+    IEnumerator Last()
+    {
+        yield return null;
         if (PlayerPrefs.HasKey("Twelve"))
         {
-            for(int i = 0; i < activeTrue.Length; i++)
+            for (int i = 0; i < activeTrue.Length; i++)
             {
                 activeTrue[i].SetActive(true);
             }
@@ -46,7 +53,6 @@ public class TwelveEvent : MonoBehaviour
                 enemy.GoOut(9);
                 enemy.ResetOut(9);
 
-                GameManager.Instance.ToCh3();
                 gameObject.SetActive(false);
             }
             else
@@ -55,13 +61,14 @@ public class TwelveEvent : MonoBehaviour
                 {
                     UIManager.Instance.AppendDialog(dialog[i]);
                 }
+                GameManager.Instance.ToCh3();
                 PlayerPrefs.SetInt("Twelve", 1);
-                PlayerController.Instance.grabable = false;
-                StartCoroutine(Delay());
+                PlayerController.Instance.grabable = false; 
+                Delay();
             }
         }
     }
-    IEnumerator Delay()
+    void Delay()
     {
         for (int i = 0; i < activeTrue.Length; i++)
         {
@@ -73,14 +80,14 @@ public class TwelveEvent : MonoBehaviour
                    DOTween.To(() => effects[z].GetFloat("Lerp"), x => effects[z].SetFloat("Lerp", x), 1, 3).SetEase(Ease.Linear).OnComplete(() =>
                    {
                        activeTrue[z].SetActive(true);
-                       DOTween.To(() => effects[z].GetFloat("AlphaLerp"), x => effects[z].SetFloat("AlphaLerp", x), 0, 2);
+                       DOTween.To(() => effects[z].GetFloat("AlphaLerp"), x => effects[z].SetFloat("AlphaLerp", x), 0, 2).OnComplete(() =>
+                       {
+                           PlayerController.Instance.grabable = true;
+                           enemy.GoOut(9);
+                           gameObject.SetActive(false);
+                       });
                    });
                });
         }
-        
-        yield return new WaitForSeconds(7);
-        enemy.GoOut(9);
-        PlayerController.Instance.grabable = true;
-        gameObject.SetActive(false);
     }
 }

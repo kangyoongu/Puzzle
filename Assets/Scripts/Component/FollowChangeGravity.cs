@@ -18,7 +18,6 @@ public class FollowChangeGravity : Interactable
     public ObjectType type = ObjectType.Normal;
     [HideInInspector]public bool zeroZone = false;
     [HideInInspector] public float weight = 1;
-
     private void Awake()
     {
         constantForce = GetComponent<ConstantForce>();

@@ -10,7 +10,7 @@ public class RootLaser : Laser
     }
     private void OnDisable()
     {
-        LaserManager.Instance.roots.RemoveAt(0);
+        LaserManager.Instance.roots.Remove(this);
     }
     public void Trigger()
     {

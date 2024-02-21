@@ -203,9 +203,9 @@ MonoBehaviour:
   startPos: {x: 0, y: 0, z: 0}
   move: 1
   dieWithLaser: 0
-  followingClip: {fileID: 8300000, guid: 4cc2cd5af1bd61144ab5dc68f01302ae, type: 3}
-  dieClip: {fileID: 8300000, guid: 4cc2cd5af1bd61144ab5dc68f01302ae, type: 3}
-  killClip: {fileID: 8300000, guid: 4cc2cd5af1bd61144ab5dc68f01302ae, type: 3}
+  followingClip: {fileID: 8300000, guid: d02aa68eaf598834083521c5f45e3c09, type: 3}
+  dieClip: {fileID: 8300000, guid: 45e363761ee46a14198f25c4f67658bd, type: 3}
+  killClip: {fileID: 8300000, guid: a62c35306866f6e4daf240b21ba25f7b, type: 3}
 --- !u!82 &-4141458211352153039
 AudioSource:
   m_ObjectHideFlags: 0
@@ -220,7 +220,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -384,7 +384,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -548,7 +548,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

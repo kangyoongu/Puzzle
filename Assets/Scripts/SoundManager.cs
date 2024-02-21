@@ -16,6 +16,9 @@ public class SoundManager : MonoBehaviour
         readingSlider.value = JsonManager.Instance.Reading;
         BGMSlider.value = JsonManager.Instance.BGM;
         SFXSlider.value = JsonManager.Instance.SFX;
+        audioMixer.SetFloat("Reading", Mathf.Log10(readingSlider.value) * 20);
+        audioMixer.SetFloat("BGM", Mathf.Log10(BGMSlider.value) * 20);
+        audioMixer.SetFloat("SFX", Mathf.Log10(SFXSlider.value) * 20);
     }
 
     public void SetReadVolume(float volume)
