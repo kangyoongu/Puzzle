@@ -17,8 +17,6 @@ public class StartCutscene : MonoBehaviour
     IEnumerator Manage()
     {
         GameManager.Instance.canControl = false;
-        GameObject g = GameObject.Find("Static Canvas");
-        g.SetActive(false);
         RenderSettings.fog = false;
         fade.color = new Color(0, 0, 0, 1);
         yield return new WaitForSeconds(3);
@@ -33,9 +31,8 @@ public class StartCutscene : MonoBehaviour
         yield return new WaitForSeconds(6);
         cam.GetComponent<CinemachineVirtualCamera>().m_Priority = 0;
         yield return new WaitForSeconds(0.1f);
-        PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 1;
+        GameManager.Instance.cBrain.m_DefaultBlend.m_Time = 1;
         RenderSettings.fog = true;
         gameObject.SetActive(false);
-        g.SetActive(true);
     }
 }
