@@ -20,14 +20,17 @@ public class GameManager : SingleTon<GameManager>
     public Material fog;
     public int startStage = 7;
     [HideInInspector] public AudioSource audioSource;
+    [SerializeField] private GameObject openScene;
+    public CinemachineBrain cBrain;
     private void Start()
     {
-        SceneManager.LoadScene("StartScene", LoadSceneMode.Additive);
+        PlayerPrefs.DeleteAll();
         Time.timeScale = 1;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         canControl = false;
         audioSource = GetComponent<AudioSource>();
+        cBrain.m_DefaultBlend.m_Time = 0;
         Application.targetFrameRate = 120;
         if (!PlayerPrefs.HasKey("Stage"))
         {
@@ -75,10 +78,6 @@ public class GameManager : SingleTon<GameManager>
     internal void GameStart()
     {
         player.SetActive(true);
-        if (PlayerPrefs.GetInt("Stage") == 1)
-        {
-            //PlayerController.Instance.camTransform.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0;
-        }
         if (startStage >= 1 && startStage <= 8)
         {
             Ch1();
@@ -100,6 +99,7 @@ public class GameManager : SingleTon<GameManager>
         }
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        openScene.SetActive(false);
         canControl = true;
         playing = true;
         StartCoroutine(NextFrameStart());
@@ -107,8 +107,11 @@ public class GameManager : SingleTon<GameManager>
     IEnumerator NextFrameStart()
     {
         yield return null;
-        SceneManager.UnloadSceneAsync("StartScene");
         yield return null;
+        if (startStage != 1)
+        {
+            cBrain.m_DefaultBlend.m_Time = 1f;
+        }
         currentInfo.transform.root.position = PlayerController.Instance.transform.position;
         PlayerController.Instance.transform.position = currentSpawnPoint.position;
         PlayerController.Instance.transform.rotation = currentSpawnPoint.rotation;

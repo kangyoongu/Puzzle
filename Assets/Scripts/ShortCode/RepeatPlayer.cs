@@ -11,7 +11,7 @@ public class RepeatPlayer : MonoBehaviour
         get => count;
         set {
             count = value;
-            if(count == 5)
+            if(count == 5 && !PlayerPrefs.HasKey("SixEvent"))
             {
                 for (int i = 0; i < repeatDialog.Length; i++)
                 {

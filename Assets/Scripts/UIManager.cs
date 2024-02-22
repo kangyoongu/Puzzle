@@ -57,6 +57,7 @@ public class UIManager : SingleTon<UIManager>
     int pointerState = 0;
     [SerializeField] Color upColor;
     [SerializeField] Color downColor;
+    private AudioSource[] sources;
     private void Start()
     {
         UpPoint();
@@ -79,21 +80,28 @@ public class UIManager : SingleTon<UIManager>
         {
             StartCoroutine(DisplayText());
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && block[0].activeSelf == false)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (setting)
+            if (CheckManager.Instance.check.activeSelf == true)
             {
-                SettingUIOut();
+                CheckManager.Instance.OnClickNo();
             }
-            else
+            else if (block[0].activeSelf == false)
             {
-                if (GameManager.Instance.playing && Time.timeScale != 0)
+                if (setting)
                 {
-                    PauseUIIn();
+                    SettingUIOut();
                 }
-                else if (Time.timeScale == 0)
+                else
                 {
-                    PauseUIOut();
+                    if (GameManager.Instance.playing && Time.timeScale != 0)
+                    {
+                        PauseUIIn();
+                    }
+                    else if (Time.timeScale == 0)
+                    {
+                        PauseUIOut();
+                    }
                 }
             }
         }
@@ -163,6 +171,11 @@ public class UIManager : SingleTon<UIManager>
     public void PauseUIIn()
     {
         Time.timeScale = 0;
+        sources = FindObjectsOfType<AudioSource>();
+        foreach(AudioSource a in sources)
+        {
+            if (a.isPlaying) a.Pause();
+        }
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         GameManager.Instance.canControl = false;
@@ -171,6 +184,10 @@ public class UIManager : SingleTon<UIManager>
     public void PauseUIOut()
     {
         Time.timeScale = 1;
+        foreach (AudioSource a in sources)
+        {
+            if (a.isPlaying) a.UnPause();
+        }
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         GameManager.Instance.canControl = true;
@@ -338,6 +355,10 @@ public class UIManager : SingleTon<UIManager>
         MainUIOut();
     }
     public void OnClickQuit()
+    {
+        CheckManager.Instance.Check("정말 게임을\n종료하시겠습니까?", Quit);
+    }
+    private void Quit()
     {
         Application.Quit();
     }

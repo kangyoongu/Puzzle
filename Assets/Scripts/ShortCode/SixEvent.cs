@@ -64,9 +64,9 @@ public class SixEvent : MonoBehaviour
         }
         yield return new WaitForSeconds(2);
         particle.GetComponent<VisualEffect>().Stop();
+        PlayerPrefs.SetInt("SixEvent", 1);
         yield return new WaitForSeconds(9);
         particle.gameObject.SetActive(false);
-        PlayerPrefs.SetInt("SixEvent", 1);
         gameObject.SetActive(true);
     }
 }
