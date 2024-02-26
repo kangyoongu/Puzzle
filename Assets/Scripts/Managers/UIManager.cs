@@ -30,6 +30,7 @@ public struct UI
 public struct Dialog
 {
     public string speaker;
+    [TextArea]
     public string line;
 }
 

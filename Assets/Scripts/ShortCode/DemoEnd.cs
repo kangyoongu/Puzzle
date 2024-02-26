@@ -24,7 +24,7 @@ public class DemoEnd : MonoBehaviour
     }
     IEnumerator Delay()
     {
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(10f);
         GameManager.Instance.GoMain();
     }
 }
