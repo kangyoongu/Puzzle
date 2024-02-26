@@ -8,11 +8,12 @@ public class TriggerEvent : MonoBehaviour
     public UnityEvent enter;
     public UnityEvent exit;
     public bool off = true;
+    public bool clear = false;
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (!GameManager.Instance.clear && GameManager.Instance.currentInfo.isDie == false)
+            if ((clear || !GameManager.Instance.clear) && GameManager.Instance.currentInfo.isDie == false)
             {
                 enter?.Invoke();
                 if (off)
@@ -26,7 +27,7 @@ public class TriggerEvent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (!GameManager.Instance.clear && GameManager.Instance.currentInfo.isDie == false)
+            if ((clear || !GameManager.Instance.clear) && GameManager.Instance.currentInfo.isDie == false)
             {
                 exit?.Invoke();
             }

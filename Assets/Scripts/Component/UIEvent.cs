@@ -17,8 +17,11 @@ public class UIEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     Image image;
     private void Awake()
     {
-        outline = GetComponent<Outline>();
-        outline.enabled = false;
+        if (outlineAction)
+        {
+            outline = GetComponent<Outline>();
+            outline.enabled = false;
+        }
         image = GetComponent<Image>();
         originColor = image.color;
     }

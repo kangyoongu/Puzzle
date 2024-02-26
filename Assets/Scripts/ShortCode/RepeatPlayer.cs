@@ -19,7 +19,7 @@ public class RepeatPlayer : MonoBehaviour
                 }
                 if (sixEvent.isFind == false)
                 {
-                    UIManager.Instance.AppendDialog(new Dialog { speaker = "찐신", line = "내가 진짜 큐브의 위치를 알려줄게"});
+                    UIManager.Instance.AppendDialog(new Dialog { speaker = "찐신", line = @"내가 진짜 큐브의 위치를 알려줄게"});
                     sixEvent.GuideParticle();
                 }
             }
