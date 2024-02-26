@@ -22,10 +22,7 @@ public class ResolutionManager : MonoBehaviour
     {
         for(int i = 0; i < Screen.resolutions.Length; i++)
         {
-            if((int)Screen.resolutions[i].refreshRateRatio.value == 60)
-            {
-                resolutions.Add(Screen.resolutions[i]);
-            }       
+            resolutions.Add(Screen.resolutions[i]);
         }
         dropdown.options.Clear();
 

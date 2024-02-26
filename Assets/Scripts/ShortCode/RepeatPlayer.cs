@@ -11,7 +11,7 @@ public class RepeatPlayer : MonoBehaviour
         get => count;
         set {
             count = value;
-            if(count == 5 && !PlayerPrefs.HasKey("SixEvent"))
+            if(count == 2 && !PlayerPrefs.HasKey("SixEvent"))
             {
                 for (int i = 0; i < repeatDialog.Length; i++)
                 {
@@ -19,7 +19,7 @@ public class RepeatPlayer : MonoBehaviour
                 }
                 if (sixEvent.isFind == false)
                 {
-                    UIManager.Instance.AppendDialog(new Dialog { speaker = "찐신", line = "내가 진짜 큐브의 위치를 알려줄게"});
+                    UIManager.Instance.AppendDialog(new Dialog { speaker = "<color=#FAED7D>태시</color>", line = "내가 <color=#4A0BA4>혼륜</color>이 숨겨둔 위치를 알려주마" });
                     sixEvent.GuideParticle();
                 }
             }
