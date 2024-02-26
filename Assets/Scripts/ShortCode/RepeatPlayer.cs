@@ -19,7 +19,7 @@ public class RepeatPlayer : MonoBehaviour
                 }
                 if (sixEvent.isFind == false)
                 {
-                    UIManager.Instance.AppendDialog(new Dialog { speaker = "<color=#FAED7D>ÅÂ½Ã</color>", line = "³»°¡ <color=#4A0BA4>È¥·û</color>ÀÌ ¼û°ÜµÐ À§Ä¡¸¦ ¾Ë·ÁÁÖ¸¶" });
+                    UIManager.Instance.AppendDialog(new Dialog { speaker = "ï¿½ï¿½ï¿½", line = "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ Å¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ë·ï¿½ï¿½Ù°ï¿½"});
                     sixEvent.GuideParticle();
                 }
             }

@@ -128,6 +128,22 @@ public class UIManager : SingleTon<UIManager>
                 for (int i = 0; i < text.line.Length; i++)
                 {
                     dialogText.text += text.line[i];
+                    if(text.line[i] == '<' && text.line[i+1] == 'c')
+                    {
+                        for (int j = 0; j < 15; j++)
+                        {
+                            i++;
+                            dialogText.text += text.line[i];
+                        }
+                    }
+                    else if (text.line[i] == '<' && text.line[i + 1] == '/')
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            i++;
+                            dialogText.text += text.line[i];
+                        }
+                    }
                     yield return new WaitForSeconds(0.1f);
                 }
                 yield return new WaitForSeconds(Mathf.Min(1f, text.line.Length * 0.2f));
