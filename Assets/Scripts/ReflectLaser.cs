@@ -36,6 +36,7 @@ public class ReflectLaser : MonoBehaviour
             if(g)
                 g.GetComponentInChildren<MeshRenderer>().material = red;
         }
+        current = false;
     }
 
     private void LateUpdate()

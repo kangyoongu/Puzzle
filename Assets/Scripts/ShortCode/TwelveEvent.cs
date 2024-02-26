@@ -11,9 +11,10 @@ public class TwelveEvent : MonoBehaviour
     public VisualEffect[] effects;
     public Convert2D3D enemy;
     public Dialog[] dialog;
+    public GameObject white;
+    public GameObject black;
     private void Start()
     {
-        PlayerPrefs.DeleteAll();
         StartCoroutine(Last());
         
     }
@@ -22,6 +23,8 @@ public class TwelveEvent : MonoBehaviour
         yield return null;
         if (PlayerPrefs.HasKey("Twelve"))
         {
+            white.SetActive(true);
+            black.SetActive(false);
             for (int i = 0; i < activeTrue.Length; i++)
             {
                 activeTrue[i].SetActive(true);
@@ -34,6 +37,8 @@ public class TwelveEvent : MonoBehaviour
         else
         {
             enemy.ResetOut(9);
+            white.SetActive(false);
+            black.SetActive(true);
             for (int i = 0; i < activeTrue.Length; i++)
             {
                 activeTrue[i].SetActive(false);
@@ -62,6 +67,9 @@ public class TwelveEvent : MonoBehaviour
                     UIManager.Instance.AppendDialog(dialog[i]);
                 }
                 GameManager.Instance.ToCh3();
+                CutsceneAudio.Instance.Play(CutsceneAudio.Instance.stage12);
+                white.SetActive(true);
+                black.SetActive(false);
                 PlayerPrefs.SetInt("Twelve", 1);
                 PlayerController.Instance.grabable = false; 
                 Delay();

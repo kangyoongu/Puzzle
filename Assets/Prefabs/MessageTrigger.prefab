@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2946327023560934912}
   - component: {fileID: 4990832877223120126}
   - component: {fileID: 4862846572280279960}
-  - component: {fileID: 3811107210392363470}
   m_Layer: 13
   m_Name: MessageTrigger
   m_TagString: Untagged
@@ -68,37 +67,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   messages:
-  - action:
-      m_PersistentCalls:
-        m_Calls: []
-    dialog: 
-    image: {fileID: 0}
-    refresh: 0
+  - speaker: 
+    line: 
   delay: 0
---- !u!54 &3811107210392363470
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4319199094815107551}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0

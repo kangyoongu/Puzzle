@@ -32,7 +32,8 @@ public class PlayerController : SingleTon<PlayerController>
     [Header("FallSoundValue")]
     [SerializeField] float startVel;
     [SerializeField] float fullVel;
-    [SerializeField] float landingVel;
+    public bool canMove = true;
+    [HideInInspector] private float missDis = 10;
     void Start()
     {
         audioSource = transform.GetChild(2).GetComponent<AudioSource>();
@@ -75,6 +76,11 @@ public class PlayerController : SingleTon<PlayerController>
     }
     void Update()
     {
+        Grab();
+    }
+
+    private void Grab()
+    {
         if (GameManager.Instance.canControl && grabable && !GameManager.Instance.clear)
         {
             // 카메라 기준으로 앞으로 레이를 쏩니다.
@@ -82,13 +88,14 @@ public class PlayerController : SingleTon<PlayerController>
             RaycastHit hit;
 
 
-            if(grabbing)
+            if (grabbing)
             {
                 UIManager.Instance.Grab();
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) || Vector3.Distance(grabObject.transform.position, transform.position) >= missDis)
                 {
                     grabbing = false;
                     grabObject?.EndGrab();
+                    UIManager.Instance.Normal();
                 }
             }
             else if (Physics.Raycast(ray, out hit, grabDistance, grabLayer))
@@ -97,7 +104,7 @@ public class PlayerController : SingleTon<PlayerController>
                 if (dimension && dimension.is2d == true && dimension.canOut)
                 {
                     UIManager.Instance.OnGrabable();
-                    if(Input.GetMouseButtonDown(0)) dimension.GoOut();
+                    if (Input.GetMouseButtonDown(0)) dimension.GoOut();
                 }
                 else
                 {
@@ -132,14 +139,14 @@ public class PlayerController : SingleTon<PlayerController>
             UIManager.Instance.Normal();
         }
     }
-    
+
     private void FixedUpdate()
     {
         Move();
     }
     private void Move()
     {
-        if (GameManager.Instance.canControl)
+        if (GameManager.Instance.canControl && canMove)
         {
             // 플레이어 움직임
             float horizontalInput = Input.GetAxis("Horizontal");
@@ -160,14 +167,15 @@ public class PlayerController : SingleTon<PlayerController>
                     if (new Vector2(rb.velocity.x, rb.velocity.z).sqrMagnitude > 1f && inputDirection.sqrMagnitude >= 0.9f)
                     {
                         walktime += Time.fixedDeltaTime * (boost ? runWeight : 1f);
-                        if (walktime >= 0.7f)
+                        if (walktime >= 0.5f)
                         {
                             audioSource.PlayOneShot(walkClip[Random.Range(0, walkClip.Length)]);
                             walktime = 0;
                         }
                     }
-                    if (beforeGrounded <= -landingVel)
+                    if (beforeGrounded <= -startVel)
                     {
+                        landingAud.volume = windAud.volume;
                         landingAud.Play();
                     }
                     beforeGrounded = -1f;
@@ -185,7 +193,7 @@ public class PlayerController : SingleTon<PlayerController>
         }
 
         if (!windAud.isPlaying) windAud.Play();
-        windAud.volume = Mathf.InverseLerp(startVel, fullVel, Mathf.Abs(rb.velocity.y));
+        windAud.volume = Mathf.InverseLerp(startVel, fullVel, Mathf.Abs(rb.velocity.y)) * 0.5f;
     }
 
     private bool DownRay(Vector3 offset, out RaycastHit hit)
@@ -233,7 +241,10 @@ public class PlayerController : SingleTon<PlayerController>
         GameManager.Instance.canControl = true;
         GameManager.Instance.currentInfo.isDie = false;
     }
-
+    public void PlayDie()
+    {
+        dieAud.Play();
+    }
     public void ObjectReset()
     {
         grabbing = false;

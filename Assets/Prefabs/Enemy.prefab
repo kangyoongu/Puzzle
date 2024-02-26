@@ -193,7 +193,7 @@ MonoBehaviour:
   startPos: {x: 0, y: 0, z: 0}
   move: 1
   dieWithLaser: 1
-  followingClip: {fileID: 8300000, guid: d02aa68eaf598834083521c5f45e3c09, type: 3}
+  followingClip: {fileID: 8300000, guid: b9cf340117f904b499b25c4bba47694e, type: 3}
   dieClip: {fileID: 8300000, guid: 45e363761ee46a14198f25c4f67658bd, type: 3}
   killClip: {fileID: 8300000, guid: a62c35306866f6e4daf240b21ba25f7b, type: 3}
 --- !u!75 &3386285144347138549
@@ -242,9 +242,9 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
-  MaxDistance: 20
+  MaxDistance: 30
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -263,32 +263,32 @@ AudioSource:
       inWeight: 0
       outWeight: 0.9812869
     - serializedVersion: 3
-      time: 0.07988892
+      time: 0.097989656
       value: 0.70224
-      inSlope: -5.0019917
-      outSlope: -5.0019917
+      inSlope: -3.8994546
+      outSlope: -3.8994546
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.68524265
     - serializedVersion: 3
-      time: 0.2033493
-      value: 0.30918884
-      inSlope: -1.2504979
-      outSlope: -1.2504979
+      time: 0.216922
+      value: 0.3691864
+      inSlope: -1.287323
+      outSlope: -1.287323
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.84560657
     - serializedVersion: 3
-      time: 0.3933014
-      value: 0.1496582
-      inSlope: -0.31262448
-      outSlope: -0.31262448
+      time: 0.42497864
+      value: 0.16964722
+      inSlope: -0.54496795
+      outSlope: -0.54496795
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 1
+      outWeight: 0.8200431
     - serializedVersion: 3
       time: 0.7095154
       value: 0.05757141
@@ -406,7 +406,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 20
   Pan2D: 0
@@ -563,14 +563,14 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 9143162507301354447, guid: 7796176d6b9d56d48be1d6198952846b, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 20
   Pan2D: 0

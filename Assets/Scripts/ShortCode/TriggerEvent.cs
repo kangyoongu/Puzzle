@@ -12,10 +12,13 @@ public class TriggerEvent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            enter?.Invoke();
-            if (off)
+            if (!GameManager.Instance.clear && GameManager.Instance.currentInfo.isDie == false)
             {
-                gameObject.SetActive(false);
+                enter?.Invoke();
+                if (off)
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
     }
@@ -23,7 +26,10 @@ public class TriggerEvent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            exit?.Invoke();
+            if (!GameManager.Instance.clear && GameManager.Instance.currentInfo.isDie == false)
+            {
+                exit?.Invoke();
+            }
         }
     }
 }

@@ -21,12 +21,15 @@ public class NineEvent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            for (int i = 0; i < dialog.Length; i++)
+            if (!GameManager.Instance.clear && GameManager.Instance.currentInfo.isDie == false)
             {
-                UIManager.Instance.AppendDialog(dialog[i]);
+                for (int i = 0; i < dialog.Length; i++)
+                {
+                    UIManager.Instance.AppendDialog(dialog[i]);
+                }
+                PlayerPrefs.SetInt("Nine", 1);
+                StartCoroutine(Delay());
             }
-            PlayerPrefs.SetInt("Nine", 1);
-            StartCoroutine(Delay());
         }
     }
     IEnumerator Delay()

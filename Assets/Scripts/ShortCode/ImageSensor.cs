@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ImageSensor : MonoBehaviour
 {
-    public Sprite image;
-    public int time = 2;
-    public int delay;
+    public int image;
+    public float time = 2;
+    public float delay;
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

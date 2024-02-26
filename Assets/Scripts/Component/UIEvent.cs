@@ -15,12 +15,18 @@ public class UIEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private Outline outline;
     Color originColor;
     Image image;
-    private void Start()
+    private void Awake()
     {
         outline = GetComponent<Outline>();
         outline.enabled = false;
         image = GetComponent<Image>();
         originColor = image.color;
+    }
+    private void OnEnable()
+    {
+        if (outlineAction) outline.enabled = false;
+        if (scaleAction) transform.localScale = Vector3.one;
+        if (pointingAction) image.color = originColor;
     }
     public void OnPointerEnter(PointerEventData eventData)
     {

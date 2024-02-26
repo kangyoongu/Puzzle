@@ -55,6 +55,7 @@ public class ButtonClickSensor : OnOffImage
     }
     IEnumerator StartAnim()
     {
+        CutsceneAudio.Instance.Play(CutsceneAudio.Instance.stage8);
         PlayerController.Instance.Down();
         PlayerController.Instance.camTransform.DOLocalRotate(new Vector3(0, -PlayerController.Instance.transform.eulerAngles.y + 90, 0), 1f);
         button.DOLocalMoveY(1.62f, 0.5f);
@@ -62,6 +63,8 @@ public class ButtonClickSensor : OnOffImage
         RenderSettings.fogColor = new Color32(51, 19, 19, 255);
         GameManager.Instance.fog.SetColor("_Color", new Color32(96, 96, 96, 255));
         pillar.DOLocalMoveY(-28f, 2f);
+        GameManager.Instance.audioSource.volume = 0f;
+        GameManager.Instance.currentInfo.OnlyPlayerDie();
         for(int i = 0; i < effects.Length; i++)
         {
             if (i == 8) yield return new WaitForSeconds(2);
@@ -80,7 +83,6 @@ public class ButtonClickSensor : OnOffImage
                        });//슬슬 안보이게
                    });
                });
-            GameManager.Instance.currentInfo.OnlyPlayerDie();
         }
         yield return new WaitForSeconds(3);
         for (int i = 0; i < meshs.Length; i++)
@@ -97,6 +99,7 @@ public class ButtonClickSensor : OnOffImage
         GameManager.Instance.currentInfo.SetSpawnPoint(0, enemy.transform.position);
         enemy.rigid.isKinematic = false;
         yield return new WaitForSeconds(5);
+        GameManager.Instance.audioSource.volume = 1f;
         GetComponent<BoxCollider>().enabled = false;
         door.ColorFull();
         doorOpener.SetActive(true);

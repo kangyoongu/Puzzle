@@ -19,7 +19,9 @@ public class StartCutscene : MonoBehaviour
         GameManager.Instance.canControl = false;
         RenderSettings.fog = false;
         fade.color = new Color(0, 0, 0, 1);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2.8f);
+        CutsceneAudio.Instance.Play(CutsceneAudio.Instance.stage1);
+        yield return new WaitForSeconds(0.2f);
         fade.DOFade(0, 0.2f).SetEase(Ease.InCubic);
         yield return new WaitForSeconds(3);
         cam.DOLocalMoveX(-73f, 7f).SetEase(Ease.Linear);
@@ -30,6 +32,7 @@ public class StartCutscene : MonoBehaviour
         }
         yield return new WaitForSeconds(6);
         cam.GetComponent<CinemachineVirtualCamera>().m_Priority = 0;
+        UIManager.Instance.point.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.1f);
         GameManager.Instance.cBrain.m_DefaultBlend.m_Time = 1;
         RenderSettings.fog = true;

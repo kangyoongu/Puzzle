@@ -93,6 +93,7 @@ public class MapReset : MonoBehaviour
         isDie = true;
 
         EventBus.Publish(State.Normal);
+        UIManager.Instance.Normal();
         yield return new WaitForSeconds(4);
 
         GameManager.Instance.audioSource.Play();
@@ -115,6 +116,7 @@ public class MapReset : MonoBehaviour
     {
         isDie = true;
         EventBus.Publish(State.Normal);
+        UIManager.Instance.Normal();
         yield return new WaitForSeconds(4);
         GameManager.Instance.audioSource.Play();
         for(int i = 0; i < enemies.Count; i++)
@@ -135,6 +137,7 @@ public class MapReset : MonoBehaviour
         PlayerController.Instance.camTransform.DOLocalRotateQuaternion(camAngle, 4);
         yield return new WaitForSeconds(4);
         GravityControl.Instance.changeState = State.Up;
+        UIManager.Instance.UpPoint();
         if(GameManager.Instance.lover.gameObject.activeSelf == true)
             GameManager.Instance.lover.ObjectReset();
         for(int i = 0; i < rigids.Count; i++)

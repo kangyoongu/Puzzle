@@ -39,10 +39,11 @@ public class StartAnimation : MonoBehaviour
     {
         GameManager.Instance.canControl = false;
         PlayerController.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        Quaternion q = PlayerController.Instance.camTransform.rotation;
         PlayerController.Instance.camTransform.DOLookAt(view.position, 1);
         enemy.move = false;
         yield return new WaitForSeconds(1.5f);
+        CutsceneAudio.Instance.Play(CutsceneAudio.Instance.stage5);
+        yield return new WaitForSeconds(0.1f);
         floor.SetActive(false);
         rigidFloor[0].SetActive(true);
         rigidFloor[1].SetActive(true);
@@ -60,8 +61,10 @@ public class StartAnimation : MonoBehaviour
         CameraShake.Instance.Shake(10, 1);
         enemy.transform.DOLocalMove(new Vector3(84.50336f, 5.511235f, 0f), 3).SetEase(Ease.OutBack);
         yield return new WaitForSeconds(3);
-        PlayerController.Instance.camTransform.DORotateQuaternion(q, 1);
+        PlayerController.Instance.camTransform.DOLocalRotateQuaternion(Quaternion.identity, 1);
         yield return new WaitForSeconds(1);
+        RotateCam.Instance.yaw = 0.0f;
+        RotateCam.Instance.pitch = 0.0f;
         enemy.move = true;
         resetter.SetActive(true);
         GameManager.Instance.canControl = true;

@@ -16,7 +16,7 @@ public class FollowChangeGravity : Interactable
     private new ConstantForce constantForce;
     private Rigidbody rigid;
     public ObjectType type = ObjectType.Normal;
-    [HideInInspector]public bool zeroZone = false;
+    [HideInInspector] public bool zeroZone = false;
     [HideInInspector] public float weight = 1;
     private void Awake()
     {
@@ -141,7 +141,6 @@ public class FollowChangeGravity : Interactable
 
     public override void ObjectReset()
     {
-        weight = 1;
         Normal();
     }
     private void OnTriggerEnter(Collider other)

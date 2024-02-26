@@ -35,7 +35,7 @@ public class GravityControl : SingleTon<GravityControl>
     }
     void Update()
     {
-        if (GameManager.Instance.canControl && canGravityControl)
+        if (GameManager.Instance.canControl && canGravityControl && PlayerController.Instance.canMove)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -44,11 +44,13 @@ public class GravityControl : SingleTon<GravityControl>
                 {
                     continueAudioSource.clip = continueUpClip;
                     continueAudioSource.Play();
+                    continueAudioSource.DOFade(0.5f, 0.5f);
                 }
                 else if (changeState == State.Down)
                 {
                     continueAudioSource.clip = continueDownClip;
                     continueAudioSource.Play();
+                    continueAudioSource.DOFade(0.5f, 0.5f);
                 }
             }
             if (Input.GetKey(KeyCode.Space))
@@ -58,13 +60,9 @@ public class GravityControl : SingleTon<GravityControl>
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 EventBus.Publish(State.Normal);
-                if (changeState == State.Up)
+                if (changeState == State.Up || changeState == State.Down)
                 {
-                    continueAudioSource.Stop();
-                }
-                else if (changeState == State.Down)
-                {
-                    continueAudioSource.Stop();
+                    continueAudioSource.DOFade(0f, 0.5f);
                 }
             }
 
@@ -74,31 +72,40 @@ public class GravityControl : SingleTon<GravityControl>
                 if(changeState == State.Up)
                 {
                     UIManager.Instance.UpPoint();
-                    audioSource.clip = upClip;
-                    audioSource.Play();
+                    //audioSource.clip = upClip;
+                    audioSource.PlayOneShot(upClip);
                 }
                 else if (changeState == State.Down)
                 {
                     UIManager.Instance.DownPoint();
-                    audioSource.clip = downClip;
-                    audioSource.Play();
+                    //audioSource.clip = downClip;
+                    audioSource.PlayOneShot(downClip);
                 }
-                /*if (Input.GetKey(KeyCode.Space))
+            }
+        }
+        else
+        {
+            if (currentState != State.Normal)
+            {
+                EventBus.Publish(State.Normal);
+                if (changeState == State.Up || changeState == State.Down)
                 {
-                    EventBus.Publish(changeState);
-                }*/
+                    continueAudioSource.Stop();
+                }
             }
         }
     }
 
     private void Up()
     {
+        UIManager.Instance.UpPoint();
         playerForce.force = new Vector3(0, 9.8f, 0);
         currentState = State.Up;
         screenMaterial.DOFloat(1, "_Lerp", 0.6f);
     }
     private void Down()
     {
+        UIManager.Instance.DownPoint();
         playerForce.force = new Vector3(0, -29.4f, 0);
         currentState = State.Down;
         screenMaterial.DOFloat(-1, "_Lerp", 0.6f);

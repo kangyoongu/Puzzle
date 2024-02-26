@@ -83,6 +83,7 @@ public class GrabableObject : Interactable
 
     public override void ObjectReset()
     {
-        EndGrab();
+        if(PlayerController.Instance.grabObject == this)
+            EndGrab();
     }
 }

@@ -24,6 +24,8 @@ public class FiveCutscene : MonoBehaviour
     public GameObject god;
 
     public Rigidbody endCheck;
+
+    private AudioSource aud;
     private void OnEnable()
     {
         EventBus.Subscribe(State.PlayerDie, ResetScene);
@@ -43,7 +45,10 @@ public class FiveCutscene : MonoBehaviour
         else
         {
             OffArrow();
+            fake.SetActive(false);
+            real.SetActive(true);
         }
+        aud = GetComponent<AudioSource>();
     }
     private void Update()
     {
@@ -69,6 +74,7 @@ public class FiveCutscene : MonoBehaviour
         enemy.move = false;
         enemy.transform.DOLocalMoveY(7.25f, 1f);
         door.DOLocalMoveY(10f, 0.6f);
+        aud.Play();
         yield return new WaitForSeconds(1);
         enemy.transform.localPosition = new Vector3(126.25f, enemy.transform.localPosition.y, 30f);
         enemy.transform.DOLocalMoveY(12.5f, 1f);
@@ -83,8 +89,9 @@ public class FiveCutscene : MonoBehaviour
     IEnumerator GoGod()//신 보러감
     {
         god.SetActive(true);
-        CinemachineBrain brain = FindFirstObjectByType<CinemachineBrain>();
+        CinemachineBrain brain = GameManager.Instance.cBrain;
         DOTween.To(() => bloom.weight, x => bloom.weight = x, 1f, 1f).SetEase(Ease.InExpo);
+        CutsceneAudio.Instance.Play(CutsceneAudio.Instance.stage5_fade);
         enemy.move = false;
         yield return new WaitForSeconds(3);
         PlayerController.Instance.transform.position = pass.transform.position;
@@ -103,22 +110,32 @@ public class FiveCutscene : MonoBehaviour
         brain.m_DefaultBlend.m_Time = 5;
         yield return new WaitForSeconds(delay);
         target.Priority = 15;
+        GameManager.Instance.canControl = false;
         yield return new WaitForSeconds(5);
         RenderSettings.fogStartDistance = 6;
+        GameManager.Instance.audioSource.volume = 0f;
         EventBus.Publish(State.PlayerDie);
         yield return new WaitForSeconds(8);
         DOTween.To(() => bloom.weight, x => bloom.weight = x, 1f, 1f).SetEase(Ease.InExpo);
+        CutsceneAudio.Instance.Play(CutsceneAudio.Instance.stage5_fade);
         brain.m_DefaultBlend.m_Time = 1;
         enemy.move = false;
         yield return new WaitForSeconds(2);
+        enemy.move = false;
         RenderSettings.fogEndDistance = fog;
         RenderSettings.fogStartDistance = start;
         target.Priority = 5;
         DOTween.To(() => bloom.weight, x => bloom.weight = x, 0f, 2f).SetEase(Ease.OutExpo);
         GravityControl.Instance.canGravityControl = true;
         PlayerPrefs.SetInt("Animation2", 1);
+        fake.SetActive(false);
+        real.SetActive(true);
         yield return new WaitForSeconds(2);
+        enemy.move = false;
+        GameManager.Instance.audioSource.volume = 1f;
         god.SetActive(false);
+        GameManager.Instance.canControl = true;
+        yield return new WaitForSeconds(1);
         enemy.move = true;
     }
     public void ResetScene()
@@ -143,7 +160,5 @@ public class FiveCutscene : MonoBehaviour
     private void OffArrow()
     {
         arrowMat.color = new Color(1, 0, 0, 0);
-        fake.SetActive(false);
-        real.SetActive(true);
     }
 }
