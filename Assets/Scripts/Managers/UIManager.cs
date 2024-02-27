@@ -63,14 +63,13 @@ public class UIManager : SingleTon<UIManager>
     public Image bigCircle;
     public Image donut;
     public Image point;
-    int pointerState = 0;
     [SerializeField] Color upColor;
     [SerializeField] Color downColor;
     private AudioSource[] sources;
 
     bool currentControl;
-    Coroutine c1;
-    Coroutine c2;
+    Tweener tween;
+    Tweener tween2;
 
     [SerializeField] private ImagePack[] images;
     private void Start()
@@ -130,7 +129,7 @@ public class UIManager : SingleTon<UIManager>
                     dialogText.text += text.line[i];
                     if(text.line[i] == '<' && text.line[i+1] == 'c')
                     {
-                        for (int j = 0; j < 15; j++)
+                        for (int j = 0; j < 14; j++)
                         {
                             i++;
                             dialogText.text += text.line[i];
@@ -138,7 +137,7 @@ public class UIManager : SingleTon<UIManager>
                     }
                     else if (text.line[i] == '<' && text.line[i + 1] == '/')
                     {
-                        for (int j = 0; j < 8; j++)
+                        for (int j = 0; j < 7; j++)
                         {
                             i++;
                             dialogText.text += text.line[i];
@@ -380,63 +379,43 @@ public class UIManager : SingleTon<UIManager>
     }
     public void Normal()
     {
-        if (pointerState != 0)
+        if (bigCircle.rectTransform.localScale.x != 0f || donut.rectTransform.localScale.x != 0f)
         {
-            if (c1 != null)
+            if (tween != null && tween.IsPlaying())
             {
-                StopCoroutine(c1);
-                StopCoroutine(c2);
+                tween.Kill();
+                tween2.Kill();
             }
-            c1 = StartCoroutine(ChangeAlphaOverTime(bigCircle, 0f, 0.5f));
-            c2 = StartCoroutine(ChangeAlphaOverTime(donut, 0f, 0.5f));
-            bigCircle.DOFade(0f, 0.5f);
-            donut.DOFade(0f, 0.5f);
-            pointerState = 0;
+            tween = donut.rectTransform.DOScale(0f, 0.5f).SetEase(Ease.OutBack);
+            tween2 = bigCircle.rectTransform.DOScale(0f, 0.5f).SetEase(Ease.OutBack);
         }
     }
     public void OnGrabable()
     {
-        if (pointerState != 1)
+        if (bigCircle.rectTransform.localScale.x != 1f || donut.rectTransform.localScale.x != 0f)
         {
-            if (c1 != null)
+
+            if (tween != null && tween.IsPlaying())
             {
-                StopCoroutine(c1);
-                StopCoroutine(c2);
+                tween.Kill();
+                tween2.Kill();
             }
-            c1 = StartCoroutine(ChangeAlphaOverTime(bigCircle, 0.4f, 0.5f));
-            c2 = StartCoroutine(ChangeAlphaOverTime(donut, 0f, 0.5f));
-            pointerState = 1;
+            tween = donut.rectTransform.DOScale(0f, 0.5f).SetEase(Ease.OutBack);
+            tween2 = bigCircle.rectTransform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
         }
     }
     public void Grab()
     {
-        if (pointerState != 2)
+        if (bigCircle.rectTransform.localScale.x != 0f || donut.rectTransform.localScale.x != 1f)
         {
-            if (c1 != null)
+            if(tween != null && tween.IsPlaying())
             {
-                StopCoroutine(c1);
-                StopCoroutine(c2);
+                tween.Kill();
+                tween2.Kill();
             }
-            c1 = StartCoroutine(ChangeAlphaOverTime(bigCircle, 0f, 0.5f));
-            c2 = StartCoroutine(ChangeAlphaOverTime(donut, 1f, 0.5f));
-            pointerState = 2;
+            tween = donut.rectTransform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
+            tween2 = bigCircle.rectTransform.DOScale(0f, 0.5f).SetEase(Ease.OutBack);
         }
-    }
-    IEnumerator ChangeAlphaOverTime(Image image, float targetAlpha, float duration)
-    {
-        float elapsedTime = 0f;
-        Color startColor = image.color;
-        Color targetColor = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
-
-        while (elapsedTime < duration)
-        {
-            float t = elapsedTime / duration;
-            image.color = Color.Lerp(startColor, targetColor, t);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        image.color = targetColor;
     }
     
     public void OnClickStart()
@@ -449,8 +428,9 @@ public class UIManager : SingleTon<UIManager>
     }
     private void Restart()
     {
+        JsonManager.Instance.Stage = 1;
+        PlayerPrefs.DeleteAll();
         GameManager.Instance.GameStart();
-        PlayerPrefs.SetInt("Stage", 1);
         PlayUIIn();
         MainUIOut();
     }

@@ -22,7 +22,7 @@ public class Crystal : Interactable
     }
     public void OnShotLaser()
     {
-        if (isEnable)
+        if (isEnable && !GameManager.Instance.currentInfo.isDie)
         {
             StartCoroutine(PlayParticle());
         }

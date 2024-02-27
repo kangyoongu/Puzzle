@@ -102,14 +102,14 @@ public class FiveCutscene : MonoBehaviour
         float start = RenderSettings.fogStartDistance;
         RenderSettings.fogEndDistance = 25;
         RenderSettings.fogStartDistance = 0;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1);//검은곳 도착
         for (int i = 0; i < wording.Length; i++)
         {
             UIManager.Instance.AppendDialog(wording[i]);
         }
         brain.m_DefaultBlend.m_Time = 5;
         yield return new WaitForSeconds(delay);
-        target.Priority = 15;
+        target.Priority = 15;//자동으로 가기 시작
         GameManager.Instance.canControl = false;
         yield return new WaitForSeconds(5);
         RenderSettings.fogStartDistance = 6;

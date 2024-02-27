@@ -33,6 +33,18 @@ public class BGMManager : SingleTon<BGMManager>
             ambSource.DOFade(0.2f, 1.5f);
         }
     }
+    public void PauseAmb()
+    {
+        ambSource.DOFade(0f, 1f).OnComplete(() =>
+        {
+            ambSource.Pause();
+        });
+    }
+    public void UnpauseAmb()
+    {
+        ambSource.UnPause();
+        ambSource.DOFade(0.2f, 1f);
+    }
     public void ChangeBGM(int index)
     {
         if (bgmSource.isPlaying)
@@ -41,14 +53,26 @@ public class BGMManager : SingleTon<BGMManager>
             {
                 bgmSource.clip = bgm[index];
                 bgmSource.Play();
-                bgmSource.DOFade(1f, 1.5f);
+                bgmSource.DOFade(0.2f, 1.5f);
             });
         }
         else
         {
             bgmSource.clip = bgm[index];
             bgmSource.Play();
-            bgmSource.DOFade(1f, 1.5f);
+            bgmSource.DOFade(0.2f, 1.5f);
         }
+    }
+    public void PauseBGM()
+    {
+        bgmSource.DOFade(0f, 1f).OnComplete(() =>
+        {
+            bgmSource.Pause();
+        });
+    }
+    public void UnpauseBGM()
+    {
+        bgmSource.UnPause();
+        bgmSource.DOFade(0.2f, 1f);
     }
 }

@@ -26,10 +26,10 @@ public class GameManager : SingleTon<GameManager>
     private void Start()
     {
         RenderSettings.fogColor = new Color32(255, 255, 255, 255);
+        BGMManager.Instance.ChangeBGM(0);
         cartoon.SetFloat("_Lerp", 0);
         cartoon.SetFloat("_BaseColorLerp", 0);
         screenMaterial.SetFloat("_Lerp", 0f);
-        PlayerPrefs.DeleteAll();
         Time.timeScale = 1;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -37,10 +37,6 @@ public class GameManager : SingleTon<GameManager>
         audioSource = GetComponent<AudioSource>();
         cBrain.m_DefaultBlend.m_Time = 0;
         Application.targetFrameRate = 120;
-        if (!PlayerPrefs.HasKey("Stage"))
-        {
-            PlayerPrefs.SetInt("Stage", 1);
-        }
     }
     public void Ch3()
     {
@@ -51,6 +47,7 @@ public class GameManager : SingleTon<GameManager>
         cartoon.SetFloat("_ColorThreshold", 0.1f);
         cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
         BGMManager.Instance.ChangeAmb(0);
+        BGMManager.Instance.ChangeBGM(3);
     }
     public void ToCh3()
     {
@@ -73,6 +70,7 @@ public class GameManager : SingleTon<GameManager>
         cartoon.SetFloat("_BaseColorLerp", 0);
         cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
         BGMManager.Instance.ChangeAmb(1);
+        BGMManager.Instance.ChangeBGM(2);
     }
     public void Ch1()
     {
@@ -82,28 +80,30 @@ public class GameManager : SingleTon<GameManager>
         cartoon.SetFloat("_BaseColorLerp", 0);
         cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
         BGMManager.Instance.ChangeAmb(0);
+        BGMManager.Instance.ChangeBGM(1);
     }
     internal void GameStart()
     {
         player.SetActive(true);
-        if (startStage >= 1 && startStage <= 8)
+        JsonManager.Instance.Stage = startStage;
+        if (JsonManager.Instance.Stage >= 1 && JsonManager.Instance.Stage <= 8)
         {
             Ch1();
         }
-        else if (startStage >= 9 && startStage <= 11)
+        else if (JsonManager.Instance.Stage >= 9 && JsonManager.Instance.Stage <= 11)
         {
             Ch2();
         }
-        else if (startStage >= 12 && startStage <= 12)
+        else if (JsonManager.Instance.Stage >= 12 && JsonManager.Instance.Stage <= 12)
         {
             Ch3();
         }
-        Scene detectedScene = SceneManager.GetSceneByBuildIndex(startStage);
+        Scene detectedScene = SceneManager.GetSceneByBuildIndex(JsonManager.Instance.Stage);
 
         // 씬이 로드되어 있는지 여부를 확인
         if (!detectedScene.IsValid())
         {
-            SceneManager.LoadScene(startStage/*PlayerPrefs.GetInt("Stage")*/, LoadSceneMode.Additive);
+            SceneManager.LoadScene(JsonManager.Instance.Stage, LoadSceneMode.Additive);
         }
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -116,7 +116,7 @@ public class GameManager : SingleTon<GameManager>
     {
         yield return null;
         yield return null;
-        if (startStage != 1)//playerpref으로 변경
+        if (JsonManager.Instance.Stage != 1 || PlayerPrefs.HasKey("FirstScene"))//playerpref으로 변경
         {
             cBrain.m_DefaultBlend.m_Time = 1f;
             UIManager.Instance.point.gameObject.SetActive(true);

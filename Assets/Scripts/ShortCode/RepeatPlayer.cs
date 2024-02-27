@@ -6,6 +6,7 @@ public class RepeatPlayer : MonoBehaviour
 {
     int count = 0;
     public Dialog[] repeatDialog;
+    public Dialog afterDialog;
     public SixEvent sixEvent;
     public int Count { 
         get => count;
@@ -19,7 +20,7 @@ public class RepeatPlayer : MonoBehaviour
                 }
                 if (sixEvent.isFind == false)
                 {
-                    UIManager.Instance.AppendDialog(new Dialog { speaker = "���", line = "���� ��¥ ť���� ��ġ�� �˷��ٰ�"});
+                    UIManager.Instance.AppendDialog(afterDialog);
                     sixEvent.GuideParticle();
                 }
             }

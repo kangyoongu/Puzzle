@@ -49,6 +49,9 @@ public class NextDoor : MonoBehaviour, IDoor
         EventBus.Publish(GravityControl.Instance.currentState);
         yield return new WaitForSeconds(2);
         GameManager.Instance.ResetPosition();
+
+        string extractedString = gameObject.scene.name.Substring(6);
+        JsonManager.Instance.Stage = int.Parse(extractedString)+1;
         if(GameManager.Instance.currentInfo.closeDoor)
             GameManager.Instance.currentInfo.closeDoor.SetActive(true);
         SceneManager.UnloadSceneAsync(gameObject.scene);

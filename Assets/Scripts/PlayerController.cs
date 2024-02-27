@@ -83,55 +83,21 @@ public class PlayerController : SingleTon<PlayerController>
     {
         if (GameManager.Instance.canControl && grabable && !GameManager.Instance.clear)
         {
-            // 카메라 기준으로 앞으로 레이를 쏩니다.
-            Ray ray = new Ray(camTransform.position, camTransform.forward);
-            RaycastHit hit;
-
-
             if (grabbing)
             {
-                UIManager.Instance.Grab();
                 if (Input.GetMouseButtonDown(0) || Vector3.Distance(grabObject.transform.position, transform.position) >= missDis)
                 {
                     grabbing = false;
                     grabObject?.EndGrab();
                     UIManager.Instance.Normal();
                 }
-            }
-            else if (Physics.Raycast(ray, out hit, grabDistance, grabLayer))
-            {
-                Convert2D3D dimension = hit.collider.GetComponent<Convert2D3D>();
-                if (dimension && dimension.is2d == true && dimension.canOut)
-                {
-                    UIManager.Instance.OnGrabable();
-                    if (Input.GetMouseButtonDown(0)) dimension.GoOut();
-                }
                 else
                 {
-                    GrabableObject grabableScript = hit.collider.GetComponent<GrabableObject>();
-                    if (grabableScript != null && !grabbing)
-                    {
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            grabObject = grabableScript;
-                            catchAud.Play();
-                            grabableScript.StartGrab();
-                            grabbing = true;
-                        }
-                        else
-                        {
-                            UIManager.Instance.OnGrabable();
-                        }
-                    }
-                    else
-                    {
-                        UIManager.Instance.Normal();
-                    }
+                    UIManager.Instance.Grab();
                 }
             }
-            else
-            {
-                UIManager.Instance.Normal();
+            else {
+                Shoot(camTransform.position, camTransform.forward, grabDistance);
             }
         }
         else
@@ -139,7 +105,52 @@ public class PlayerController : SingleTon<PlayerController>
             UIManager.Instance.Normal();
         }
     }
-
+    private void Shoot(Vector3 pos, Vector3 rot, float dis)
+    {
+        // 카메라 기준으로 앞으로 레이를 쏩니다.
+        Ray ray = new Ray(pos, rot);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, dis, grabLayer))
+        {
+            if (hit.collider.isTrigger)
+            {
+                Shoot(hit.point + (rot * 0.01f), rot, dis - hit.distance);
+                return;
+            }
+            Convert2D3D dimension = hit.collider.GetComponent<Convert2D3D>();
+            if (dimension && dimension.is2d == true && dimension.canOut)
+            {
+                UIManager.Instance.OnGrabable();
+                if (Input.GetMouseButtonDown(0)) dimension.GoOut();
+            }
+            else
+            {
+                GrabableObject grabableScript = hit.collider.GetComponent<GrabableObject>();
+                if (grabableScript != null && !grabbing)
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        grabObject = grabableScript;
+                        catchAud.Play();
+                        grabableScript.StartGrab();
+                        grabbing = true;
+                    }
+                    else
+                    {
+                        UIManager.Instance.OnGrabable();
+                    }
+                }
+                else
+                {
+                    UIManager.Instance.Normal();
+                }
+            }
+        }
+        else
+        {
+            UIManager.Instance.Normal();
+        }
+    }
     private void FixedUpdate()
     {
         Move();
@@ -164,7 +175,7 @@ public class PlayerController : SingleTon<PlayerController>
             {
                 if (hit.distance <= 1.3f)
                 {
-                    if (new Vector2(rb.velocity.x, rb.velocity.z).sqrMagnitude > 1f && inputDirection.sqrMagnitude >= 0.9f)
+                    if (new Vector2(rb.velocity.x, rb.velocity.z).sqrMagnitude > 1f && inputDirection.sqrMagnitude >= 0.4f)
                     {
                         walktime += Time.fixedDeltaTime * (boost ? runWeight : 1f);
                         if (walktime >= 0.5f)
@@ -193,7 +204,7 @@ public class PlayerController : SingleTon<PlayerController>
         }
 
         if (!windAud.isPlaying) windAud.Play();
-        windAud.volume = Mathf.InverseLerp(startVel, fullVel, Mathf.Abs(rb.velocity.y)) * 0.5f;
+        windAud.volume = Mathf.InverseLerp(startVel, fullVel, Mathf.Abs(rb.velocity.y)) * 0.9f;
     }
 
     private bool DownRay(Vector3 offset, out RaycastHit hit)

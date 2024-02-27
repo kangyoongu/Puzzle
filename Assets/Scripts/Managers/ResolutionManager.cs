@@ -29,7 +29,7 @@ public class ResolutionManager : MonoBehaviour
         foreach(Resolution item in resolutions)
         {
             string option;
-            option = item.width + "x" + item.height;
+            option = $"{item.width}x{item.height} {(int)item.refreshRateRatio.value}hz";
             dropdown.options.Add(option);
 
         }
@@ -65,6 +65,6 @@ public class ResolutionManager : MonoBehaviour
     }
     public void Refresh()
     {
-        Screen.SetResolution(resolutions[resolutionNum].width, resolutions[resolutionNum].height, screenMode);
+        Screen.SetResolution(resolutions[resolutionNum].width, resolutions[resolutionNum].height, screenMode, resolutions[resolutionNum].refreshRateRatio);
     }
 }

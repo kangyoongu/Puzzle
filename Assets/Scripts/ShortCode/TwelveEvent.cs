@@ -78,6 +78,8 @@ public class TwelveEvent : MonoBehaviour
     }
     void Delay()
     {
+        BGMManager.Instance.PauseAmb();
+        BGMManager.Instance.PauseBGM();
         for (int i = 0; i < activeTrue.Length; i++)
         {
             int z = i;
@@ -92,6 +94,10 @@ public class TwelveEvent : MonoBehaviour
                        {
                            PlayerController.Instance.grabable = true;
                            enemy.GoOut(9);
+                           BGMManager.Instance.UnpauseBGM();
+                           BGMManager.Instance.UnpauseAmb();
+                           BGMManager.Instance.ChangeAmb(0);
+                           BGMManager.Instance.ChangeBGM(3);
                            gameObject.SetActive(false);
                        });
                    });

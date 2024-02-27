@@ -5,8 +5,6 @@ using UnityEngine.VFX;
 using DG.Tweening;
 public class ButtonClickSensor : OnOffImage
 {
-    bool first = true;
-    public Dialog[] wording;
     public GameObject quad;
     bool playerIsIn = false;
     public Sprite Ekey;
@@ -99,6 +97,8 @@ public class ButtonClickSensor : OnOffImage
         GameManager.Instance.currentInfo.SetSpawnPoint(0, enemy.transform.position);
         enemy.rigid.isKinematic = false;
         yield return new WaitForSeconds(5);
+        BGMManager.Instance.ChangeAmb(1);
+        BGMManager.Instance.ChangeBGM(2);
         GameManager.Instance.audioSource.volume = 1f;
         GetComponent<BoxCollider>().enabled = false;
         door.ColorFull();
@@ -106,14 +106,6 @@ public class ButtonClickSensor : OnOffImage
     }
     public void Enter()
     {
-        if (first == true)
-        {
-            for (int i = 0; i < wording.Length; i++)
-            {
-                UIManager.Instance.AppendDialog(wording[i]);
-                first = false;
-            }
-        }
         playerIsIn = true;
     }
     public void Exit()

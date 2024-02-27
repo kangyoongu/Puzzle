@@ -24,7 +24,7 @@ public class DissolvingWall : MonoBehaviour
     }
     private void OnDisable()
     {
-        LaserManager.Instance.walls.RemoveAt(0);
+        LaserManager.Instance.walls.Remove(this);
     }
     private void Start()
     {
@@ -82,7 +82,7 @@ public class DissolvingWall : MonoBehaviour
     }
     public void Off()
     {
-        if(boxCollider.enabled == true)
+        if(boxCollider != null && boxCollider.enabled == true)
             boxCollider.enabled = false;
         work = false;
         mat.DOFloat(1, "_Lerp", 2);

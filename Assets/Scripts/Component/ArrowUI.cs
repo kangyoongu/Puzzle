@@ -22,8 +22,8 @@ public class ArrowUI : MonoBehaviour
                     temp %= options.Count;
                     text2.text = options[temp];
                     text2.rectTransform.anchoredPosition = text1.rectTransform.anchoredPosition + new Vector2(offset, 0);
-                    text2.rectTransform.DOAnchorPosX(text1.rectTransform.anchoredPosition.x, 0.5f);
-                    text1.rectTransform.DOAnchorPosX(text1.rectTransform.anchoredPosition.x - offset, 0.5f).OnComplete(() =>
+                    text2.rectTransform.DOAnchorPosX(text1.rectTransform.anchoredPosition.x, 0.5f).SetUpdate(true);
+                    text1.rectTransform.DOAnchorPosX(text1.rectTransform.anchoredPosition.x - offset, 0.5f).SetUpdate(true).OnComplete(() =>
                     {
                         TextMeshProUGUI text = text1;
                         text1 = text2;
@@ -49,8 +49,8 @@ public class ArrowUI : MonoBehaviour
                     if (temp < 0) temp += options.Count;
                     text2.text = options[temp];
                     text2.rectTransform.anchoredPosition = text1.rectTransform.anchoredPosition - new Vector2(offset, 0);
-                    text2.rectTransform.DOAnchorPosX(text1.rectTransform.anchoredPosition.x, 0.5f);
-                    text1.rectTransform.DOAnchorPosX(text1.rectTransform.anchoredPosition.x + offset, 0.5f).OnComplete(() =>
+                    text2.rectTransform.DOAnchorPosX(text1.rectTransform.anchoredPosition.x, 0.5f).SetUpdate(true);
+                    text1.rectTransform.DOAnchorPosX(text1.rectTransform.anchoredPosition.x + offset, 0.5f).SetUpdate(true).OnComplete(() =>
                     {
                         TextMeshProUGUI text = text1;
                         text1 = text2;

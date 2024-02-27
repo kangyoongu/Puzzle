@@ -52,7 +52,14 @@ public class JsonManager : SingleTon<JsonManager>
     }
     public void OnClickReset()//¹Ì¿Ï
     {
-        gameData = new GameData { _BGM = 1.401642f, _SFX = 1.401642f, _reading = 1.401642f, _stage = 1, _resolution = Screen.resolutions.Length - 1, _fullScreen = 0, _language = 0, _sensitivity = 1.912209f };
+        gameData._BGM = 1.401642f;
+        gameData._SFX = 1.401642f;
+        gameData._reading = 1.401642f;
+        gameData._resolution = Screen.resolutions.Length - 1;
+        gameData._fullScreen = 0;
+        gameData._language = 0;
+        gameData._sensitivity = 1.912209f;
+        SaveData();
         resolutionManager.Apply();
         soundManager.Apply();
     }

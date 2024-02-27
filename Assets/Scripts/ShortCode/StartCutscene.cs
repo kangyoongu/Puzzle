@@ -10,12 +10,27 @@ public class StartCutscene : MonoBehaviour
     public Transform cam;
     public VisualEffect[] effects;
     public Material fade;
+    public GameObject delay;
+    public GameObject nodel;
     void Start()
     {
-        StartCoroutine(Manage());
+        if (!PlayerPrefs.HasKey("FirstScene"))
+        {
+            delay.SetActive(true);
+            nodel.SetActive(false);
+            StartCoroutine(Manage());
+        }
+        else
+        {
+            delay.SetActive(false);
+            nodel.SetActive(true);
+            gameObject.SetActive(false);
+        }
     }
     IEnumerator Manage()
     {
+        BGMManager.Instance.PauseAmb();
+        BGMManager.Instance.PauseBGM();
         GameManager.Instance.canControl = false;
         RenderSettings.fog = false;
         fade.color = new Color(0, 0, 0, 1);
@@ -36,6 +51,9 @@ public class StartCutscene : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         GameManager.Instance.cBrain.m_DefaultBlend.m_Time = 1;
         RenderSettings.fog = true;
+        BGMManager.Instance.UnpauseBGM();
+        BGMManager.Instance.UnpauseAmb();
+        PlayerPrefs.SetInt("FirstScene", 1);
         gameObject.SetActive(false);
     }
 }

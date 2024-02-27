@@ -8,19 +8,19 @@ public class Laser : MonoBehaviour
     public void ReflectionLaser()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 60f, layerMask))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 100f, layerMask))
         {
-            SkipWall(transform.position, 0);
+            SkipWall(transform.position, 100, 0);
         }
         else
         {
-            transform.localScale = new Vector3(1, 1, 60);
+            transform.localScale = new Vector3(1, 1, 50);
         }
     }
-    private void SkipWall(Vector3 pos, float distance)//사라지는 벽 쏘면 평범해질때까지 반복
+    private void SkipWall(Vector3 pos, float distance, float totalDis)//사라지는 벽 쏘면 평범해질때까지 반복
     {
         RaycastHit hit; 
-        if (Physics.Raycast(pos, transform.forward, out hit, 60, layerMask))
+        if (Physics.Raycast(pos, transform.forward, out hit, distance, layerMask))
         {
             if (hit.collider.CompareTag("Crystal"))
             {
@@ -44,24 +44,25 @@ public class Laser : MonoBehaviour
 
                     }
                 }
-                transform.localScale = new Vector3(1, 1, hit.distance * 0.5f);
+                transform.localScale = new Vector3(1, 1, (totalDis + hit.distance) * 0.5f);
+                return;
             }
             if (hit.collider.CompareTag("DissolvingWall"))
             {
                 hit.transform.GetComponent<DissolvingWall>().ColliderOff();
-                SkipWall(hit.point + transform.forward * 0.01f, distance+0.01f + hit.distance);
+                SkipWall(hit.point + transform.forward * 0.01f, 100 - totalDis - hit.distance, totalDis + hit.distance);
                 return;
             }
             if (hit.collider.isTrigger && hit.collider.gameObject.layer != LayerMask.NameToLayer("BlockLaser"))
             {
-                SkipWall(hit.point + transform.forward * 0.01f, distance + 0.01f + hit.distance);
+                SkipWall(hit.point + transform.forward * 0.01f, 100 - totalDis - hit.distance, totalDis + hit.distance);
                 return;
             }
-            transform.localScale = new Vector3(1, 1, (distance + hit.distance) * 0.5f);
+            transform.localScale = new Vector3(1, 1, (totalDis + hit.distance) * 0.5f);
         }
         else
         {
-            transform.localScale = new Vector3(1, 1, 60);
+            transform.localScale = new Vector3(1, 1, (totalDis + distance) * 0.5f);
         }
     }
 }
