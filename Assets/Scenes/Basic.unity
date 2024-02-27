@@ -3162,7 +3162,7 @@ MonoBehaviour:
   currentJointPos: {x: 0, y: 0, z: 0}
   cartoon: {fileID: 2100000, guid: d6ade1491e2229243a733408eb837d8f, type: 2}
   fog: {fileID: 2100000, guid: 326c4c495447c95459176e1b9af6cf95, type: 2}
-  startStage: 2
+  startStage: 10
   audioSource: {fileID: 0}
   openScene: {fileID: 120461280}
   cBrain: {fileID: 963194229}
@@ -5552,7 +5552,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4098345485755173484, guid: c50d617eb7058c9478a488e45a3462ce, type: 3}
       propertyPath: speed
-      value: 3
+      value: 3.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
