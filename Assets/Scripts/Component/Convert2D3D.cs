@@ -113,18 +113,23 @@ public class Convert2D3D : Interactable
         canIn = startState[1];
         canOut = startState[2];
         canInteract = true;
+        if (inWall)
+            dir = inWall.right * through;
+        StartCoroutine(Delay());
+        if(resetOut == true)
+        {
+            GoOut(resetOutTime);
+        }
+    }
+    IEnumerator Delay()
+    {
+        yield return null;
         if (is2d)
         {
             if (enemy)
             {
                 enemy.move = false;
             }
-        }
-        if (inWall)
-            dir = inWall.right * through;
-        if(resetOut == true)
-        {
-            GoOut(resetOutTime);
         }
     }
 }

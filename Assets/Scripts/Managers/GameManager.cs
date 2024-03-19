@@ -23,13 +23,15 @@ public class GameManager : SingleTon<GameManager>
     [SerializeField] private GameObject openScene;
     public CinemachineBrain cBrain;
     public Material screenMaterial;
+
     private void Start()
     {
         RenderSettings.fogColor = new Color32(255, 255, 255, 255);
         BGMManager.Instance.ChangeBGM(0);
+        screenMaterial.SetFloat("_Lerp", 0f);
         cartoon.SetFloat("_Lerp", 0);
         cartoon.SetFloat("_BaseColorLerp", 0);
-        screenMaterial.SetFloat("_Lerp", 0f);
+        cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
         Time.timeScale = 1;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -37,17 +39,13 @@ public class GameManager : SingleTon<GameManager>
         audioSource = GetComponent<AudioSource>();
         cBrain.m_DefaultBlend.m_Time = 0;
         Application.targetFrameRate = 120;
+        StartCoroutine(Frame());
     }
-    public void Ch3()
+    IEnumerator Frame()
     {
-        fog.SetColor("_Color", new Color32(96, 96, 96, 255));
-        RenderSettings.fogColor = new Color32(33, 13, 13, 255);
-        cartoon.SetFloat("_Lerp", 1);
+        yield return null;
+        cartoon.SetFloat("_Lerp", 0);
         cartoon.SetFloat("_BaseColorLerp", 0);
-        cartoon.SetFloat("_ColorThreshold", 0.1f);
-        cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
-        BGMManager.Instance.ChangeAmb(0);
-        BGMManager.Instance.ChangeBGM(3);
     }
     public void ToCh3()
     {
@@ -61,6 +59,17 @@ public class GameManager : SingleTon<GameManager>
         {
             cartoon.DOFloat(0.1f, "_ColorThreshold", 1f).SetEase(Ease.Linear);
         });
+    }
+    public void Ch3()
+    {
+        fog.SetColor("_Color", new Color32(96, 96, 96, 255));
+        RenderSettings.fogColor = new Color32(33, 13, 13, 255);
+        cartoon.SetFloat("_Lerp", 1);
+        cartoon.SetFloat("_BaseColorLerp", 0);
+        cartoon.SetFloat("_ColorThreshold", 0.1f);
+        cartoon.SetColor("_OutlineColor", new Color(0, 0, 0));
+        BGMManager.Instance.ChangeAmb(0);
+        BGMManager.Instance.ChangeBGM(3);
     }
     public void Ch2()
     {
@@ -85,7 +94,8 @@ public class GameManager : SingleTon<GameManager>
     internal void GameStart()
     {
         player.SetActive(true);
-        JsonManager.Instance.Stage = startStage;
+        //JsonManager.Instance.Stage = startStage;
+        PlayerPrefs.DeleteAll();
         if (JsonManager.Instance.Stage >= 1 && JsonManager.Instance.Stage <= 8)
         {
             Ch1();
@@ -141,6 +151,9 @@ public class GameManager : SingleTon<GameManager>
     }
     public void GoMain()
     {
+        DOTween.CompleteAll(true);
+        DOTween.Clear(true);
+
         for (int i = 0; i < SceneManager.loadedSceneCount; i++)
         {
             if (SceneManager.GetSceneAt(i).name != "Basic")

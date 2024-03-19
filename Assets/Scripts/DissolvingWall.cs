@@ -12,6 +12,7 @@ public class DissolvingWall : MonoBehaviour
     public AudioClip offClip;
     AudioSource audioSource;
     AudioSource audioSource2;
+    AudioSource audioSource3;
     bool beforeCollider = true;
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class DissolvingWall : MonoBehaviour
         mesh.material = mat;
         audioSource = GetComponent<AudioSource>();
         audioSource2 = transform.GetChild(0).GetComponent<AudioSource>();
+        audioSource3 = transform.GetChild(1).GetComponent<AudioSource>();
         audioSource.clip = onClip;
         audioSource2.clip = offClip;
     }
@@ -54,6 +56,7 @@ public class DissolvingWall : MonoBehaviour
     {
         if (work)
         {
+            audioSource3.volume = (1 - mat.GetFloat("_Lerp")) * 0.7f;
             if (boxCollider.enabled)
             {
                 if(!beforeCollider && mat.GetFloat("_Lerp") < 0.8f)

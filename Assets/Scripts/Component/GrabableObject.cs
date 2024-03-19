@@ -7,7 +7,6 @@ public class GrabableObject : Interactable
 {
     private ConstantForce constant;
     [HideInInspector] public bool grab = false;
-    float currentGravity = 0;
     Rigidbody rigid;
     LayerMask layer;
     FollowChangeGravity gravity;
@@ -32,10 +31,6 @@ public class GrabableObject : Interactable
         {
             if (constant)
             {
-                if (constant.force.y != 0)
-                {
-                    currentGravity = constant.force.y;
-                }
                 constant.force = new Vector3(0, 0, 0);
             }
             if(rigid.isKinematic == false)
@@ -44,9 +39,7 @@ public class GrabableObject : Interactable
     }
     public void StartGrab()
     {
-        if (constant)
-            currentGravity = constant.force.y;
-        else
+        if (!constant)
             rigid.useGravity = false;
         rigid.constraints = RigidbodyConstraints.None;
         rigid.freezeRotation = true;
@@ -64,7 +57,7 @@ public class GrabableObject : Interactable
             }
             else
             {
-                constant.force = new Vector3(0, currentGravity, 0);
+                gravity.GetForce();
             }
         }
         else

@@ -15,22 +15,22 @@ public class BGMManager : SingleTon<BGMManager>
         bgmSource = GetComponent<AudioSource>();
         ambSource = transform.GetChild(0).GetComponent<AudioSource>();
     }
-    public void ChangeAmb(int index)
+    public void ChangeAmb(int index, float time = 1.5f, float volume = 0.2f)
     {
         if (ambSource.isPlaying)
         {
-            ambSource.DOFade(0f, 1.5f).OnComplete(() =>
+            ambSource.DOFade(0f, time).OnComplete(() =>
             {
                 ambSource.clip = amb[index];
                 ambSource.Play();
-                ambSource.DOFade(0.2f, 1.5f);
+                ambSource.DOFade(volume, time);
             });
         }
         else
         {
             ambSource.clip = amb[index];
             ambSource.Play();
-            ambSource.DOFade(0.2f, 1.5f);
+            ambSource.DOFade(volume, time);
         }
     }
     public void PauseAmb()
@@ -63,16 +63,16 @@ public class BGMManager : SingleTon<BGMManager>
             bgmSource.DOFade(0.2f, 1.5f);
         }
     }
-    public void PauseBGM()
+    public void PauseBGM(float time = 1f)
     {
-        bgmSource.DOFade(0f, 1f).OnComplete(() =>
+        bgmSource.DOFade(0f, time).OnComplete(() =>
         {
             bgmSource.Pause();
         });
     }
-    public void UnpauseBGM()
+    public void UnpauseBGM(float time = 1f)
     {
         bgmSource.UnPause();
-        bgmSource.DOFade(0.2f, 1f);
+        bgmSource.DOFade(0.2f, time);
     }
 }

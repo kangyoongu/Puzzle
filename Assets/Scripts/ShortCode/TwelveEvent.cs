@@ -13,6 +13,7 @@ public class TwelveEvent : MonoBehaviour
     public Dialog[] dialog;
     public GameObject white;
     public GameObject black;
+
     private void Start()
     {
         StartCoroutine(Last());

@@ -94,8 +94,6 @@ public class MapReset : MonoBehaviour
 
         EventBus.Publish(State.Normal);
         UIManager.Instance.Normal();
-        BGMManager.Instance.PauseBGM();
-        BGMManager.Instance.PauseAmb();
         yield return new WaitForSeconds(4);
 
         GameManager.Instance.audioSource.Play();
@@ -111,8 +109,6 @@ public class MapReset : MonoBehaviour
         rotateCam.yaw = 0;
         PlayerController.Instance.ObjectReset();
         GameManager.Instance.canControl = true;
-        BGMManager.Instance.UnpauseAmb();
-        BGMManager.Instance.UnpauseBGM();
         yield return null;
         isDie = false;
     }
@@ -121,8 +117,6 @@ public class MapReset : MonoBehaviour
         isDie = true;
         EventBus.Publish(State.Normal);
         UIManager.Instance.Normal();
-        BGMManager.Instance.PauseBGM();
-        BGMManager.Instance.PauseAmb();
         yield return new WaitForSeconds(4);
         GameManager.Instance.audioSource.Play();
         for(int i = 0; i < enemies.Count; i++)
@@ -160,8 +154,6 @@ public class MapReset : MonoBehaviour
         rotateCam.yaw = 0;
         PlayerController.Instance.ObjectReset();
         GameManager.Instance.canControl = true;
-        BGMManager.Instance.UnpauseAmb();
-        BGMManager.Instance.UnpauseBGM();
         yield return null;
         isDie = false;
     }

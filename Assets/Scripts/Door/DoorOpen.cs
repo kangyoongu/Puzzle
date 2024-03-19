@@ -13,6 +13,7 @@ public class DoorOpen : MonoBehaviour, IDoor
     public AudioClip openClip;
     public AudioClip closeClip;
     private AudioSource audioSource;
+    private AudioSource crystalClip;
     public int CurrentCrystal
     {
         get => currentCrystal;
@@ -31,6 +32,7 @@ public class DoorOpen : MonoBehaviour, IDoor
         anim = GetComponentsInChildren<Animator>();
         center = transform.GetChild(5).GetComponent<MeshRenderer>();
         audioSource = GetComponent<AudioSource>();
+        crystalClip = transform.GetChild(7).GetComponent<AudioSource>();
         block = transform.GetChild(6).gameObject;
         centerMaterial = center.material;
         centerMaterial = Instantiate(centerMaterial);
@@ -96,5 +98,10 @@ public class DoorOpen : MonoBehaviour, IDoor
         {
             block.SetActive(false);
         }
+    }
+    public void PlayAud(AudioClip clip)
+    {
+        crystalClip.clip = clip;
+        crystalClip.Play();
     }
 }

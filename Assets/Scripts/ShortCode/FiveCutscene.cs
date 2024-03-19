@@ -102,6 +102,8 @@ public class FiveCutscene : MonoBehaviour
         float start = RenderSettings.fogStartDistance;
         RenderSettings.fogEndDistance = 25;
         RenderSettings.fogStartDistance = 0;
+        BGMManager.Instance.PauseBGM(2f);
+        BGMManager.Instance.ChangeAmb(2, 2f, 1f);
         yield return new WaitForSeconds(1);//검은곳 도착
         for (int i = 0; i < wording.Length; i++)
         {
@@ -111,7 +113,9 @@ public class FiveCutscene : MonoBehaviour
         yield return new WaitForSeconds(delay);
         target.Priority = 15;//자동으로 가기 시작
         GameManager.Instance.canControl = false;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(4.6f);
+        BGMManager.Instance.ChangeAmb(3, 1f, 1f);
+        yield return new WaitForSeconds(0.4f);
         RenderSettings.fogStartDistance = 6;
         GameManager.Instance.audioSource.volume = 0f;
         EventBus.Publish(State.PlayerDie);
@@ -135,6 +139,8 @@ public class FiveCutscene : MonoBehaviour
         GameManager.Instance.audioSource.volume = 1f;
         god.SetActive(false);
         GameManager.Instance.canControl = true;
+        BGMManager.Instance.ChangeAmb(0);
+        BGMManager.Instance.UnpauseBGM(2f);
         yield return new WaitForSeconds(1);
         enemy.move = true;
     }

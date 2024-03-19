@@ -177,4 +177,19 @@ public class FollowChangeGravity : Interactable
             }
         }
     }
+    public void GetForce()
+    {
+        if (GravityControl.Instance.currentState == State.Normal)
+        {
+            Normal();
+        }
+        else if (GravityControl.Instance.currentState == State.Down)
+        {
+            Down();
+        }
+        else
+        {
+            Up();
+        }
+    }
 }

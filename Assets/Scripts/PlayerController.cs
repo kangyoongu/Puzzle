@@ -235,6 +235,7 @@ public class PlayerController : SingleTon<PlayerController>
     {
         GameManager.Instance.currentInfo.isDie = true;
         EventBus.Publish(State.Normal);
+        UIManager.Instance.Normal();
         Die();
         yield return new WaitForSeconds(4);
         GameManager.Instance.audioSource.Play();
@@ -247,9 +248,11 @@ public class PlayerController : SingleTon<PlayerController>
         cam.pitch = 0;
         cam.yaw = 0;
         GravityControl.Instance.changeState = State.Up;
+        UIManager.Instance.UpPoint();
         ObjectReset();
         rb.isKinematic = false;
         GameManager.Instance.canControl = true;
+        yield return null;
         GameManager.Instance.currentInfo.isDie = false;
     }
     public void PlayDie()

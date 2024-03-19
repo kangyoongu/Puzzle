@@ -53,7 +53,7 @@ public class SixEvent : MonoBehaviour
     }
     IEnumerator Move()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(7f);
         particle.position = PlayerController.Instance.transform.position;
         particle.gameObject.SetActive(true);
         for (int i = 0; i < particlePos.Length; i++)

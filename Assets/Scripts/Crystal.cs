@@ -10,11 +10,8 @@ public class Crystal : Interactable
     bool isEnable = true;
     public DoorOpen targetDoor;
     public AudioClip clip;
-    private AudioSource audioSource;
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        audioSource.clip = clip;
         spheres = GetComponentsInChildren<Transform>();
         mat = spheres[1].GetComponent<MeshRenderer>().material;
         mat = Instantiate(mat);
@@ -30,7 +27,7 @@ public class Crystal : Interactable
 
     IEnumerator PlayParticle()
     {
-        audioSource.Play();
+        targetDoor.PlayAud(clip);
         mat.DOFloat(1, "_Lerp", 2);
         isEnable = false;
         targetDoor.CurrentCrystal++;
