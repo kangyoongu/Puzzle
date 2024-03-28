@@ -38,7 +38,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BaseColorLerp: 0
-    - _ColorThreshold: 0.1
+    - _ColorThreshold: 0.0050000027
     - _Lerp: 0
     - _NormalThreshold: 1.19
     - _OVERLAY: 0
