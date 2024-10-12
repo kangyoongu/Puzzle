@@ -95,7 +95,7 @@ public class GameManager : SingleTon<GameManager>
     {
         player.SetActive(true);
         //JsonManager.Instance.Stage = startStage;
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
         if (JsonManager.Instance.Stage >= 1 && JsonManager.Instance.Stage <= 8)
         {
             Ch1();

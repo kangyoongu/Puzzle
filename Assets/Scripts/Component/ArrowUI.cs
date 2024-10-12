@@ -7,6 +7,20 @@ using UnityEngine.Events;
 
 public class ArrowUI : MonoBehaviour
 {
+    public TextMeshProUGUI text1;
+    public TextMeshProUGUI text2;
+
+    public int offset = 200;
+
+    public UnityEvent<int> OnChangeValue;
+    public List<string> options;
+
+    bool changing = false;
+    public bool applyWithButton = false;
+
+    public GameObject button;
+    int currentIndex = -1;
+
     int index;
     public int Index
     {
@@ -80,15 +94,6 @@ public class ArrowUI : MonoBehaviour
         }
     }
 
-    public TextMeshProUGUI text1;
-    public TextMeshProUGUI text2;
-    public int offset = 200;
-    public UnityEvent<int> OnChangeValue;
-    public List<string> options;
-    bool changing = false;
-    public bool applyWithButton = false;
-    public GameObject button;
-    int currentIndex = -1;
     private void Start()
     {
         button.SetActive(false);

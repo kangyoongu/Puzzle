@@ -57,7 +57,7 @@ public class ResolutionManager : MonoBehaviour
         resolutionNum = x;
         Refresh();
     }
-    public void FulScreenBtn(int isFull)
+    public void FullScreenBtn(int isFull)
     {
         JsonManager.Instance.FullScreen = isFull;
         screenMode = isFull == 0 ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;

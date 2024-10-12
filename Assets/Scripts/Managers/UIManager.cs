@@ -428,7 +428,7 @@ public class UIManager : SingleTon<UIManager>
     }
     private void Restart()
     {
-        //JsonManager.Instance.Stage = 1;
+        JsonManager.Instance.Stage = 1;
         PlayerPrefs.DeleteAll();
         GameManager.Instance.GameStart();
         PlayUIIn();
